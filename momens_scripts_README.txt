@@ -1,13 +1,45 @@
+Moments is AFS analysis method superficially similar to dadi but operating
+on different math (ordinary differential equations rather than diffusion approximation)
+It is considerably faster than dadi, handles up to five populations simultaneously,
+has easy functions for bootstrapping and estimating parameter uncertainties,
+and plots cartoons of inferred demographic scenarios.
+
+This collection of command-line scrips is to run basic pairwise analysis of 
+population subdivision using moments, without the need to recode python scripts
+(the only thing that needs to be hard-coded in the scripts are settings for 
+mutation rate and generation time for your species, see moments_scripts_README.txt)
+
+Link to original paper: http://www.genetics.org/content/early/2017/05/08/genetics.117.200493
+Moments manual (may change with updates): https://bitbucket.org/simongravel/moments/raw/efc4da3047226e3662dd43b525e41c85b93e90fd/doc/manual/manual.pdf
+
+#------------
+# installing moments
+
+# visit https://bitbucket.org/simongravel/moments
+
+# On a Mac: in Enthought Canopy terminal, say
+git clone https://bitbucket.org/simongravel/moments.git
+cd moments
+sudo python setup.py install 
+
+# installing locally on a Linux cluster:
+git clone https://bitbucket.org/simongravel/moments.git
+cd moments
+python setup.py build_ext --inplace
+
 #------------------------
 # PREPARING DATA
 
-# converting vcf into dadi format
+# unpacking vcf file to play with
+tar vxf coral.tgz
+
+# converting vcf into dadi/moments format
 # pops.txt is a two-column table giving correspondence 
 # between samples (in vcf file) and populations
 perl vcf2dadi.pl coral.vcf pops.txt 
 
-# calculating optimal projections:  number of AFS bins (aim for slightly lower 
-# than 2x number of individuals)
+# calculating optimal projections: number of AFS bins giving the most segregating sites
+# (aim for slightly lower than 2x number of individuals)
 # arguments: datafile, population, lowest projection to try, highest projection to try
 # the last pair of numbers printed to STDOUT is the optimal projection number 
 # and the number of segregating sites under this projection
