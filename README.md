@@ -3,7 +3,7 @@
 *Moments* is AFS analysis method superficially similar to *dadi* but operating on different math (ordinary differential equations rather than diffusion approximation) It is considerably faster than *dadi*, handles up to five populations simultaneously, has easy functions for bootstrapping and estimating parameter uncertainties, and plots cartoons of inferred demographic scenarios.
 
 This collection of command-line scrips is to run basic pairwise analysis of 
-population subdivision using moments, without the need to recode python scripts. 
+population subdivision using *Moments*, without the need to recode python scripts. 
 
 See **moments_scripts_README.txt** for instructions.
 
