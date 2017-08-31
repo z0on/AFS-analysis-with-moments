@@ -48,7 +48,7 @@ params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
 poptg = moments.Inference.optimize_log(params, data, func,
                                    lower_bound=lower_bound,
                                    upper_bound=upper_bound,
-                                   verbose=len(params), maxiter=30)
+                                   verbose=False,maxiter=10)
 
 # extracting model predictions, likelihood and theta
 model = func(poptg, ns)

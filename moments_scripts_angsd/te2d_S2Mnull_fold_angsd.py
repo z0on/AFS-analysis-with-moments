@@ -13,9 +13,9 @@ infile=sys.argv[1]
 params=[  float(sys.argv[2]),   float(sys.argv[3])]
 
 import os
-data = moments.Spectrum.from_file(infile)
-fs = data.fold()
-nalleles=fs.S()
+fs = moments.Spectrum.from_file(infile)
+data = fs.fold()
+nalleles=data.S()
 print "N alleles: ",nalleles
 ns=data.sample_sizes
 np.set_printoptions(precision=3)     
@@ -40,7 +40,7 @@ params = moments.Misc.perturb_params(params, fold=1, upper_bound=upper_bound,
 poptg = moments.Inference.optimize_log(params, data, func,
 							   lower_bound=lower_bound,
 							   upper_bound=upper_bound,
-							   verbose=len(params), maxiter=20)
+							   verbose=False,maxiter=10)
 model = func(poptg, ns)
 ll_model = moments.Inference.ll_multinom(model, data)
 theta = moments.Inference.optimal_sfs_scaling(model, data)

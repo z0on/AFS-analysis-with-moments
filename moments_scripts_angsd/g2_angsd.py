@@ -43,7 +43,7 @@ params = moments.Misc.perturb_params(params, fold=1, upper_bound=upper_bound,
 poptg = moments.Inference.optimize_log(params, data, func,
 							   lower_bound=lower_bound,
 							   upper_bound=upper_bound,
-							   verbose=len(params), maxiter=20)
+							   verbose=False,maxiter=10)
 model = func(poptg, ns)
 ll_model = moments.Inference.ll_multinom(model, data)
 theta = moments.Inference.optimal_sfs_scaling(model, data)
