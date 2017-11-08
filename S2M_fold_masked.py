@@ -24,7 +24,7 @@ dd = Misc.make_data_dict(infile)
 # set Polarized=False below for folded AFS analysis
 data = Spectrum.from_data_dict(dd, pop_ids,projections,polarized=False)
 ns=data.sample_sizes
-'''
+
 # masking singletons 
 #data.mask[:,0]=True
 #data.mask[0,:]=True
@@ -34,7 +34,7 @@ data.mask[1,:]=True
 #data.mask[projections[0],:]=True
 data.mask[:,projections[1]-1]=True
 data.mask[projections[0]-1,:]=True
-'''
+
 np.set_printoptions(precision=3)     
 
 #-------------------

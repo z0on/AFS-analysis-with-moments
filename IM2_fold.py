@@ -18,11 +18,22 @@ params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[
 # mutation rate per sequenced portion of genome per generation
 mu=0.018
 # generation time, in thousand years
-gtime=0.005 
+gtime=0.001 
 
 dd = Misc.make_data_dict(infile)
 data = Spectrum.from_data_dict(dd, pop_ids,projections,polarized=False)
 ns=data.sample_sizes
+'''
+# masking singletons 
+#data.mask[:,0]=True
+#data.mask[0,:]=True
+data.mask[:,1]=True
+data.mask[1,:]=True
+#data.mask[:,projections[1]]=True
+#data.mask[projections[0],:]=True
+data.mask[:,projections[1]-1]=True
+data.mask[projections[0]-1,:]=True
+'''
 np.set_printoptions(precision=3)     
 
 #-------------------

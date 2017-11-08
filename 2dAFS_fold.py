@@ -16,6 +16,18 @@ projections=[int(sys.argv[4]),int(sys.argv[5])]
 dd = Misc.make_data_dict(infile)
 data = Spectrum.from_data_dict(dd, pop_ids,projections,polarized=False)
 ns=data.sample_sizes
+
+'''
+# masking singletons 
+#data.mask[:,0]=True
+#data.mask[0,:]=True
+data.mask[:,1]=True
+data.mask[1,:]=True
+#data.mask[:,projections[1]]=True
+#data.mask[projections[0],:]=True
+data.mask[:,projections[1]-1]=True
+data.mask[projections[0]-1,:]=True
+'''
 np.set_printoptions(precision=3)     
 
 moments.Plotting.plot_single_2d_sfs(data, vmin=1)
