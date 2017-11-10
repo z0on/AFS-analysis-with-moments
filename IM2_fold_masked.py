@@ -24,8 +24,8 @@ dd = Misc.make_data_dict(infile)
 data = Spectrum.from_data_dict(dd, pop_ids,projections,polarized=False)
 ns=data.sample_sizes
 
-# masking singletons and doubletons
-data.mask[0:2,0:2]=True
+# masking singletons, doubletons, and tripletons
+data.mask[0:3,0:3]=True
 
 np.set_printoptions(precision=3)     
 
