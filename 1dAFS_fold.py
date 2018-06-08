@@ -21,3 +21,6 @@ np.set_printoptions(precision=3)
 
 moments.Plotting.plot_1d_fs(data)
 plt.savefig('1dAFSf_'+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+'.pdf')
+nalleles=data.S()
+print "N alleles: ",nalleles
+
