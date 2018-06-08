@@ -40,7 +40,7 @@ def SC(params , ns):
     fs.integrate([nu1, nu2], T1, m = np.array([[0, m12], [m21, 0]]))
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
  
-func=s2m
+func=SC
 upper_bound = [100, 100, 100, 100,200,200,0.25]
 lower_bound = [1e-3,1e-3, 1e-3,1e-3,0.01,0.01,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
