@@ -35,7 +35,7 @@ np.set_printoptions(precision=3)
 
 def SCI(params , ns):
 #    p_misid: proportion of misidentified ancestral states
-    nu1, nu2, T0,T1, m12, m1, m1i, P, p_misid = params
+    nu1, nu2, T0,T1, m1, m1i, P, p_misid = params
 # neutrals:
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
