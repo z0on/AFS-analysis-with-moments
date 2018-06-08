@@ -33,8 +33,8 @@ np.set_printoptions(precision=3)
 def SCI(params , ns):
 #    p_misid: proportion of misidentified ancestral states
     nu1, nu2, T0,T1, m12, m21,m12i, m21i, P, p_misid = params
-    sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
 # neutrals:
+    sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
     fs.integrate([nu1, nu2], T0, m = np.array([[0, 0], [0, 0]]))
@@ -44,8 +44,9 @@ def SCI(params , ns):
     fs.integrate([nu1, nu2], T0, m = np.array([[0, 0], [0, 0]]))
     fs.integrate([nu1, nu2], T1, m = np.array([[0, m12], [m21, 0]]))
 # islands:
+    stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(sts)
-    fsi = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
+    fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
     fsi.integrate([nu1, nu2], T0, m = np.array([[0, 0], [0, 0]]))
     fsi.integrate([nu1, nu2], T1, m = np.array([[0, m12], [m21, 0]]))
     fsi = moments.Spectrum(sts)

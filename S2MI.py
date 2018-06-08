@@ -41,7 +41,7 @@ def s2mi(params , ns):
 # islands
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
-    fsi = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
+    fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
     fsi.integrate([nu1, nu2], T, m = np.array([[0, m12i], [m21i, 0]]))
 
     fs2=P*fsi+(1-P)*fs
