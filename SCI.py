@@ -81,7 +81,7 @@ moments.ModelPlot.plot_model(plot_mod, save_file="SCI_"+ind+".png", pop_labels=p
 
 # bootstrapping for SDs of params and theta
 all_boot=moments.Misc.bootstrap(dd,pop_ids,projections)
-uncert=moments.Godambe.GIM_uncert(s2m,all_boot,poptg,data)
+uncert=moments.Godambe.GIM_uncert(func,all_boot,poptg,data)
 
 # printing parameters and their SDs
 print "SCI_Res",ind,sys.argv[1],sys.argv[2],sys.argv[3],' ll: ', ll_model,' p: ', poptg, " t: ",theta, 'uncert: ', uncert
