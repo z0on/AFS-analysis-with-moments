@@ -64,7 +64,7 @@ def IM2iSC(params, ns):
 
 func=IM2iSC
 upper_bound = [100,100,100, 100, 10,10, 200,200,0.9999,0.25]
-lower_bound = [1e-3,1e-3,1e-3,1e-3, 1e-3,1e-3,1e-5,1e-5,1e-5,1e-5,1e-4,1e-5]
+lower_bound = [1e-3,1e-3,1e-3,1e-3, 1e-3,1e-3,1e-5,1e-5,1e-4,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
