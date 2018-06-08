@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-# split with asymmetric migration upon secondary contact, "genomic islands" of two different migration regimes
-# n(para): 10
+# split with symmetric migration upon secondary contact, "genomic islands" of two different migration regimes
+# n(para): 8
 
 import matplotlib
 matplotlib.use('PDF')
