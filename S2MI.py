@@ -45,7 +45,7 @@ def s2mi(params , ns):
     fs2=P*fsi+(1-P)*fs
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
  
-func=s2m
+func=s2mi
 upper_bound = [100, 100, 100, 200,200,200,200,0.9999,0.25]
 lower_bound = [1e-3,1e-3, 1e-3,0.01,0.01,0.01,0.01,1e-4,1e-5]
 params = moments.Misc.perturb_params(params, fold=1, upper_bound=upper_bound,
