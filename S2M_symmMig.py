@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# split with symmetric migration
+# n(para): 5
 
 import matplotlib
 matplotlib.use('PDF')

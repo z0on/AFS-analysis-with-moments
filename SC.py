@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# split with asymmetric migration upon secondary contact
+# n(para): 7
+
 import matplotlib
 matplotlib.use('PDF')
 import moments
