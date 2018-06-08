@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # split with growth starting after some time, asymmetric migration upon secondary contact
-# n(para): 8
+# n(para): 9
 
 import matplotlib
 matplotlib.use('PDF')
@@ -17,7 +17,7 @@ infile=sys.argv[1]
 pop_ids=[sys.argv[2],sys.argv[3]]
 projections=[int(sys.argv[4]),int(sys.argv[5])]
 #params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9]),float(sys.argv[10]),float(sys.argv[11]),float(sys.argv[12]),float(sys.argv[13])]
-params=array([ 1,1,1,1,1,1,1,0.01])
+params=array([ 1,1,1,1,1,1,1,1,0.01])
 
 # mutation rate per sequenced portion of genome per generation
 mu=0.018
@@ -42,7 +42,7 @@ def IM2SC(params, ns):
     p_misid: proportion of misidentified ancestral states
     
     """
-    nu1_0,nu2_0,nu1,nu2,T,m12,m21,p_misid = params
+    nu1_0,nu2_0,nu1,nu2,T,T0,m12,m21,p_misid = params
     nu1_func = lambda t: nu1_0 * (nu1/nu1_0)**(t/T)
     nu2_func = lambda t: nu2_0 * (nu2/nu2_0)**(t/T)
     nu_func = lambda t: [nu1_func(t), nu2_func(t)]
@@ -55,8 +55,8 @@ def IM2SC(params, ns):
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
 
 func=IM2SC
-upper_bound = [100,100,100, 100, 10, 200,200,0.25]
-lower_bound = [1e-3,1e-3,1e-3,1e-3, 1e-3,1e-3,1e-5,1e-5]
+upper_bound = [100,100,100, 100,10,10, 200,200,0.25]
+lower_bound = [1e-3,1e-3,1e-3,1e-3, 1e-3,1e-3,1e-5,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
