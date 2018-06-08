@@ -13,7 +13,8 @@ import sys
 infile=sys.argv[1]
 pop_ids=[sys.argv[2],sys.argv[3]]
 projections=[int(sys.argv[4]),int(sys.argv[5])]
-params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9])]
+#params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9])]
+params=[1,1,1,0.01]
 
 # mutation rate per sequenced portion of genome per generation
 mu=0.018
@@ -41,7 +42,7 @@ def s2m(params , ns):
 func=s2m
 upper_bound = [100, 100, 100,0.25]
 lower_bound = [1e-3,1e-3, 1e-3,0.0001]
-params = moments.Misc.perturb_params(params, fold=1, upper_bound=upper_bound,
+params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
 poptg = moments.Inference.optimize_log(params, data, func,
@@ -58,7 +59,7 @@ theta = moments.Inference.optimal_sfs_scaling(model, data)
 ind=str(random.randint(0,999999))
 
 # printing parameters and their SDs
-print "s2mNMRes",ind,sys.argv[1],sys.argv[2],sys.argv[3],' ll: ', ll_model,' p: ', poptg, " t: ",theta
+print "s2mNM_Res",ind,sys.argv[1],sys.argv[2],sys.argv[3],' ll: ', ll_model,' p: ', poptg, " t: ",theta
                                     
 # plotting quad-panel figure wit AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=1, resid_range=3,

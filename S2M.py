@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# split with asymmetric migration
+# n(para): 6
+
+
 import matplotlib
 matplotlib.use('PDF')
 import moments
@@ -13,7 +17,8 @@ import sys
 infile=sys.argv[1]
 pop_ids=[sys.argv[2],sys.argv[3]]
 projections=[int(sys.argv[4]),int(sys.argv[5])]
-params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9]),float(sys.argv[10]),float(sys.argv[11])]
+#params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9]),float(sys.argv[10]),float(sys.argv[11])]
+params=[1,1,1,1,1,0.01]
 
 # mutation rate per sequenced portion of genome per generation
 mu=0.018
@@ -40,8 +45,8 @@ def s2m(params , ns):
  
 func=s2m
 upper_bound = [100, 100, 100, 200,200,0.25]
-lower_bound = [1e-3,1e-3, 1e-3,0.1,0.1,1e-5]
-params = moments.Misc.perturb_params(params, fold=1, upper_bound=upper_bound,
+lower_bound = [1e-3,1e-3, 1e-3,0.1,1e-5,1e-5]
+params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
 poptg = moments.Inference.optimize_log(params, data, func,
@@ -66,7 +71,7 @@ all_boot=moments.Misc.bootstrap(dd,pop_ids,projections)
 uncert=moments.Godambe.GIM_uncert(s2m,all_boot,poptg,data)
 
 # printing parameters and their SDs
-print "s2mRes",ind,sys.argv[1],sys.argv[2],sys.argv[3],' ll: ', ll_model,' p: ', poptg, " t: ",theta, 'uncert: ', uncert
+print "s2m_Res",ind,sys.argv[1],sys.argv[2],sys.argv[3],' ll: ', ll_model,' p: ', poptg, " t: ",theta, 'uncert: ', uncert
                                     
 # plotting quad-panel figure wit AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=1, resid_range=3,

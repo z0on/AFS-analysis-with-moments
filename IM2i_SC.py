@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# split with growth starting after some time, asymmetric migration upon secondary contact, "genomic islands" of two different migration regimes
+# n(para): 12
+
 import matplotlib
 matplotlib.use('PDF')
 import moments
@@ -61,7 +64,7 @@ def IM2iSC(params, ns):
 
 func=IM2iSC
 upper_bound = [100,100,100, 100, 10,10, 200,200,200,200,0.9999,0.25]
-lower_bound = [1e-3,1e-3,1e-3,1e-3, 1e-3,1e-3,0.01,0.01,0.01,0.01,1e-4,1e-5]
+lower_bound = [1e-3,1e-3,1e-3,1e-3, 1e-3,1e-3,1e-5,1e-5,1e-5,1e-5,1e-4,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
@@ -87,7 +90,7 @@ all_boot=moments.Misc.bootstrap(dd,pop_ids,projections)
 uncert=moments.Godambe.GIM_uncert(func,all_boot,poptg,data)
 
 # printing parameters and their SDs
-print "IM2iSC",ind,sys.argv[1],sys.argv[2],sys.argv[3],' ll: ', ll_model,' p: ', poptg, " t: ",theta, 'uncert: ', uncert
+print "IM2iSC_Res",ind,sys.argv[1],sys.argv[2],sys.argv[3],' ll: ', ll_model,' p: ', poptg, " t: ",theta, 'uncert: ', uncert
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=1, resid_range=3,
                                     pop_ids =pop_ids)
                                     

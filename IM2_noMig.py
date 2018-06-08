@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# split with growth and NO migration
+# n(para): 6
+
 import matplotlib
 matplotlib.use('PDF')
 import moments
@@ -13,8 +16,8 @@ import sys
 infile=sys.argv[1]
 pop_ids=[sys.argv[2],sys.argv[3]]
 projections=[int(sys.argv[4]),int(sys.argv[5])]
-params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9]),float(sys.argv[10]),float(sys.argv[11])]
-#params=array([ 1,1,1,1,2,30,30])
+#params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9]),float(sys.argv[10]),float(sys.argv[11])]
+params=[1,1,1,1,1,0.01]
 
 # mutation rate per sequenced portion of genome per generation
 mu=0.018
@@ -32,7 +35,6 @@ np.set_printoptions(precision=3)
 
 
 #-------------------
-# split with growth and asymmetrical migration
 def IM2(params, ns):
     """
     Isolation-with-migration model with split into two arbtrary sizes
@@ -72,7 +74,7 @@ theta = moments.Inference.optimal_sfs_scaling(model, data)
 ind=str(random.randint(0,999999))
 
 # printing parameters and their SDs
-print "IM2nm",ind,sys.argv[1],sys.argv[2],sys.argv[3],' ll: ', ll_model,' p: ', poptg, " t: ",theta
+print "IM2nm_Res",ind,sys.argv[1],sys.argv[2],sys.argv[3],' ll: ', ll_model,' p: ', poptg, " t: ",theta
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=1, resid_range=3,
                                     pop_ids =pop_ids)
                                     
