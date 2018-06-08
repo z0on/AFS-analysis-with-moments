@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# split with growth and symmetric migration 
+# n(para): 7
 
 import matplotlib
 matplotlib.use('PDF')
@@ -13,8 +15,8 @@ import sys
 infile=sys.argv[1]
 pop_ids=[sys.argv[2],sys.argv[3]]
 projections=[int(sys.argv[4]),int(sys.argv[5])]
-params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9]),float(sys.argv[10]),float(sys.argv[11]),float(sys.argv[12])]
-#params=array([ 1,1,1,1,2,30,30])
+#params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9]),float(sys.argv[10]),float(sys.argv[11]),float(sys.argv[12])]
+params=[ 1,1,1,1,1,1,0.01]
 
 # mutation rate per sequenced portion of genome per generation
 mu=0.018
@@ -55,7 +57,7 @@ def IM2(params, ns):
 func=IM2
 upper_bound = [100,100,100, 100, 10, 200,0.25]
 lower_bound = [1e-3,1e-3,1e-3,1e-3, 1e-3,0.1,1e-5]
-params = moments.Misc.perturb_params(params, fold=1, upper_bound=upper_bound,
+params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
 # fitting (poptg = optimal parameters):
@@ -76,7 +78,7 @@ all_boot=moments.Misc.bootstrap(dd,pop_ids,projections)
 uncert=moments.Godambe.GIM_uncert(IM2,all_boot,poptg,data)
 
 # printing parameters and their SDs
-print "IM2sm",ind,sys.argv[1],sys.argv[2],sys.argv[3],' ll: ', ll_model,' p: ', poptg, " t: ",theta, 'uncert: ', uncert
+print "IM2sm_Res",ind,sys.argv[1],sys.argv[2],sys.argv[3],' ll: ', ll_model,' p: ', poptg, " t: ",theta, 'uncert: ', uncert
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=1, resid_range=3,
                                     pop_ids =pop_ids)
                                     
