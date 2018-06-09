@@ -32,7 +32,7 @@ np.set_printoptions(precision=3)
 #-------------------
 # split into unequal pop sizes with asymmetrical migration
 
-def s2m(params , ns):
+def s2mSM(params , ns):
 #    p_misid: proportion of misidentified ancestral states
     nu1, nu2, T, mi, p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
@@ -41,7 +41,7 @@ def s2m(params , ns):
     fs.integrate([nu1, nu2], T, m = np.array([[0, mi], [mi, 0]]))
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
  
-func=s2m
+func=s2mSM
 upper_bound = [100, 100, 100, 200,0.25]
 lower_bound = [1e-3,1e-3, 1e-3,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=1, upper_bound=upper_bound,
@@ -50,7 +50,7 @@ params = moments.Misc.perturb_params(params, fold=1, upper_bound=upper_bound,
 poptg = moments.Inference.optimize_log(params, data, func,
                                    lower_bound=lower_bound,
                                    upper_bound=upper_bound,
-                                   verbose=len(params), maxiter=30)
+                                   verbose=False, maxiter=30)
 
 # extracting model predictions, likelihood and theta
 model = func(poptg, ns)
@@ -60,11 +60,15 @@ theta = moments.Inference.optimal_sfs_scaling(model, data)
 # random index for this replicate
 ind=str(random.randint(0,999999))
 
+# bootstrapping for SDs of params and theta
+all_boot=moments.Misc.bootstrap(dd,pop_ids,projections)
+uncert=moments.Godambe.GIM_uncert(func,all_boot,poptg,data)
+
 # printing parameters and their SDs
-print "s2mSM_Res",ind,sys.argv[1],sys.argv[2],sys.argv[3],' ll: ', ll_model,' p: ', poptg, " t: ",theta
+print "RESULT","s2mSM",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta,uncert
                                     
-# plotting quad-panel figure wit AFS, model, residuals:
+# plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=1, resid_range=3,
                                     pop_ids =pop_ids)
-plt.savefig("s2mSM"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
+plt.savefig("s2mSM_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 
