@@ -52,7 +52,7 @@ params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
 poptg = moments.Inference.optimize_log(params, data, func,
                                    lower_bound=lower_bound,
                                    upper_bound=upper_bound,
-                                   verbose=len(params), maxiter=30)
+                                   verbose=False, maxiter=30)
 
 # extracting model predictions, likelihood and theta
 model = func(poptg, ns)
@@ -68,10 +68,10 @@ moments.ModelPlot.plot_model(plot_mod, save_file="s2m_"+ind+".png", pop_labels=p
 
 # bootstrapping for SDs of params and theta
 all_boot=moments.Misc.bootstrap(dd,pop_ids,projections)
-uncert=moments.Godambe.GIM_uncert(s2m,all_boot,poptg,data)
+uncert=moments.Godambe.GIM_uncert(func,all_boot,poptg,data)
 
 # printing parameters and their SDs
-print "RESULT",s2m,ind,len(params),*sys.argv,ll_model,*poptg,theta,*uncert
+print "RESULT",s2m,ind,len(params),sys.argv,ll_model,poptg,theta,uncert
                                     
 # plotting quad-panel figure wit AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=1, resid_range=3,
