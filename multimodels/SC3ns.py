@@ -78,7 +78,7 @@ uncert=moments.Godambe.GIM_uncert(func,all_boot,poptg,data)
 print "RESULT","sc3ns",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta,uncert
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
-#moments.Plotting.plot_2d_comp_multinom(model, data, vmin=1, resid_range=3,
-#                                    pop_ids =pop_ids)
-#plt.savefig("sc3ns_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
+moments.Plotting.plot_2d_comp_multinom(model, data, vmin=1, resid_range=3,
+                                    pop_ids =pop_ids)
+plt.savefig("sc3ns_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 
