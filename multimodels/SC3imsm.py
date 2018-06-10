@@ -22,9 +22,9 @@ projections=[int(sys.argv[4]),int(sys.argv[5])]
 params=[1,1,1,1,1,1,1,1,1,1,1,0.5,0.01]
 
 # mutation rate per sequenced portion of genome per generation: for A.millepora, 0.02
-mu=[float(sys.argv[6])]
+mu=float(sys.argv[6])
 # generation time, in thousand years: 0.005  (5 years)
-gtime=[float(sys.argv[7])] 
+gtime=float(sys.argv[7]) 
 
 dd = Misc.make_data_dict(infile)
 # set Polarized=False below for folded AFS analysis
