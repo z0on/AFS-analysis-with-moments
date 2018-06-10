@@ -44,15 +44,7 @@ def sc3ei(params , ns):
     fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, 0], [0, 0]]))
     fs.integrate([nu1_3, nu2_3], T3, m = np.array([[0, 0], [0, 0]]))
 
-    stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
-    fsi = moments.Spectrum(stsi)
-    fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1_1, nu2_1], T1, m = np.array([[0, 0], [0, 0]]))
-    fsi.integrate([nu1_2, nu2_2], T2, m = np.array([[0, 0], [0, 0]]))
-    fsi.integrate([nu1_3, nu2_3], T3, m = np.array([[0, 0], [0, 0]]))
-
-    fs2=P*fsi+(1-P)*fs
-    return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
+    return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
  
 func=sc3ei
 upper_bound = [100, 100, 100,100,100, 100, 100, 100,100, 0.25]
