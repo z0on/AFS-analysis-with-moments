@@ -42,13 +42,12 @@ def IMscnm(params, ns):
     p_misid: proportion of misidentified ancestral states
     
     """
-    nu1,nu2,T1,T2,p_misid = params
+    nu1,nu2,T,p_misid = params
     nu_func = lambda t: nu1 * (nu2/nu1)**(t/T)
 
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
-    fs.integrate([nu1], T1)
-    fs.integrate(nu_func, T2)
+    fs.integrate(nu_func, T)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
 
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
