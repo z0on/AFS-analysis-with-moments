@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # steady epoch then growth, NO SPLIT
-# n(para): 5
+# n(para): 4
 
 import matplotlib
 matplotlib.use('PDF')
@@ -17,7 +17,7 @@ infile=sys.argv[1]
 pop_ids=[sys.argv[2],sys.argv[3]]
 projections=[int(sys.argv[4]),int(sys.argv[5])]
 #params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9]),float(sys.argv[10]),float(sys.argv[11]),float(sys.argv[12]),float(sys.argv[13])]
-params=[1,1,1,1,0.01]
+params=[1,1,1,0.01]
 
 # mutation rate per sequenced portion of genome per generation: for A.millepora, 0.02
 mu=[float(sys.argv[6])]
@@ -53,8 +53,8 @@ def IMscnm(params, ns):
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
 
 func=IMscnm
-upper_bound = [100, 100, 100,100,0.25]
-lower_bound = [1e-3,1e-3,1e-5,1e-5,1e-5]
+upper_bound = [ 100, 100,100,0.25]
+lower_bound = [1e-3,1e-5,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
@@ -73,17 +73,17 @@ ind=str(random.randint(0,999999))
 
 # plotting demographic model
 #plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
-#moments.ModelPlot.plot_model(plot_mod, save_file="IMscns_"+ind+"_"+sys.argv[1]+".png",pop_labels=pop_ids, nref=theta/(4*mu), gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
+#moments.ModelPlot.plot_model(plot_mod, save_file="IMns_"+ind+"_"+sys.argv[1]+".png",pop_labels=pop_ids, nref=theta/(4*mu), gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
 all_boot=moments.Misc.bootstrap(dd,pop_ids,projections)
 uncert=moments.Godambe.GIM_uncert(func,all_boot,poptg,data)
 
 # printing parameters and their SDs
-print "RESULT","IMscns",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta,uncert
+print "RESULT","IMns",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta,uncert
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=1, resid_range=3,
                                     pop_ids =pop_ids)
-plt.savefig("IMscns_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
+plt.savefig("IMns_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 
