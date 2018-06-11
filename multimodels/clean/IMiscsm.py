@@ -56,7 +56,7 @@ def IM2iSCsm(params, ns):
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
     fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1, nu2], T0, m = np.array([[0, 0], [0, 0]]))
+    fsi.integrate([nu1_0, nu2_0], T0, m = np.array([[0, 0], [0, 0]]))
     fsi.integrate(nu_func, T, dt_fac=0.01, m=np.array([[0, m1i], [m1i, 0]]))
 
     fs2=P*fsi+(1-P)*fs
