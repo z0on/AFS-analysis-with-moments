@@ -50,7 +50,7 @@ def imscnm(params, ns):
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1, nu2], T0, m = np.array([[0, 0], [0, 0]]))
+    fs.integrate([nu1_0, nu2_0], T0, m = np.array([[0, 0], [0, 0]]))
     fs.integrate(nu_func, T, dt_fac=0.01, m=np.array([[0, 0], [0, 0]]))
 
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
