@@ -36,14 +36,14 @@ np.set_printoptions(precision=3)
 
 #-------------------
 # split with growth and asymmetrical migration; with genomic islands
-def IMscnm(params, ns):
+def IMscns(params, ns):
     """
     Isolation-with-migration model with split into two arbtrary sizes
     p_misid: proportion of misidentified ancestral states
     
     """
     nu1,nu2,T1,T2,p_misid = params
-    nu_func = lambda t: nu1 * (nu2/nu1)**(t/T2)
+    nu_func = lambda t: [nu1*np.exp(np.log(nu2/nu1) * t / T2)]
 
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
@@ -53,7 +53,7 @@ def IMscnm(params, ns):
 
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
 
-func=IMscnm
+func=IMscns
 upper_bound = [100, 100, 100,100,0.25]
 lower_bound = [1e-3,1e-3,1e-5,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,

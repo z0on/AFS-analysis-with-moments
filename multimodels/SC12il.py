@@ -48,7 +48,7 @@ def sc12il(params , ns):
 
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
-    fsi.integrate([nu0], T)
+    fsi.integrate([nu0], T1)
     fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
     fsi.integrate([nu1_2, nu2_2], T2, m = np.array([[0, 0], [0, 0]]))
     fsi.integrate([nu1_3, nu2_3], T3, m = np.array([[0, m12_3i], [m21_3i, 0]]))

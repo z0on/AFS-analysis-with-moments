@@ -54,7 +54,7 @@ def sc1il(params , ns):
     fs2=P*fsi+(1-P)*fs
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
  
-func=sc2il
+func=sc1il
 upper_bound = [100, 100, 100, 100, 200,200,0.999,0.25]
 lower_bound = [1e-3,1e-3,1e-3,1e-3,1e-5,1e-5,0.001,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,

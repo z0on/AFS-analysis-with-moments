@@ -43,7 +43,7 @@ def IMscnm(params, ns):
     
     """
     nu1,nu2,T,p_misid = params
-    nu_func = lambda t: nu1 * (nu2/nu1)**(t/T)
+    nu_func = lambda t: [nu1*np.exp(np.log(nu2/nu1) * t / T)]
 
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
