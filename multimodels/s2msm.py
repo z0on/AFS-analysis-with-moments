@@ -41,7 +41,7 @@ def sc1(params , ns):
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
     fs.integrate([nu1_1, nu2_1], T, m = np.array([[0, m], [m, 0]]))
 
-    return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(f2)
+    return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
  
 func=sc1
 upper_bound = [100, 100, 100,  200,0.25]
