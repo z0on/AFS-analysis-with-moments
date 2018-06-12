@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # split, constant pop size, symmetric migration
-# n(para): 8
+# n(para): 6
 
 import matplotlib
 matplotlib.use('PDF')
@@ -17,7 +17,7 @@ infile=sys.argv[1]
 pop_ids=[sys.argv[2],sys.argv[3]]
 projections=[int(sys.argv[4]),int(sys.argv[5])]
 #params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9]),float(sys.argv[10]),float(sys.argv[11])]
-params=[1,1,1,1,1,1,0.01]
+params=[1,1,1,1,1,0.01]
 
 # mutation rate per sequenced portion of genome per generation: for A.millepora, 0.02
 mu=float(sys.argv[6])
@@ -44,8 +44,8 @@ def sc1(params , ns):
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
  
 func=sc1
-upper_bound = [100, 100, 100, 100, 200,200,0.25]
-lower_bound = [1e-3,1e-3,1e-3,1e-3,1e-5,1e-5,1e-5]
+upper_bound = [ 100, 100, 100, 200,200,0.25]
+lower_bound = [1e-3,1e-3,1e-3,1e-5,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
