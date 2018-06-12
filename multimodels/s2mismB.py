@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # split, constant pop size, genomic islands, symmetric migration for one genome type, asymmetric for other 
-# n(para): 11
+# n(para): 8
 
 import matplotlib
 matplotlib.use('PDF')
@@ -43,7 +43,7 @@ def s2mismB(params , ns):
 
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
-    fsi = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
+    fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
     fsi.integrate([nu1_1, nu2_1], T, m = np.array([[0, m12i], [m21i, 0]]))
 
     fs2=P*fsi+(1-P)*fs

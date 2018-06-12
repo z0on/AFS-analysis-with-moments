@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # split, constant pop size, asymmetric migration, genomic islangs
-# n(para): 11
+# n(para): 9
 
 import matplotlib
 matplotlib.use('PDF')
@@ -17,7 +17,7 @@ infile=sys.argv[1]
 pop_ids=[sys.argv[2],sys.argv[3]]
 projections=[int(sys.argv[4]),int(sys.argv[5])]
 #params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9]),float(sys.argv[10]),float(sys.argv[11])]
-params=[1,1,1,1,1,1,1,1,1,0.5,0.01]
+params=[1,1,1,1,1,1,1,0.5,0.01]
 
 # mutation rate per sequenced portion of genome per generation: for A.millepora, 0.02
 mu=float(sys.argv[6])
@@ -35,7 +35,7 @@ np.set_printoptions(precision=3)
 
 def s2mi(params , ns):
 #    p_misid: proportion of misidentified ancestral states
-    nu1_1, nu2_1,T, m12,m21,m12i,m21i, p_misid = params
+    nu1_1, nu2_1,T, m12,m21,m12i,m21i, P, p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
@@ -43,15 +43,15 @@ def s2mi(params , ns):
 
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
-    fsi = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
+    fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
     fsi.integrate([nu1_1, nu2_1], T, m = np.array([[0, m12i], [m21i, 0]]))
 
     fs2=P*fsi+(1-P)*fs
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
  
 func=s2mi
-upper_bound = [100, 100, 100, 100, 200,200,200,200,0.999,0.25]
-lower_bound = [1e-3,1e-3,1e-3,1e-3,1e-5,1e-5,1e-5,1e-5,1e-3,1e-5]
+upper_bound = [100, 100, 100, 200,200,200,200,0.999,0.25]
+lower_bound = [1e-3,1e-3,1e-3,1e-5,1e-5,1e-5,1e-5,1e-3,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 

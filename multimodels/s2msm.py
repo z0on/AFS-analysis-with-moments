@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # split, constant pop size, symmetric migration
-# n(para): 8
+# n(para): 5
 
 import matplotlib
 matplotlib.use('PDF')
