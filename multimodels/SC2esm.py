@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-# size change before split, one epoch after split, NO migration
-# n(para): 6
+# "primary contact"
+# split with symmetric migration, two epochs in each pop, migration only in FIRST epoch
+# n(para): 9
 
 
 import matplotlib
@@ -18,7 +19,7 @@ infile=sys.argv[1]
 pop_ids=[sys.argv[2],sys.argv[3]]
 projections=[int(sys.argv[4]),int(sys.argv[5])]
 #params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9]),float(sys.argv[10]),float(sys.argv[11])]
-params=[1,1,1,1,1,0.01]
+params=[1,1,1,1,1,1,1,0.01]
 
 # mutation rate per sequenced portion of genome per generation: for A.millepora, 0.02
 mu=float(sys.argv[6])
@@ -34,21 +35,21 @@ np.set_printoptions(precision=3)
 #-------------------
 # split into unequal pop sizes with asymmetrical migration
 
-def sc11nm(params , ns):
+def sc2ie(params , ns):
 #    p_misid: proportion of misidentified ancestral states
-    nu0, nu1_2,nu2_2,T1, T2, p_misid = params
+    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m,p_misid = params
 
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
-    fs.integrate([nu0], T1)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, 0], [0, 0]]))
+    fs.integrate([nu1_1, nu2_1], T0, m = np.array([[0, m], [m, 0]]))
+    fs.integrate([nu1_2, nu2_2], T, m = np.array([[0, 0], [0, 0]]))
 
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
  
-func=sc11nm
-upper_bound = [100, 100, 100, 100,100,0.25]
-lower_bound = [1e-3,1e-3,1e-3,1e-3,1e-3,1e-5]
+func=sc2ie
+upper_bound = [100, 100, 100, 100, 100, 100, 200,0.25]
+lower_bound = [1e-3,1e-3, 1e-3,1e-3,1e-3,1e-3,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
@@ -67,17 +68,17 @@ ind=str(random.randint(0,999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
-moments.ModelPlot.plot_model(plot_mod, save_file="sc11nm_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
+moments.ModelPlot.plot_model(plot_mod, save_file="sc2esm_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
 all_boot=moments.Misc.bootstrap(dd,pop_ids,projections)
 uncert=moments.Godambe.GIM_uncert(func,all_boot,poptg,data)
 
 # printing parameters and their SDs
-print "RESULT","sc11nm",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta,uncert
+print "RESULT","sc2esm",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta,uncert
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=1, resid_range=3,
                                     pop_ids =pop_ids)
-plt.savefig("sc11nm_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
+plt.savefig("sc2esm_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 
