@@ -105,6 +105,8 @@ move all files from AFS-analysis-with-moments to one of your $PATH locations, or
 2dAFS.py 2pops_dadi.data pop0 pop1 36 36
 
 # ------ multimodel inference: fit a diversity of 2-population models, then select the best one based on AIC.
+# there are models with a period of exponential growth ("IM" models), models with one, two or three different size and/or migration rate epochs ("SC" models, including models with no migration in some epochs), models with symmetrical migration ("sm" models, in other cases migration is asymmetrical), models with two types of genomic loci ("genomic islands") introgressing at different rates ("i" models), and some fun combinations thereof.
+# differences between models are summarized in excel table moments_multimodels.xls
 
 # read about multimodel inference here: 
 # https://pdfs.semanticscholar.org/a696/9a3b5720162eaa75deec3a607a9746dae95e.pdf
@@ -130,6 +132,5 @@ cut -f 2,3,4,5 -d " " mmods.res >likes
 # - examine the model's graphic output (*.pdf of actual and modeled SFS, and *.png of the model graph)
 # - grep fitted model parameters and their SDs from *.mom files
 
-# differences between models are summarized in excel table moments_multimodels.xls
 # the order of parameters are listed in files unfolded_params and folded_params. Typically pop size parameters are first, then times, then migration rates, then the fraction of genomic "islands" (in "i"  models), then percentage of misidentified ancestral states (in unfolded models).
 
