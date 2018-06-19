@@ -1,183 +1,135 @@
-Moments is AFS analysis method superficially similar to dadi but operating
-on different math (ordinary differential equations rather than diffusion approximation)
-It is considerably faster than dadi, handles up to five populations simultaneously,
-has easy functions for bootstrapping and estimating parameter uncertainties,
-and plots cartoons of inferred demographic scenarios.
+# INSTALLATIONS
 
-This collection of command-line scrips is to run basic pairwise analysis of 
-population subdivision using moments, without the need to recode python scripts
-(the only thing that needs to be hard-coded in the scripts are settings for 
-mutation rate and generation time for your species, see moments_scripts_README.txt)
+------- Moments: 
 
-Link to original paper: http://www.genetics.org/content/early/2017/05/08/genetics.117.200493
-Moments manual (may change with updates): https://bitbucket.org/simongravel/moments/raw/efc4da3047226e3662dd43b525e41c85b93e90fd/doc/manual/manual.pdf
-
-#------------
-# installing moments
-
-# visit https://bitbucket.org/simongravel/moments
-
-# On a Mac: in Enthought Canopy terminal, say
-git clone https://bitbucket.org/simongravel/moments.git
-cd moments
-sudo python setup.py install 
-
-# installing locally on a Linux cluster:
-git clone https://bitbucket.org/simongravel/moments.git
+cd
+git clone https://bitbucket.org/simongravel/moments.git 
 cd moments
 python setup.py build_ext --inplace
 
-#------------------------
-# PREPARING DATA
+# add this to .bashrc, section 2:
+  export PYTHONPATH=$PYTHONPATH:$HOME/moments
+# re-login
 
-# unpacking vcf file to play with
-tar vxf coral.tgz
+cds
+cd RAD
 
-# converting vcf into dadi/moments format
-# pops.txt is a two-column table giving correspondence 
-# between samples (in vcf file) and populations
-perl vcf2dadi.pl coral.vcf pops.txt 
+------- ANGSD (if this does not work, look for changes in installation procedure on ANGSD github site) : 
 
-# calculating optimal projections: number of AFS bins giving the most segregating sites
-# (aim for slightly lower than 2x number of individuals)
-# arguments: datafile, population, lowest projection to try, highest projection to try
-# the last pair of numbers printed to STDOUT is the optimal projection number 
-# and the number of segregating sites under this projection
-python projections.py coral_dadi.data K 30 40  
-python projections.py coral_dadi.data W 30 40  
+# install xz first from https://tukaani.org/xz/
+cd
+wget https://tukaani.org/xz/xz-5.2.3.tar.gz --no-check-certificate
+tar vxf xz-5.2.3.tar.gz 
+cd xz-5.2.3/
+./configure --prefix=$HOME/xz-5.2.3/
+make
+make install
 
-#-----------------------
-#  DATA EXPLORATION
+# edit .bashrc:
+nano .bashrc
+   export LD_LIBRARY_PATH=$HOME/xz-5.2.3/lib:$LD_LIBRARY_PATH
+   export LIBRARY_PATH=$HOME/xz-5.2.3/lib:$LIBRARY_PATH
+   export C_INCLUDE_PATH=$HOME/xz-5.2.3/include:$C_INCLUDE_PATH
+logout
+# re-login
 
-# plotting 1d AFS for K population
-# arguments: datafile, population, projections
-python 1dAFS.py coral_dadi.data K 36
+# now, install htslib:
+cd
+git clone https://github.com/samtools/htslib.git
+cd htslib
+make CFLAGS=" -g -Wall -O2 -D_GNU_SOURCE -I$HOME/xz-5.2.3/include"
 
-# plotting 2d AFS for W and K populations
-# arguments: datafile, pop1, pop2, projections for pop1, projections for pop2
-python 2dAFS.py coral_dadi.data W K 32 36
+cd
+git clone https://github.com/ANGSD/angsd.git 
+cd angsd
+make HTSSRC=../htslib
 
-# plotting folded 2dAFS
-python 2dAFS_fold.py coral_dadi.data W K 32 36
-
-#==================
-#  FITTING MODELS
-
-# main models (S2M, IM2 and their folded or "hot" versions) must be run
-# multiple times on the same dataset to find parameters producing 
-# best likelihood. Initial parameter setting can be the same; they will be perturbed
-# when starting the model (more strongly perturbed in "hot" version)
-# Outputs on main model scripts:
-#	- resulting parameter values and their uncertainty SDs based on bootstrap, printed to STDOUT 
-#     (uncertainties are for all parameters and theta);
-#   - pdf quad-plot of data - model - residuals
-#		(examine them for correlated residuals in the AFS - 
-#		indication that the model does not capture something)
-#   - png of inferred demographic scenario 
-#		to properly scale this graph, modify mutation rate and generation time within 
-#		the model script, lines ~18-22. Currently set to:
-#		# mutation rate per sequenced portion of genome per generation
-#		mu=0.018
-#		# generation time, in thousand years
-#		gtime=0.005 
-
-# Each run is assigned a random ID number to associate printed parameter values 
-# with quad-plots and demographic cartoons
-
-# If your reads are mapped to an outgroup genome, which allows identifying which SNP 
-# state is ancestral, use basic (polarized) versions of models.
-# if not (mapped to same-species genome or called genotypes de novo), use "fold" versions. 
-# Example commands below assume polarized data, using basic models.
-# The folded models are run in the same way but have one less argument 
-# (percent of ancestral state mis-identification, 
-# which is the last argument in basic models - remove it when running folded models)
-
-#-----------------------
-# split with asymmetrical migration (S2M) model
-
-# arguments: 
-#	datafile, pop1, pop2, projections for pop1, projections for pop2
-#	pop1 size, pop2 size, 
-#   time of split,
-#	migration from pop2 to pop1 
-# 		(number of individuals in pop1 that are immigrants from pop2 every generation),
-#	migration from pop1 to pop2,
-#	percent of misidentified ancestral states
-python S2M.py coral_dadi.data W K 32 36 1 1 1 10 10 0.01
-
-# "S2M" without split
-# arguments: 
-#	datafile, pop1, pop2, projections for pop1, projections for pop2
-#	final pop size 
-#   time of size change,
-#	percent of misidentified ancestral states
-python te2d_S2Mnull.py coral_dadi.data W K 32 36 1 1 0.01
+# now adding ANGSD to $PATH
+cd
+nano .bashrc
+# section 2:
+   export PATH=$HOME/angsd:$PATH
+   export PATH=$HOME/angsd/misc:$PATH
+# save (Ctl-O, Ctl-X)
 
 
-# S2M without migration (can the AFS be explained by very recent split instead?)
-# arguments: 
-#	datafile, pop1, pop2, projections for pop1, projections for pop2
-#	pop1 size, pop2 size, 
-#   time of split,
-#	percent of misidentified ancestral states
-python S2M_noMig.py coral_dadi.data W K 32 36 1 1 1 0.01
+#==========================
+# ANDSD => SFS for demographic analysis
 
+# make separate files listing bams for each population (NB: without clones or replicates!)
+# Let's assume we have two populations, pop0 and pop1, 20 individuals each, with corresponding bams listed in pop0.bams and pop1.bams
 
-# S2M with symmetrical migration
-# arguments: 
-#	datafile, pop1, pop2, projections for pop1, projections for pop2
-#	pop1 size, pop2 size, 
-#   time of split,
-#   migration (same in both directions),
-#	percent of misidentified ancestral states
-python S2M_symmMig.py coral_dadi.data W K 32 36 1 1 1 10 0.01
+# filtering sites to work on - use only filters that do not distort allele frequency
+# set minInd to 0.9 x (pop0 + pop1 sizes) 
+cat pop0.bams pop1.bams > all.bams
+FILTERS="-minMapQ 30 -minQ 35 -minInd 36 -doHWE 1 -sb_pval 1e-2 -hetbias_pval 1e-2 -skipTriallelic 1"
+DOS="-doMajorMinor 1 -doMaf 1 -dosnpstat 1 -dogeno 3 -doPost 2"
+angsd -b all.bams -GL 1 $FILTERS $DOS -P 1 -out sfsSites
 
-# use AICweights.R to compare models by delta-AIC criterion
+# extracting and indexing list of sites to make SFS from 
+# filtering out sites where heterozygote counts comprise more than 50% of all counts (likely lumped paralogs)
+zcat sfsSites.snpStat.gz | awk '($3+$4+$5+$6)>0' | awk '($12+$13+$14+$15)/($3+$4+$5+$6)<0.5' | cut -f 1,2  >sites2do 
+angsd sites index sites2do
 
-#-------------
-# IM2 model - like S2M but with growth
+# estimating site frequency likelihoods for each population 
+export GENOME_REF=mygenome.fasta
+TODO="-doSaf 1 -anc $GENOME_REF -ref $GENOME_REF""
+# In the following lines, set minInd to 80-90% of 2x pop sample size; i.e., if sample size is 20 set to 2*20*0.9: 36)
+angsd -sites sites2do -b pop0.bams -GL 1 -P 1 $TODO -out pop0
+angsd -sites sites2do -b pop1.bams -GL 1 -P 1 $TODO -out pop1
 
-# split with asymmetrical migration and growth (IM2) model
-# (this one might take a long time!)
-# arguments: 
-#	datafile, pop1, pop2, projections for pop1, projections for pop2
-#	initial pop1 size, initial pop2 size, 
-#	final pop1 size, final pop2 size, 
-#   time of split,
-#	migration from pop2 to pop1,
-#	migration from pop1 to pop2,
-#	percent of misidentified ancestral states
-python IM2.py coral_dadi.data W K 32 36 1 1 1 1 5 10 10 0.01
+# generating per-population SFS
+realSFS pop0.saf.idx >pop0.sfs
+realSFS pop1.saf.idx >pop1.sfs
 
-# IM2 without split
-# arguments: 
-#	datafile, pop1, pop2, projections for pop1, projections for pop2
-#	initial pop size
-#	final pop size 
-#   time of growth start (= initial size change)
-#	percent of misidentified ancestral states
-python growth2d_IM2null.py coral_dadi.data W K 32 36 1 1 1 0.01
+# generating dadi-like posterior counts based on sfs priors
+realSFS dadi pop0.saf.idx pop1.saf.idx -sfs pop0.sfs -sfs pop1.sfs -ref $GENOME_REF -anc $GENOME_REF >dadiout
 
-# IM2 without migration (can the AFS be explained by very recent split instead?)
-# arguments: 
-#	datafile, pop1, pop2, projections for pop1, projections for pop2
-#	initial pop1 size, initial pop2 size, 
-#	final pop1 size, final pop2 size, 
-#   time of split,
-#	percent of misidentified ancestral states
-python IM2_noMig.py coral_dadi.data W K 32 36 1 1 1 1 5 0.01
+# converting to dadi-snp format understood by dadi an Moments:
+# (numbers after the input file name are numbers of individuals sampled per population)
+realsfs2dadi.pl dadiout 20 20 >2pops_dadi.data
 
-# IM2 with symmetrical migration
-# arguments: 
-#	datafile, pop1, pop2, projections for pop1, projections for pop2
-#	initial pop1 size, initial pop2 size, 
-#	final pop1 size, final pop2 size, 
-#   time of split,
-#   migration (same in both directions),
-#	percent of misidentified ancestral states
-python IM2_symmMig.py coral_dadi.data W K 32 36 1 1 1 1 1 10 0.01
+#=====================
+# 2d AFS analysis using Moments
 
-# use AICweights.R to compare models by delta-AIC criterion
+# get Misha's Moments scripts collection
+git clone https://github.com/z0on/AFS-analysis-with-moments.git
+move all files from AFS-analysis-with-moments to one of your $PATH locations, or set $PATH to include the AFS-analysis-with-moments directory
 
+# print folded 2d SFS - for denovo or when mapping to genome of the studied species
+# (change numbers to 2 x 0.9 x number of samples for in each pop):
+2dAFS_fold.py 2pops_dadi.data pop0 pop1 36 36
 
+# print unfolded 2d SFS - if mapping to genome of sister species
+# (change numbers to 2 x 0.9 x number of samples for in each pop):
+2dAFS.py 2pops_dadi.data pop0 pop1 36 36
+
+# ------ multimodel inference: fit a diversity of 2-population models, then select the best one based on AIC.
+
+# read about multimodel inference here: 
+# https://pdfs.semanticscholar.org/a696/9a3b5720162eaa75deec3a607a9746dae95e.pdf
+
+# this HAS to be parallelized - we need to fit ~100 models 10 times to make sure each model converges at its best fit at least once.
+
+# input line: the last four numbers are:
+# - projections (2 x 0.9 x number of samples) for in each pop;
+# - mutation rate per gamete per generation
+# - generation time, in thousand years
+IN="2pops_dadi.data pop0 pop1 36 36 0.02 0.005"
+
+# after setting the $IN variable, execute all commands listed in the text file "allmodels_unfolded" (if your alleles are polarized into ancestral and derived, for example by mapping to a sister species genome) or "allmodels_folded" 
+
+# collecting results while fixing broken lines
+cat *.mom | perl -pe 's/RESULT(.+)(\d)\n/RESULT$1$2/' |perl -pe 's/RESULT(.+)(\d)\n/RESULT$1$2/' |perl -pe 's/RESULT(.+)(\d)\n/RESULT$1$2/' | perl -pe 's/RESULT(.+)([\d\s])\n/RESULT$1$2/' | grep RESULT > mmods.res
+
+# extracting likelihoods and parameter numbers for AIC:
+cut -f 2,3,4,5 -d " " mmods.res >likes
+
+# use R script deltaAIC_multimodels.R to find best-fitting model.
+# using model ID number that the R script will list: 
+# - examine the model's graphic output (*.pdf of actual and modeled SFS, and *.png of the model graph)
+# - grep fitted model parameters and their SDs from *.mom files
+
+# differences between models are summarized in excel table moments_multimodels.xls
+# the order of parameters are listed in files unfolded_params and folded_params. Typically pop size parameters are first, then times, then migration rates, then the fraction of genomic "islands" (in "i"  models), then percentage of misidentified ancestral states (in unfolded models).
 
