@@ -12,12 +12,13 @@ import sys
 
 infile=sys.argv[1]
 #pop_ids=[sys.argv[2],sys.argv[3]]
-#projections=[int(sys.argv[4]),int(sys.argv[5])]
+projections=[int(sys.argv[2]),int(sys.argv[3])]
 
 #dd = Misc.make_data_dict(infile)
 #data = Spectrum.from_data_dict(dd, pop_ids,projections,polarized=True)
 
 fs = moments.Spectrum.from_file(infile)
+fs=fs.project(projections)
 #fs = data.fold()
 nalleles=fs.S()
 print "N alleles: ",nalleles
@@ -26,4 +27,4 @@ print "N alleles: ",nalleles
 #pylab.figure()
 moments.Plotting.plot_single_2d_sfs(fs, vmin=1)
 #plt.show()
-plt.savefig('2dAFS'+"_"+sys.argv[1]+'.pdf')
+plt.savefig('2dAFS'+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+'.pdf')

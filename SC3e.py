@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-# split, three epochs in each pop, asymmetric migration starts in second epoch
-# n(para): 14
+# split, three epochs in each pop, asymmetric migration at same rates in all epochs
+# n(para): 12
 
 
 import matplotlib
@@ -18,12 +18,12 @@ infile=sys.argv[1]
 pop_ids=[sys.argv[2],sys.argv[3]]
 projections=[int(sys.argv[4]),int(sys.argv[5])]
 #params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9]),float(sys.argv[10]),float(sys.argv[11])]
-params=[1,1,1,1,1,1,1,1,1,1,1,1,0.5,0.01]
+params=[1,1,1,1,1,1,1,1,1,1,1,0.01]
 
-# mutation rate per sequenced portion of genome per generation
-mu=0.018
-# generation time, in thousand years
-gtime=0.005 
+# mutation rate per sequenced portion of genome per generation: for A.millepora, 0.02
+mu=float(sys.argv[6])
+# generation time, in thousand years: 0.005  (5 years)
+gtime=float(sys.argv[7]) 
 
 dd = Misc.make_data_dict(infile)
 # set Polarized=False below for folded AFS analysis
@@ -34,20 +34,21 @@ np.set_printoptions(precision=3)
 #-------------------
 # split into unequal pop sizes with asymmetrical migration
 
-def sc3e(params , ns):
+def sc3ei(params , ns):
 #    p_misid: proportion of misidentified ancestral states
-    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_2, m21_2,m12_3,m21_3, p_misid = params
+    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3, p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, 0], [0, 0]]))
-    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, m12_2], [m21_2, 0]]))
-    fs.integrate([nu1_3, nu2_3], T3, m = np.array([[0, m12_3], [m21_3, 0]]))
+    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, m12_3], [m21_3, 0]]))
+    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, 0], [0, 0]]))
+    fs.integrate([nu1_3, nu2_3], T3, m = np.array([[0, 0], [0, 0]]))
+
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
  
-func=sc3e
-upper_bound = [100, 100, 100,100,100, 100, 100, 100,100, 200,200,200,200,0.25]
-lower_bound = [1e-3,1e-3, 1e-3,1e-3,1e-3,1e-3,1e-3,1e-3,1e-3,1e-5,1e-5,1e-5,1e-5,1e-5]
+func=sc3ei
+upper_bound = [100, 100, 100,100,100, 100, 100, 100,100, 200,200,0.25]
+lower_bound = [1e-3,1e-3, 1e-3,1e-3,1e-3,1e-3,1e-3,1e-3,1e-3,1e-5,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
@@ -66,7 +67,7 @@ ind=str(random.randint(0,999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
-moments.ModelPlot.plot_model(plot_mod, save_file="sc3e_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
+moments.ModelPlot.plot_model(plot_mod, save_file="sc3e_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
 all_boot=moments.Misc.bootstrap(dd,pop_ids,projections)

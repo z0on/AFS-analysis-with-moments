@@ -1,0 +1,107 @@
+fold_IM.py:    nu1_0,nu2_0,nu1,nu2,T,m12,m21,p_misid 
+fold_IMi.py:    nu1_0,nu2_0,nu1,nu2,T,m12,m21,m12i,m21i,P,p_misid 
+fold_IMisc.py:    nu1_0,nu2_0,nu1,nu2,T,T0,m12,m21,m12i,m21i,P,p_misid 
+fold_IMisc2.py:    nua,nub,nu1_0,nu2_0,nu1,nu2,T,T0,m12,m21,m12i,m21i,P,p_misid 
+fold_IMisc2sm.py:    nua,nub,nu1_0,nu2_0,nu1,nu2,T,T0,m,mi,P,p_misid 
+fold_IMiscsm.py:    nu1_0,nu2_0,nu1,nu2,T,T0,m1,m1i,P,p_misid 
+fold_IMiscsmB.py:    nu1_0,nu2_0,nu1,nu2,T,T0,m,m12i,m21i,P,p_misid 
+fold_IMism.py:    nu1_0,nu2_0,nu1,nu2,T,m1,m1i,P,p_misid 
+fold_IMnm.py:    nu1_0,nu2_0,nu1,nu2,T,p_misid 
+fold_IMns.py:    nu1,nu2,T,p_misid 
+fold_IMsc.py:    nu1_0,nu2_0,nu1,nu2,T,T0,m12,m21,p_misid 
+fold_IMsc2.py:    nua,nub,nu1_0,nu2_0,nu1,nu2,T,T0,m12,m21,p_misid 
+fold_IMsc2sm.py:    nua,nub,nu1_0,nu2_0,nu1,nu2,T,T0,m,p_misid 
+fold_IMscnm.py:    nu1_0,nu2_0,nu1,nu2,T,T0,p_misid 
+fold_IMscns.py:    nu1,nu2,T1,T2,p_misid 
+fold_IMscsm.py:    nu1_0,nu2_0,nu1,nu2,T,T0,m,p_misid 
+fold_IMsm.py:    nu1_0,nu2_0,nu1,nu2,T,m,p_misid 
+fold_SC1.py:    nu1_1, nu2_1,T0, T, m12_1, m21_1, m12_2, m21_2 
+fold_SC11.py:    nu0, nu1_2,nu2_2,T0, T, m12_2, m21_2,p_misid 
+fold_SC11nm.py:    nu0, nu1_2,nu2_2,T1, T2 
+fold_SC11sm.py:    nu0, nu1_2,nu2_2,T0, T, m 
+fold_SC12il.py:    nu0, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC12ilsm.py:    nu0, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m,mi, P 
+fold_SC12im.py:    nu0, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC12iml.py:    nu0, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC12imlsm.py:    nu0, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m,mi, P 
+fold_SC12imlsm1.py:    nu0, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m,mi,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC12imlsm2.py:    nu0, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m,mi,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC12imsm.py:    nu0, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m,mi, P 
+fold_SC12nm.py:    nu0, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,p_misid 
+fold_SC1e.py:    nu1_1, nu2_1,T0, T, m12_2, m21_2 
+fold_SC1esm.py:    nu1_1, nu2_1,T0, T, m 
+fold_SC1i.py:    nu1_1, nu2_1,T0, T, m12_1, m21_1, m12_2, m21_2,m12_1i, m21_1i, m12_2i, m21_2i,P 
+fold_SC1ie.py:    nu1_1, nu2_1, T0, T, m12_2, m21_2, m12_2i, m21_2i, P 
+fold_SC1ielsm1.py:    nu1_1, nu2_1, T0, T, m,mi,m12_2, m21_2, m12_2i, m21_2i, P 
+fold_SC1ielsm2.py:    nu1_1, nu2_1, T0, T, m,mi,m12_2, m21_2, m12_2i, m21_2i, P 
+fold_SC1iesm.py:    nu1_1, nu2_1, T0, T, m,mi, P 
+fold_SC1il.py:    nu1_1, nu2_1, T0, T, m12_2, m21_2, m12_2i, m21_2i, P 
+fold_SC1ilsm.py:    nu1_1, nu2_1, T0, T, m,mi, P 
+fold_SC1l.py:    nu1_1, nu2_1,T0, T, m12_2, m21_2 
+fold_SC1lsm.py:    nu1_1, nu2_1,T0, T, m 
+fold_SC1nm.py:    nu1_2,nu2_2,T2 
+fold_SC1ns.py:    nu0, T1 
+fold_SC1sm1.py:    nu1_1, nu2_1,T0, T, m, m12_2, m21_2 
+fold_SC1sm2.py:    nu1_1, nu2_1,T0, T, m, m12_2, m21_2 
+fold_SC2.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m12_1, m21_1,m12_2, m21_2,p_misid 
+fold_SC21nm.py:    nu0, nu1,nu1_3,nu2_3,T1, T2, T3,p_misid 
+fold_SC2e.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m12_1, m21_1,p_misid 
+fold_SC2el.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m12_1, m21_1,p_misid 
+fold_SC2elsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m,p_misid 
+fold_SC2esm.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m,p_misid 
+fold_SC2i.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m12_1, m21_1, m12_2, m21_2,m12_1i, m21_1i, m12_2i, m21_2i,P 
+fold_SC2ie.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m12_1, m21_1,m12_1i, m21_1i, P 
+fold_SC2iel.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m12_2, m21_2, m12_2i, m21_2i, P 
+fold_SC2ielsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m,mi, P 
+fold_SC2ielsm1.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m,mi,m12_2, m21_2, m12_2i, m21_2i, P 
+fold_SC2ielsm2.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m,mi,m12_2, m21_2, m12_2i, m21_2i, P 
+fold_SC2iesm.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m,mi, P 
+fold_SC2il.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m12_2, m21_2, m12_2i, m21_2i, P 
+fold_SC2ilsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m,mi, P 
+fold_SC2l.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m12_1, m21_1,p_misid 
+fold_SC2lsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m,p_misid 
+fold_SC2ns.py:    nu0, nu1,T1, T2,p_misid 
+fold_SC2sm1.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m,m12_1, m21_1,p_misid 
+fold_SC2sm2.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m,m12_1, m21_1,p_misid 
+fold_SC3e.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3 
+fold_SC3el2.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_1,m21_1,m12_3,m21_3 
+fold_SC3elsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m 
+fold_SC3em.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3 
+fold_SC3em2.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_1,m21_1,m12_3,m21_3 
+fold_SC3eml.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3 
+fold_SC3emlsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m 
+fold_SC3emsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m 
+fold_SC3esm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m 
+fold_SC3ie.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC3iel.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC3ielsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m,mi, P 
+fold_SC3ielsm1.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m1,m1i,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC3ielsm2.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m1,m1i,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC3iem.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC3ieml.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC3iemlsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m,mi, P 
+fold_SC3iemsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m,mi, P 
+fold_SC3iemsm1.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m1,m1i,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC3iemsm2.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m1,m1i,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC3iesm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m,mi, P 
+fold_SC3il.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC3ilsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m,mi, P 
+fold_SC3im.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC3iml.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC3imlsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m,mi, P 
+fold_SC3imlsm1.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m1,m1i,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC3imlsm2.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m1,m1i,m12_3,m21_3,m12_3i,m21_3i, P 
+fold_SC3imsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m,mi, P 
+fold_SC3l.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3 
+fold_SC3lsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m 
+fold_SC3m.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3 
+fold_SC3ml.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3 
+fold_SC3ml2.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_1,m21_1,m12_3,m21_3 
+fold_SC3mlsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m 
+fold_SC3msm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m 
+fold_SC3nm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3 
+fold_SC3ns.py:    nu0, nu1,nu2,T1, T2, T3,p_misid 
+fold_s2m.py:    nu1_1, nu2_1,T, m12,m21 
+fold_s2mi.py:    nu1_1, nu2_1,T, m12,m21,m12i,m21i, P 
+fold_s2mismB.py:    nu1_1, nu2_1,T, m,m12i,m21i, P 
+fold_s2msm.py:    nu1_1, nu2_1,T, m 

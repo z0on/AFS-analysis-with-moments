@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-# split, two epochs in each pop, asymmetric migration starts in second epoch
+# "primary contact"
+# split with asymmetric migration, two epochs in each pop, migration only in FIRST epoch
 # n(para): 9
 
 
@@ -20,10 +21,10 @@ projections=[int(sys.argv[4]),int(sys.argv[5])]
 #params=[float(sys.argv[6]),float(sys.argv[7]),float(sys.argv[8]),float(sys.argv[9]),float(sys.argv[10]),float(sys.argv[11])]
 params=[1,1,1,1,1,1,1,1,0.01]
 
-# mutation rate per sequenced portion of genome per generation
-mu=0.018
-# generation time, in thousand years
-gtime=0.005 
+# mutation rate per sequenced portion of genome per generation: for A.millepora, 0.02
+mu=float(sys.argv[6])
+# generation time, in thousand years: 0.005  (5 years)
+gtime=float(sys.argv[7]) 
 
 dd = Misc.make_data_dict(infile)
 # set Polarized=False below for folded AFS analysis
@@ -34,17 +35,19 @@ np.set_printoptions(precision=3)
 #-------------------
 # split into unequal pop sizes with asymmetrical migration
 
-def sc2e(params , ns):
+def sc2ie(params , ns):
 #    p_misid: proportion of misidentified ancestral states
-    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m12_2, m21_2, p_misid = params
+    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m12_1, m21_1,p_misid = params
+
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1_1, nu2_1], T0, m = np.array([[0, 0], [0, 0]]))
-    fs.integrate([nu1_2, nu2_2], T, m = np.array([[0, m12_2], [m21_2, 0]]))
+    fs.integrate([nu1_1, nu2_1], T0, m = np.array([[0, m12_1], [m21_1, 0]]))
+    fs.integrate([nu1_2, nu2_2], T, m = np.array([[0, 0], [0, 0]]))
+
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
  
-func=sc2e
+func=sc2ie
 upper_bound = [100, 100, 100, 100, 100, 100, 200,200,0.25]
 lower_bound = [1e-3,1e-3, 1e-3,1e-3,1e-3,1e-3,1e-5,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
@@ -65,7 +68,7 @@ ind=str(random.randint(0,999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
-moments.ModelPlot.plot_model(plot_mod, save_file="sc2e_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
+moments.ModelPlot.plot_model(plot_mod, save_file="sc2e_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
 all_boot=moments.Misc.bootstrap(dd,pop_ids,projections)
