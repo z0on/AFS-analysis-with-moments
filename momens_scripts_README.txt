@@ -60,7 +60,8 @@ nano .bashrc
 # Let's assume we have two populations, pop0 and pop1, 20 individuals each, with corresponding bams listed in pop0.bams and pop1.bams
 
 # filtering sites to work on - use only filters that do not distort allele frequency
-# set minInd to 0.9 x (pop0 + pop1 sizes) 
+# set minInd to 75-90% of the total number fo individuals in the project
+# if you are doing any other RAD than 2bRAD or GBS, remove '-sb_pval 1e-2' from FILTERS
 cat pop0.bams pop1.bams > all.bams
 FILTERS="-minMapQ 30 -minQ 35 -minInd 36 -doHWE 1 -sb_pval 1e-2 -hetbias_pval 1e-2 -skipTriallelic 1"
 DOS="-doMajorMinor 1 -doMaf 1 -dosnpstat 1 -dogeno 3 -doPost 2"
@@ -74,9 +75,9 @@ angsd sites index sites2do
 # estimating site frequency likelihoods for each population 
 export GENOME_REF=mygenome.fasta
 TODO="-doSaf 1 -anc $GENOME_REF -ref $GENOME_REF""
-# In the following lines, set minInd to 80-90% of 2x pop sample size; i.e., if sample size is 20 set to 2*20*0.9: 36)
-angsd -sites sites2do -b pop0.bams -GL 1 -P 1 $TODO -out pop0
-angsd -sites sites2do -b pop1.bams -GL 1 -P 1 $TODO -out pop1
+# In the following lines, set minInd to 75-90% of each pop's sample size
+angsd -sites sites2do -b pop0.bams -GL 1 -P 1 $TODO -minInd 18 -out pop0
+angsd -sites sites2do -b pop1.bams -GL 1 -P 1 $TODO -minInd 18 -out pop1
 
 # generating per-population SFS
 realSFS pop0.saf.idx >pop0.sfs
@@ -94,7 +95,7 @@ realsfs2dadi.pl dadiout 20 20 >2pops_dadi.data
 
 # get Misha's Moments scripts collection
 git clone https://github.com/z0on/AFS-analysis-with-moments.git
-move all files from AFS-analysis-with-moments to one of your $PATH locations, or set $PATH to include the AFS-analysis-with-moments directory
+# set your $PATH to include the AFS-analysis-with-moments directory
 
 # print folded 2d SFS - for denovo or when mapping to genome of the studied species
 # (change numbers to 2 x 0.9 x number of samples for in each pop):
