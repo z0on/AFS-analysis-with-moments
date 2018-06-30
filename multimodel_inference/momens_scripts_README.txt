@@ -95,7 +95,7 @@ realsfs2dadi.pl dadiout 20 20 >2pops_dadi.data
 
 # get Misha's Moments scripts collection
 git clone https://github.com/z0on/AFS-analysis-with-moments.git
-# set your $PATH to include the AFS-analysis-with-moments directory
+# set your $PATH to include directory AFS-analysis-with-moments/multimodel_inference 
 
 # print folded 2d SFS - for denovo or when mapping to genome of the studied species
 # (change numbers to 2 x 0.9 x number of samples for in each pop):
