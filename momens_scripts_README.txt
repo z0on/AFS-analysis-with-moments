@@ -112,16 +112,31 @@ git clone https://github.com/z0on/AFS-analysis-with-moments.git
 # read about multimodel inference here: 
 # https://pdfs.semanticscholar.org/a696/9a3b5720162eaa75deec3a607a9746dae95e.pdf
 
-# this HAS to be parallelized - we need to fit ~100 models 10 times to make sure each model converges at its best fit at least once.
+# this HAS to be parallelized - we need to fit ~100 models 5 times to make sure each model converges at its best fit at least once.
 
+# copy the file ".../AFS-analysis-with-moments/multimodel_inference/allmodels_unfolded" to your working directory
+# if your alleles are NOT polarized into ancestral and derived (for example by mapping to a sister species genome) copy "allmodels_folded" instead
+
+# running all models on the same data NREPS times, to ensure convergence
 # input line: the last four numbers are:
 # - projections (2 x 0.9 x number of samples) for in each pop;
 # - mutation rate per gamete per generation
 # - generation time, in thousand years
-IN="2pops_dadi.data pop0 pop1 36 36 0.02 0.005"
+ARGS="2pops_dadi.data pop0 pop1 36 36 0.02 0.005"
+NREPS=5
+>am
+for i in `seq 1 $NREPS`;do
+# 
+cat allmodels >>am;
+done
+NMODELS=`cat am | wc -l`
+>args
+for i in `seq 1 $NMODELS`; do
+echo $ARGS >>args;
+done
+paste am args -d " " >ama
 
-# after setting the $IN variable, execute all commands listed in the text file "allmodels_unfolded" (if your alleles are polarized into ancestral and derived, for example by mapping to a sister species genome) or "allmodels_folded" 
-# write all the output into file(s) with extension '.mom'
+# execute all commands listed in the text file "ama", write all the output into file(s) with extension '.mom'
 
 # collecting results while fixing broken lines
 cat *.mom | perl -pe 's/RESULT(.+)(\d)\n/RESULT$1$2/' |perl -pe 's/RESULT(.+)(\d)\n/RESULT$1$2/' |perl -pe 's/RESULT(.+)(\d)\n/RESULT$1$2/' | perl -pe 's/RESULT(.+)([\d\s])\n/RESULT$1$2/' | grep RESULT > mmods.res
@@ -129,7 +144,7 @@ cat *.mom | perl -pe 's/RESULT(.+)(\d)\n/RESULT$1$2/' |perl -pe 's/RESULT(.+)(\d
 # extracting likelihoods and parameter numbers for AIC:
 cut -f 2,3,4,5 -d " " mmods.res >likes
 
-# use R script deltaAIC_multimodels.R to find best-fitting model.
+# use R script AFS-analysis-with-moments/multimodel_inference/deltaAIC_multimodels.R to find best-fitting model.
 # then, using model ID number that the R script will identify as best-fitting model: 
 # - examine the model's graphic output (*.pdf of actual and modeled SFS, and *.png of the model graph)
 # - grep fitted model parameters and their SDs from *.mom files
