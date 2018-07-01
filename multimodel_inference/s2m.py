@@ -33,7 +33,7 @@ np.set_printoptions(precision=3)
 #-------------------
 # split into unequal pop sizes with asymmetrical migration
 
-def sc1(params , ns):
+def s2m(params , ns):
 #    p_misid: proportion of misidentified ancestral states
     nu1_1, nu2_1,T, m12,m21, p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
@@ -43,7 +43,7 @@ def sc1(params , ns):
 
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
  
-func=sc1
+func=s2m
 upper_bound = [ 100, 100, 100, 200,200,0.25]
 lower_bound = [1e-3,1e-3,1e-3,1e-5,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,

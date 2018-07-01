@@ -95,7 +95,7 @@ realsfs2dadi.pl dadiout 20 20 >2pops_dadi.data
 
 # get Misha's Moments scripts collection
 git clone https://github.com/z0on/AFS-analysis-with-moments.git
-# set your $PATH to include the AFS-analysis-with-moments directory
+# set your $PATH to include directory AFS-analysis-with-moments/multimodel_inference 
 
 # print folded 2d SFS - for denovo or when mapping to genome of the studied species
 # (change numbers to 2 x 0.9 x number of samples for in each pop):
@@ -121,6 +121,7 @@ git clone https://github.com/z0on/AFS-analysis-with-moments.git
 IN="2pops_dadi.data pop0 pop1 36 36 0.02 0.005"
 
 # after setting the $IN variable, execute all commands listed in the text file "allmodels_unfolded" (if your alleles are polarized into ancestral and derived, for example by mapping to a sister species genome) or "allmodels_folded" 
+# write all the output into file(s) with extension '.mom'
 
 # collecting results while fixing broken lines
 cat *.mom | perl -pe 's/RESULT(.+)(\d)\n/RESULT$1$2/' |perl -pe 's/RESULT(.+)(\d)\n/RESULT$1$2/' |perl -pe 's/RESULT(.+)(\d)\n/RESULT$1$2/' | perl -pe 's/RESULT(.+)([\d\s])\n/RESULT$1$2/' | grep RESULT > mmods.res
@@ -129,7 +130,7 @@ cat *.mom | perl -pe 's/RESULT(.+)(\d)\n/RESULT$1$2/' |perl -pe 's/RESULT(.+)(\d
 cut -f 2,3,4,5 -d " " mmods.res >likes
 
 # use R script deltaAIC_multimodels.R to find best-fitting model.
-# using model ID number that the R script will list: 
+# then, using model ID number that the R script will identify as best-fitting model: 
 # - examine the model's graphic output (*.pdf of actual and modeled SFS, and *.png of the model graph)
 # - grep fitted model parameters and their SDs from *.mom files
 
