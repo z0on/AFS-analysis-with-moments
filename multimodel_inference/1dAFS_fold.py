@@ -23,4 +23,6 @@ moments.Plotting.plot_1d_fs(data)
 plt.savefig('1dAFSf_'+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+'.pdf')
 nalleles=data.S()
 print "N alleles: ",nalleles
+print data
+numpy.savetxt('1dsfs', data, newline=" ")
 
