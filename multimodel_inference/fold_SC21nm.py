@@ -36,7 +36,7 @@ np.set_printoptions(precision=3)
 
 def sc12nm(params , ns):
 #    p_misid: proportion of misidentified ancestral states
-    nu0, nu1,nu1_3,nu2_3,T1, T2, T3,p_misid = params
+    nu0, nu1,nu1_3,nu2_3,T1, T2, T3 = params
 
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)

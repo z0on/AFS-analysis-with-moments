@@ -43,7 +43,7 @@ def IM2iSC(params, ns):
     p_misid: proportion of misidentified ancestral states
     
     """
-    nua,nub,nu1_0,nu2_0,nu1,nu2,T,T0,m,mi,P,p_misid = params
+    nua,nub,nu1_0,nu2_0,nu1,nu2,T,T0,m,mi,P = params
     nu1_func = lambda t: nu1_0 * (nu1/nu1_0)**(t/T)
     nu2_func = lambda t: nu2_0 * (nu2/nu2_0)**(t/T)
     nu_func = lambda t: [nu1_func(t), nu2_func(t)]

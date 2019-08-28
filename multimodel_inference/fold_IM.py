@@ -42,7 +42,7 @@ def IMi(params, ns):
     p_misid: proportion of misidentified ancestral states
     
     """
-    nu1_0,nu2_0,nu1,nu2,T,m12,m21,p_misid = params
+    nu1_0,nu2_0,nu1,nu2,T,m12,m21 = params
     nu1_func = lambda t: nu1_0 * (nu1/nu1_0)**(t/T)
     nu2_func = lambda t: nu2_0 * (nu2/nu2_0)**(t/T)
     nu_func = lambda t: [nu1_func(t), nu2_func(t)]

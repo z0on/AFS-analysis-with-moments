@@ -37,7 +37,7 @@ np.set_printoptions(precision=3)
 
 def sc2ie(params , ns):
 #    p_misid: proportion of misidentified ancestral states
-    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m12_1, m21_1,p_misid = params
+    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m12_1, m21_1 = params
 
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
