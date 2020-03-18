@@ -64,6 +64,7 @@ fold_SC2ns.py:    nu0, nu1,T1, T2,p_misid
 fold_SC2sm1.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m,m12_1, m21_1,p_misid 
 fold_SC2sm2.py:    nu1_1, nu2_1, nu1_2,nu2_2,T0, T, m,m12_1, m21_1,p_misid 
 fold_SC3e.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3 
+fold_SC3el.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3
 fold_SC3el2.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_1,m21_1,m12_3,m21_3 
 fold_SC3elsm.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m 
 fold_SC3em.py:    nu1_1, nu2_1, nu1_2,nu2_2,nu1_3,nu2_3,T1, T2, T3,m12_3,m21_3 
