@@ -51,7 +51,7 @@ def s2mismB(params , ns):
  
 func=s2mismB
 upper_bound = [100, 100, 100, 100, 200,200,0.999]
-lower_bound = [1e-15,1e-15,1e-15,1e-15,1e-5,1e-5,1e-15]
+lower_bound = [1e-8,1e-8,1e-8,1e-8,1e-5,1e-5,1e-8]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 

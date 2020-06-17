@@ -56,7 +56,7 @@ def sc1ie(params , ns):
  
 func=sc1ie
 upper_bound = [100, 100, 100, 100, 200,200,200,200,0.999,0.25]
-lower_bound = [1e-15,1e-15,1e-15,1e-15,1e-5,1e-5,1e-5,1e-5,0.001,1e-5]
+lower_bound = [1e-8,1e-8,1e-8,1e-8,1e-5,1e-5,1e-5,1e-5,0.001,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 

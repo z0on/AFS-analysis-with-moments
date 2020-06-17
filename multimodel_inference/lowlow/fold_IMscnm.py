@@ -57,7 +57,7 @@ def imscnm(params, ns):
 
 func=imscnm
 upper_bound = [100,100,100, 100, 10,10]
-lower_bound = [1e-15,1e-15,1e-15,1e-15,1e-5,1e-5]
+lower_bound = [1e-8,1e-8,1e-8,1e-8,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 

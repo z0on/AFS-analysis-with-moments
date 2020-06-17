@@ -58,7 +58,7 @@ def sc12iml(params , ns):
  
 func=sc12iml
 upper_bound = [100, 100,100,100, 100, 100, 100,100, 200,200,200,200,200,200,0.999]
-lower_bound = [1e-15, 1e-15,1e-15,1e-15,1e-15,1e-15,1e-15,1e-15,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,0.001]
+lower_bound = [1e-8, 1e-8,1e-8,1e-8,1e-8,1e-8,1e-8,1e-8,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,0.001]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 

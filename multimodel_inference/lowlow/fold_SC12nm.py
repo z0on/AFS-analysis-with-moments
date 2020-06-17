@@ -49,7 +49,7 @@ def sc12nm(params , ns):
  
 func=sc12nm
 upper_bound = [100, 100,100,100, 100, 100, 100,100]
-lower_bound = [1e-15, 1e-15,1e-15,1e-15,1e-15,1e-15,1e-15,1e-15]
+lower_bound = [1e-8, 1e-8,1e-8,1e-8,1e-8,1e-8,1e-8,1e-8]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 

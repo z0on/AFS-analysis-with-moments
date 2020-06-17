@@ -47,7 +47,7 @@ def sc1ns(params , ns):
  
 func=sc1ns
 upper_bound = [100,100,0.25]
-lower_bound = [1e-15,1e-15,1e-5]
+lower_bound = [1e-8,1e-8,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
