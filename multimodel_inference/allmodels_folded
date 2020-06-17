@@ -64,6 +64,7 @@ fold_SC2ns.py
 fold_SC2sm1.py
 fold_SC2sm2.py
 fold_SC3e.py
+fold_SC3el.py
 fold_SC3el2.py
 fold_SC3elsm.py
 fold_SC3em.py

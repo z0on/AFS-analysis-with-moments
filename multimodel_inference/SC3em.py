@@ -40,8 +40,8 @@ def sc3ei(params , ns):
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, m12_3], [m21_3, 0]]))
-    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, 0], [0, 0]]))
+    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, 0], [0, 0]]))
+    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, m12_3], [m21_3, 0]]))
     fs.integrate([nu1_3, nu2_3], T3, m = np.array([[0, m12_3], [m21_3, 0]]))
 
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
@@ -67,17 +67,18 @@ ind=str(random.randint(0,999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
-moments.ModelPlot.plot_model(plot_mod, save_file="sc3el_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
+moments.ModelPlot.plot_model(plot_mod, save_file="sc3em_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", 
+reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
 all_boot=moments.Misc.bootstrap(dd,pop_ids,projections)
 uncert=moments.Godambe.GIM_uncert(func,all_boot,poptg,data)
 
 # printing parameters and their SDs
-print "RESULT","sc3el",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta,uncert
+print "RESULT","sc3em",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta,uncert
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=1, resid_range=3,
                                     pop_ids =pop_ids)
-plt.savefig("sc3el_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
+plt.savefig("sc3em_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 
