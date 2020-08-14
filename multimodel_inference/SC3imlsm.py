@@ -83,10 +83,10 @@ all_boot=moments.Misc.bootstrap(dd,pop_ids,projections)
 uncert=moments.Godambe.GIM_uncert(func,all_boot,poptg,data)
 
 # printing parameters and their SDs
-print "RESULT","sc3imlsm",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta,uncert
+print("RESULT","sc3imlsm",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta,uncert)
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
-moments.Plotting.plot_2d_comp_multinom(model, data, vmin=1, resid_range=3,
+moments.Plotting.plot_2d_comp_multinom(model, data, vmin=0.1, resid_range=3,
                                     pop_ids =pop_ids)
 plt.savefig("sc3imlsm_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 

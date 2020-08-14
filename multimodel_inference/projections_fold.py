@@ -18,4 +18,4 @@ for p in range(len(proj)):
     if maxS<data.S():
             maxS=data.S()
             maxproj=proj[p]
-print "\n------\n",maxproj,maxS,"\n"
+print("\n------\n",maxproj,maxS,"\n")

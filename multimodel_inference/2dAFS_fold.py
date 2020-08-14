@@ -30,7 +30,7 @@ data.mask[projections[0]-1,:]=True
 '''
 np.set_printoptions(precision=3)     
 
-moments.Plotting.plot_single_2d_sfs(data, vmin=1)
+moments.Plotting.plot_single_2d_sfs(data, vmin=0.1)
 plt.savefig('2dAFSf_'+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 nalleles=data.S()
-print "N alleles: ",nalleles
+print("N alleles: ",nalleles)
