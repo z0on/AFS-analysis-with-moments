@@ -8,8 +8,8 @@ See [GADMA](https://github.com/ctlab/GADMA) for the alternative solution to this
 
 ## Installation ##
 First of all, install *moments*
-Clone the repository and copy all the `*.py* files from `/AFS-analysis-with-moments/multimodel_inference/nodadi/python2.7/` or from `/AFS-analysis-with-moments/multimodel_inference/nodadi/python3/` (depending on your `python` version) to where you keep your executables (for example, `~/bin`). 
-> NOTE: examples below assime that the repository is cloned in the home directory, `~`. If you cloned it elsewhere, make sure to replace `~/AFS-analysis-with-moments` in the examples below with actual path.
+Clone the repository and copy all the `*.py` files from `/AFS-analysis-with-moments/multimodel_inference/nodadi/python2.7/` or from `/AFS-analysis-with-moments/multimodel_inference/nodadi/python3/` (depending on your `python` version) to where you keep your executables (for example, `~/bin`). 
+> NOTE: examples below assime that the repository is cloned in the home directory, `~/`. If you cloned it elsewhere, make sure to replace `~/AFS-analysis-with-moments` in the examples below with actual path.
 
 ## Stages of the method ##
 - The first step is **model selection**, where we run all possible models on 10 bootstrapped SFS. We actually run each model on each bootstrap six times, to make sure the model converges to its best likelihood at least once. Then we use an `R` script `model_selection_10boots.R` to select the best-fitted instance (out of 6) for each model for each bootstrap, and compare the AIC scores for all models. The best model is the one with the *lowest median AIC score among bootstrap replicates*.  
