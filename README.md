@@ -7,9 +7,16 @@ The problem with *moments* and *dadi* is that, while they can evaluate a pre-spe
 See [GADMA](https://github.com/ctlab/GADMA) for the alternative solution to this problem. Compared to GADMA, we are far less elegant but somewhat more flexible (we can incorporate essentially any model, for example, involving selection and heterogeneous introgression rates across the genome). Our approach also lets the user evaluate how much better the winning model is compared to "null" alternatives (for example, models with no population split, with symmetrical migration, or with constant population sizes). Our disadvantage is a ridiculously huge number of model-fit runs that we have to perform; the good news is, all this can be done in parallel, and each single-model run takes no more than 2 hours.
 
 ## Installation ##
-First of all, install *moments*
-Clone the repository and copy all the `*.py` files from `/AFS-analysis-with-moments/multimodel_inference/nodadi/python2.7/` or from `/AFS-analysis-with-moments/multimodel_inference/nodadi/python3/` (depending on your `python` version) to where you keep your executables (for example, `~/bin`). 
-> NOTE: examples below assime that the repository is cloned in the home directory, `~/`. If you cloned it elsewhere, make sure to replace `~/AFS-analysis-with-moments` in the examples below with actual path.
+First of all, install *moments*. The example below would clone it into root directory and install it for a specific user.
+```bash
+cd
+git clone https://bitbucket.org/simongravel/moments.git 
+cd moments
+python setup.py build_ext --inplace
+cd
+```
+Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-with-moments/multimodel_inference/nodadi/python2.7/` or from `/AFS-analysis-with-moments/multimodel_inference/nodadi/python3/` (depending on your `python` version) to where you keep your executables (for example, `~/bin`). 
+> NOTE: all code examples here assime the repository is cloned in the home directory, `~/`. If you cloned it elsewhere, make sure to replace `~/` in all examples with the actual path.
 
 ## Stages of the method ##
 - The first step is **model selection**, where we run all possible models on 10 bootstrapped SFS. We actually run each model on each bootstrap six times, to make sure the model converges to its best likelihood at least once. Then we use an `R` script `model_selection_10boots.R` to select the best-fitted instance (out of 6) for each model for each bootstrap, and compare the AIC scores for all models. The best model is the one with the *lowest median AIC score among bootstrap replicates*.  
