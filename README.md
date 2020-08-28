@@ -37,7 +37,7 @@ cat allmodels >>mods;
 done
 
 CONTRAST=p12 # name of the run, can be anything
-ARGS="p1 p2 16 16 0.02 0.005" # pop1, pop2, projection for pop1, projection for pop2, mutation rate (per genotyped portion of the genome per generation), generation time in thousands of years. Population names can be anything. Projections shoudl be rounded 0.8*2N for each population - in the case here, each population had 10 individuals sampled from it.
+ARGS="p1 p2 16 16 0.02 0.005" # pop1, pop2, projection for pop1, projection for pop2, mutation rate (per genotyped portion of the genome per generation), generation time in thousands of years. Population names can be anything. For ANGSD-derived SFS, projections should be 0.8*2N for each population (ronded to integer); in the case shown here, each population was represented by 10 individuals.
 
 >modsel.p12.1
 for B in `seq 1 10`; do
