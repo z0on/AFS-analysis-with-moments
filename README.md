@@ -24,22 +24,23 @@ Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-w
 
 ## Model selection ##
 Let's assume we have ten bootstrapped 2dSFS formatted for *moments* or *dadi*. Such file is nothing more than a line of numbers with a header line giving the dimensions of the spectrum ( 2 x N + 1 for each of the two populations, where N is the number of sampled diploids). See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD).
+Bootstrapped sfs shoudl be named like `p12_1.sfs`, `p12_2.sfs` etc. where `p12` is the name of population contrast.
 
 ```bash
 cd [where your boostrapped SFS files are]
 cp ~/AFS-analysis-with-moments/multimodel_inference/allmodels_unfolded allmodels
 # if your SFS needs to be folded, use this line instead:
 # cp ~/AFS-analysis-with-moments/multimodel_inference/allmodels_folded allmodels
-NREPS=3
+NREPS=6
 >mods
 for i in `seq 1 $NREPS`;do 
 cat allmodels >>mods;
 done
 
-CONTRAST=p12 # name of the run, can be anything
+CONTRAST=p12 # name of population comparison, should be matching the leading part of the bootstapped SFS names
 ARGS="p1 p2 16 16 0.02 0.005" # pop1, pop2, projection for pop1, projection for pop2, mutation rate (per genotyped portion of the genome per generation), generation time in thousands of years. Population names can be anything. For ANGSD-derived SFS, projections should be 0.8*2N for each population (ronded to integer); in the case shown here, each population was represented by 10 individuals.
 
->modsel.p12.1
+>modsel
 for B in `seq 1 10`; do
 INFILE=${CONTRAST}_${B}.sfs;
 echo $INFILE;
@@ -48,9 +49,8 @@ NMODELS=`cat mods | wc -l`
 for i in `seq 1 $NMODELS`; do
 echo "$INFILE $ARGS" >>args;
 done;
-paste mods args -d " " >>100runsc24.1;
+paste mods args -d " " >>modsel;
 done
-
 ```
 
 See **moments_scripts_README.txt** for instructions.
