@@ -26,7 +26,10 @@ Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-w
 Let's assume we have ten bootstrapped 2dSFS formatted for *moments* or *dadi*. Such file is nothing more than a line of numbers with a header line giving the dimensions of the spectrum ( 2 x N + 1 for each of the two populations, where N is the number of sampled diploids). See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD).
 
 ```bash
+cd [where your boostrapped SFS files are]
 cp ~/AFS-analysis-with-moments/multimodel_inference/allmodels_unfolded allmodels
+# if your SFS needs to be folded, use this line instead:
+# cp ~/AFS-analysis-with-moments/multimodel_inference/allmodels_folded allmodels
 NREPS=3
 >mods
 for i in `seq 1 $NREPS`;do 
