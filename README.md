@@ -1,4 +1,4 @@
-# Multimodel demographic inference using *moments*#
+# Multimodel demographic inference using *moments* 
 
 *Moments* is AFS analysis method superficially similar to *dadi* but operating on different math (ordinary differential equations rather than diffusion approximation) It is considerably faster than *dadi*, handles up to five populations simultaneously, has easy functions for bootstrapping and estimating parameter uncertainties, and plots cartoons of inferred demographic scenarios.
 
