@@ -1,17 +1,47 @@
 # Multimodel demographic inference using *moments* 
 
-[*Moments*](https://bitbucket.org/simongravel/moments/src/master/) is AFS analysis method superficially similar to *dadi* but operating on different math (ordinary differential equations rather than diffusion approximation) It is considerably faster than *dadi*, handles up to five populations simultaneously, has easy functions for bootstrapping and estimating parameter uncertainties, and plots cartoons of inferred demographic scenarios.
+[*Moments*](https://bitbucket.org/simongravel/moments/src/master/) is AFS analysis method superficially similar to *dadi* but operating on different math (ordinary differential equations rather than diffusion approximation). It is considerably faster than *dadi* (although somewhat less accurate), handles up to five populations simultaneously, and plots cartoons of inferred demographic scenarios.
 
-The problem with *moments* and *dadi* is that they are designed to evaluate a pre-specified demographic model; they cannot find the model structure that best fits the data. The idea of this repository is pretty simple: to fit all possible two-population models we can possible think of to the experimental 2dSFS and  use Akaike Information Criterion to select the best one.
+The problem with *moments* and *dadi* is that, while they can evaluate a pre-specified demographic model; they are not designed to search for the general model structure that best fits the data (i.e., splitting or not, with or without migration, with or without additional growth periods). The idea of this repository to solving this is pretty simple: to fit all two-population models we can possible think of to the experimental 2dSFS and use Akaike Information Criterion to select the best one.
 
 See [GADMA](https://github.com/ctlab/GADMA) for the alternative solution to this problem. Compared to GADMA, we are far less elegant but somewhat more flexible (we can incorporate essentially any model, for example, involving selection and heterogeneous introgression rates across the genome). Our approach also lets the user evaluate how much better the winning model is compared to "null" alternatives (for example, models with no population split, with symmetrical migration, or with constant population sizes). Our disadvantage is a ridiculously huge number of model-fit runs that we have to perform; the good news is, all this can be done in parallel, and each single-model run takes no more than 2 hours.
+
+## Installation ##
+First of all, install *moments*
+Clone the repository and copy all the `*.py* files from `/AFS-analysis-with-moments/multimodel_inference/nodadi/python2.7/` or from `/AFS-analysis-with-moments/multimodel_inference/nodadi/python3/` (depending on your `python` version) to where you keep your executables (for example, `~/bin`). 
+> NOTE: examples below assime that the repository is cloned in the home directory, `~`. If you cloned it elsewhere, make sure to replace `~/AFS-analysis-with-moments` in the examples below with actual path.
 
 ## Stages of the method ##
 - The first step is **model selection**, where we run all possible models on 10 bootstrapped SFS. We actually run each model on each bootstrap six times, to make sure the model converges to its best likelihood at least once. Then we use an `R` script `model_selection_10boots.R` to select the best-fitted instance (out of 6) for each model for each bootstrap, and compare the AIC scores for all models. The best model is the one with the *lowest median AIC score among bootstrap replicates*.  
 - The second step is running the winning model on 100 bootstrapped SFS, to **evaluate parameter uncertainties**. Once again, we will have to do 6 model runs for each bootstrap. The parameter meanings and uncertainties are deciphered by the second R script that we have, `bestmodel_bootstrap.R`.
 
 ## Model selection ##
-Let's assume we have a 2dSFS formatted for *moments* or *dadi*, which is no more than a string of numbers with a header line giving two numbers, the dimensions of the spectrum ( 2 x N + 1 for each of the two populations, where N is the number of sampled diploids). See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)
+Let's assume we have ten bootstrapped 2dSFS formatted for *moments* or *dadi*. Such file is nothing more than a line of numbers with a header line giving the dimensions of the spectrum ( 2 x N + 1 for each of the two populations, where N is the number of sampled diploids). See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD).
+
+```bash
+cp ~/AFS-analysis-with-moments/multimodel_inference/allmodels_unfolded allmodels
+NREPS=3
+>mods
+for i in `seq 1 $NREPS`;do 
+cat allmodels >>mods;
+done
+
+CONTRAST=c24
+ARGS="c2 c4 50 12 0.02 0.005"
+
+>100runsc24.1
+for B in `seq 1 10`; do
+INFILE=${CONTRAST}_${B}.sfs;
+echo $INFILE;
+NMODELS=`cat mods | wc -l`
+>args
+for i in `seq 1 $NMODELS`; do
+echo "$INFILE $ARGS" >>args;
+done;
+paste mods args -d " " >>100runsc24.1;
+done
+
+```
 
 See **moments_scripts_README.txt** for instructions.
 ## Appendix ## 
