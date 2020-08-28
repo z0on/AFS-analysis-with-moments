@@ -1,6 +1,6 @@
 # Multimodel demographic inference using *moments* 
 
-*Moments* is AFS analysis method superficially similar to *dadi* but operating on different math (ordinary differential equations rather than diffusion approximation) It is considerably faster than *dadi*, handles up to five populations simultaneously, has easy functions for bootstrapping and estimating parameter uncertainties, and plots cartoons of inferred demographic scenarios.
+[*Moments*](https://bitbucket.org/simongravel/moments/src/master/) is AFS analysis method superficially similar to *dadi* but operating on different math (ordinary differential equations rather than diffusion approximation) It is considerably faster than *dadi*, handles up to five populations simultaneously, has easy functions for bootstrapping and estimating parameter uncertainties, and plots cartoons of inferred demographic scenarios.
 
 The problem with *moments* and *dadi* is that they are designed to evaluate a pre-specified demographic model; they cannot find the model structure that best fits the data. The idea of this repository is pretty simple: to fit all possible two-population models we can possible think of to the experimental 2dSFS and  use Akaike Information Criterion to select the best one.
 
