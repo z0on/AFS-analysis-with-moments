@@ -36,10 +36,10 @@ for i in `seq 1 $NREPS`;do
 cat allmodels >>mods;
 done
 
-CONTRAST=c24
-ARGS="c2 c4 50 12 0.02 0.005"
+CONTRAST=p12 # name of the run, can be anything
+ARGS="p1 p2 16 16 0.02 0.005" # pop1, pop2, projection for pop1, projection for pop2, mutation rate (per genotyped portion of the genome per generation), generation time in thousands of years. Population names can be anything. Projections shoudl be rounded 0.8*2N for each population - in the case here, each population had 10 individuals sampled from it.
 
->100runsc24.1
+>modsel.p12.1
 for B in `seq 1 10`; do
 INFILE=${CONTRAST}_${B}.sfs;
 echo $INFILE;
