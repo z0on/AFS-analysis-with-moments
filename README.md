@@ -67,6 +67,7 @@ There will be two plots generated. The first one is the boxplot of best likeliho
 ![all boxplots](all_boxplots.png)
 
 And the second one is the plot of just the medians for the top 10 models:
+
 ![top10](top10_medians.png)
 
 ## Appendix ## 
