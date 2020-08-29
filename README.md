@@ -61,7 +61,13 @@ grep RESULT p12.stdout -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o\d+\S//'
 # extracting numbers of parameters and likelihoods
 cut -f 2,3,4,5,6 -d " " p12.res >p12.likes
 ```
+Lastly, open `modelSelection_10boots.R`, enter the name of the `*.likes` file(s) on line 8, and run it.
 
+There will be two plots generated. The first one is the boxplot of best likelihoods for each model for all bootstrap replicates:
+![all boxplots](all_boxplots.png)
+
+And the second one is the plot of just the medians for the top 10 models:
+![top10](top10_medians.png)
 
 ## Appendix ## 
 
