@@ -52,8 +52,23 @@ done;
 paste mods args -d " " >>modsel;
 done
 ```
+Run all commands in `modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 2 hours each. Best run these on an HPC cluster, in parallel! **Make sure the STDOUT output of all these runs is collected in some text file**, let's call it `p12.stdout`.
 
-See **moments_scripts_README.txt** for instructions.
+Then, to extract results:
+```bash
+# collecting results, with parameter estimates (just in case)
+grep RESULT p12.stdout -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o\d+\S//' | perl -pe 's/\n//' | perl -pe 's/[\[\]]//g' | perl -pe 's/RESULT/\nRESULT/g' | grep RESULT >p12.res
+# extracting numbers of parameters and likelihoods
+cut -f 2,3,4,5,6 -d " " p12.res >p12.likes
+```
+Lastly, open `modelSelection_10boots.R`, enter the name of the `*.likes` file(s) on line 8, and run it.
+
+There will be two plots generated. The first one is the boxplot of best likelihoods for each model for all bootstrap replicates:
+![all boxplots](all_boxplots.png)
+
+And the second one is the plot of just the medians for the top 10 models:
+![top10](top10_medians.png)
+
 ## Appendix ## 
 
 [Link to original *Moments* paper]( http://www.genetics.org/content/early/2017/05/08/genetics.117.200493)
