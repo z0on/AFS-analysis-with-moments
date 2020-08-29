@@ -15,7 +15,7 @@ cd moments
 python setup.py build_ext --inplace
 cd
 ```
-Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-with-moments/multimodel_inference/nodadi/python2.7/` or from `/AFS-analysis-with-moments/multimodel_inference/nodadi/python3/` (depending on your `python` version) to where you keep your executables (for example, `~/bin`). 
+Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-with-moments/multimodel_inference/nodadi.python2/` or from `/AFS-analysis-with-moments/multimodel_inference/nodadi.python3/` (depending on your `python` version) to where you keep your executables (for example, `~/bin`). 
 > NOTE: all code examples here assume the repository is cloned in the home directory, `~/`. If you cloned it elsewhere, make sure to replace `~/` in all examples with the actual path.
 
 ## Overview of the method ##
