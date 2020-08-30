@@ -15,7 +15,7 @@ cd moments
 python setup.py build_ext --inplace
 cd
 ```
-Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-with-moments/multimodel_inference/nodadi.python2/` or from `/AFS-analysis-with-moments/multimodel_inference/nodadi.python3/` (depending on your `python` version) to where you keep your executables (for example, `~/bin`). 
+Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-with-moments/multimodel_inference/py2/` or from `/AFS-analysis-with-moments/multimodel_inference/py3/` (depending on your `python` version) to where you keep your executables (for example, `~/bin`). 
 > NOTE: all code examples here assume the repository is cloned in the home directory, `~/`. If you cloned it elsewhere, make sure to replace `~/` in all examples with the actual path.
 
 ## Overview of the method ##
@@ -46,22 +46,23 @@ INFILE=${CONTRAST}_${B}.sfs;
 echo $INFILE;
 NMODELS=`cat mods | wc -l`
 >args
->{$CONTRAST}.stdout
+>${CONTRAST}.stdout
 for i in `seq 1 $NMODELS`; do
 echo "$INFILE $ARGS >>${CONTRAST}.stdout" >>args;
 done;
 paste mods args -d " " >>modsel;
 done
 ```
-Run all commands in `modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 2 hours each. Best run these on an HPC cluster, in parallel! Note that all the STDOUT output is collected in a file, `p12.stdout` in this case.
+Run all commands in `modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 2 hours each. Best run these on an HPC cluster, in parallel! Note that all the screen output is collected in a file, `p12.stdout` in this case.
 
 Then, to extract results:
 ```bash
-grep RESULT p12.stdout -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o\d+\S//' | perl -pe 's/\n//' | perl -pe 's/[\[\]]//g' | perl -pe 's/RESULT/\nRESULT/g' | grep RESULT >p12.res
+CONTRAST=p12 # don't forget to regenerate $CONTRAST variable if you had to re-login!
+grep RESULT ${CONTRAST}.stdout -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o\d+\S//' | perl -pe 's/\n//' | perl -pe 's/[\[\]]//g' | perl -pe 's/RESULT/\nRESULT/g' | grep RESULT >${CONTRAST}.res
 ```
-Lastly, run `modelSelection.R` on the file `p12.res`:
+Lastly, run `modelSelection.R` on the file `${CONTRAST}.res`:
 ```bash
-Rscript modelSelection.R infile=p12.res
+Rscript modelSelection.R infile=${CONTRAST}.res
 ```
 Two plots will be generated. The first one is the boxplot of best AIC scores for each model for all bootstrap replicates:
 ![all boxplots](all_boxplots.png)
@@ -70,14 +71,14 @@ And the second one is the plot of just the AIC medians for the top 10 models:
 
 ![top10](top10_medians.png)
 
-The script also outputs the text file named `[infile].[modelname]`, where `[modelname]` is the name of the winning model. This file contains the fitted parameter values for the winning model, which will be used at the next stage as "guiding values" for random restarts.
+The script also outputs the text file named `[infile].[modelname]`, **where `[modelname]` is the name of the winning model**. This file contains the fitted parameter values for the winning model, which will be used at the next stage as "guiding values" for random restarts.
 
 ## Bootstrapping the winning model ## 
 Assuming we have 100 boostrapped SFS (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)), we are now going to run just the winning model on all of them. We will do 6 random restarts per bootstrap replicate, using parameters output by `modelSelection.R` as "guides": these values will be randomly perturbed (changed on average 2-fold up or down) at the start of each model run.
 
 ```bash
 CONTRAST=p12 
-WINNER="sc3ielsm1" # winning model, accodring to stage 1
+WINNER="sc3ielsm1" # change this to your winning model, according to stage 1
 ARGS="p1 p2 16 16 0.02 0.005 ${CONTRAST}.res.${WINNER}"
 
 NREPS=6 # number of random restarts per bootstrap rep
@@ -92,18 +93,19 @@ INFILE=${CONTRAST}_${B}.sfs;
 echo $INFILE;
 NMODELS=`cat mods | wc -l`
 >args
+>${CONTRAST}.boots
 for i in `seq 1 $NMODELS`; do
-echo "$INFILE $ARGS" >>args;
+echo "$INFILE $ARGS >>${CONTRAST}.boots" >>args;
 done;
 paste mods args -d " " >>winboots;
 done
 ```
-Run all commands in `winboots`, collecting all the STDOUT output in a file, say `winboots.out`. Then extract results from that file and run `bestmodel_bootstrap.R` on them:
+Run all commands in `winboots`, collecting all the text output in a file `p12.boots`. Then extract results from that file and run `bestmodel_bootstrap.R` on them:
 ```bash
-grep RESULT winboots.out -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o\d+\S//' | perl -pe 's/\n//' | perl -pe 's/[\[\]]//g' | perl -pe 's/RESULT/\nRESULT/g' | grep RESULT >winboots.res
-Rscript bestmodel_bootstrap.R infile=winboots.res
+grep RESULT ${CONTRAST}.boots -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o\d+\S//' | perl -pe 's/\n//' | perl -pe 's/[\[\]]//g' | perl -pe 's/RESULT/\nRESULT/g' | grep RESULT >${CONTRAST}.boots.res
+Rscript bestmodel_bootstrap.R infile=${CONTRAST}.boots.res
 ```
-Additonal options to `bestmodel_bootstrap.R` are:
+>Note: Additonal options to `bestmodel_bootstrap.R` are:
 - `topq`: top quantile cutoff. Only boostrap runs in this top quantile will be summarized. Default 0.25.
 - `path2models`: path to the subdir `multimodel_inference` within this cloned repository. Default `~/AFS-analysis-with-moments/multimodel_inference/`.
 
