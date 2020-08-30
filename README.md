@@ -106,12 +106,15 @@ grep RESULT ${CONTRAST}.boots -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o\
 Rscript bestmodel_bootstrap.R infile=${CONTRAST}.boots.res
 ```
 >Note: Additonal options to `bestmodel_bootstrap.R` are:
-- `topq`: top quantile cutoff. Only boostrap runs in this top quantile will be summarized. Default 0.25.
-- `path2models`: path to the subdir `multimodel_inference` within this cloned repository. Default `~/AFS-analysis-with-moments/multimodel_inference/`.
+>- `topq`: top quantile cutoff. Only boostrap runs in this top quantile will be summarized. Default 0.25.
+>- `path2models`: path to the subdir `multimodel_inference` within this cloned repository. Default `~/AFS-analysis-with-moments/multimodel_inference/`.
 
 This will generate the histogram of likelihoods and red line for top=quantile cutoff:
+
 ![boots histogram](boothist.png)
+
 ...and, finally, boxplots for parameter estimates:
+
 ![params](boot_params.png)
 
 The script also saves an RData bundle containing the summary dataframe (medians, 25% quantile, 75% quantile for all parameters) and the big dataframe containing all summarized bootstrap data.
