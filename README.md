@@ -46,24 +46,22 @@ INFILE=${CONTRAST}_${B}.sfs;
 echo $INFILE;
 NMODELS=`cat mods | wc -l`
 >args
+>{$CONTRAST}.stdout
 for i in `seq 1 $NMODELS`; do
-echo "$INFILE $ARGS" >>args;
+echo "$INFILE $ARGS >>${CONTRAST}.stdout" >>args;
 done;
 paste mods args -d " " >>modsel;
 done
 ```
-Run all commands in `modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 2 hours each. Best run these on an HPC cluster, in parallel! **Make sure the STDOUT output of all these runs is collected in some text file**, let's call it `p12.stdout`.
+Run all commands in `modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 2 hours each. Best run these on an HPC cluster, in parallel! Note that all the STDOUT output is collected in a file, `p12.stdout` in this case.
 
 Then, to extract results:
 ```bash
-# collecting results, with parameter estimates (just in case)
 grep RESULT p12.stdout -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o\d+\S//' | perl -pe 's/\n//' | perl -pe 's/[\[\]]//g' | perl -pe 's/RESULT/\nRESULT/g' | grep RESULT >p12.res
-# extracting numbers of parameters and likelihoods
-cut -f 2,3,4,5,6 -d " " p12.res >p12.likes
 ```
 Lastly, run `modelSelection.R` on the file `p12.res`:
 ```bash
-Rscript modelSelection.R infile=p12.likes
+Rscript modelSelection.R infile=p12.res
 ```
 Two plots will be generated. The first one is the boxplot of best AIC scores for each model for all bootstrap replicates:
 ![all boxplots](all_boxplots.png)
@@ -72,18 +70,20 @@ And the second one is the plot of just the AIC medians for the top 10 models:
 
 ![top10](top10_medians.png)
 
+The script also outputs the text file named `[infile].[modelname]`, where `[modelname]` is the name of the winning model. This file contains the fitted parameter values for the winning model, which will be used at the next stage as "guiding values" for random restarts.
+
 ## Bootstrapping the winning model ## 
-Assuming we have 100 boostrapped SFS (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)), we are now going to run just the winning model on all of them, with 6 random restarts per bootstrap replicate. 
+Assuming we have 100 boostrapped SFS (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)), we are now going to run just the winning model on all of them. We will do 6 random restarts per bootstrap replicate, using parameters output by `modelSelection.R` as "guides": these values will be randomly perturbed (changed on average 2-fold up or down) at the start of each model run.
 
 ```bash
-CONTRAST=p12
-ARGS="p1 p2 16 16 0.02 0.005"
-WINNER="SC3ielsm1.py" # winning model, accodring to stage 1
+CONTRAST=p12 
+WINNER="sc3ielsm1" # winning model, accodring to stage 1
+ARGS="p1 p2 16 16 0.02 0.005 ${CONTRAST}.res.${WINNER}"
 
 NREPS=6 # number of random restarts per bootstrap rep
 >mods
 for i in `seq 1 $NREPS`;do 
-echo $WINNER >>mods;
+echo ${WINNER}.py >>mods;
 done
 
 >winboots
