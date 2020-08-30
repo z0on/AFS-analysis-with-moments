@@ -19,11 +19,11 @@ Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-w
 > NOTE: all code examples here assume the repository is cloned in the home directory, `~/`. If you cloned it elsewhere, make sure to replace `~/` in all examples with the actual path.
 
 ## Overview of the method ##
-- The first step is **model selection**, where we run all possible models on 10 bootstrapped SFS. We actually run each model on each bootstrap six times, to make sure the model converges to its best likelihood at least once. Then we use an `R` script `model_selection_10boots.R` to select the best-fitted instance (out of 6) for each model for each bootstrap, and compare the AIC scores for all models. The best model is the one with the *lowest median AIC score among bootstrap replicates*.  
-- The second step is running the winning model on 100 bootstrapped SFS, to **evaluate parameter uncertainties**. Once again, we will have to do 6 model runs for each bootstrap. The parameter meanings and uncertainties are deciphered by the second R script that we have, `bestmodel_bootstrap.R`.
+- The first step is **model selection**, where we run all possible models on 10 bootstrapped SFS. We actually run each model on each bootstrap six times (six random restarts), to make sure the model converges to its best likelihood at least once. Then we use an `R` script `model_selection_10boots.R` to select the best-fitted instance (out of 6) for each model for each bootstrap, and compare the AIC scores for all models. The best model is the one with the *lowest median AIC score among bootstrap replicates*.  
+- The second step is running the winning model on 100 bootstrapped SFS, to **evaluate parameter uncertainties**. Once again, we will have to do 6 random restarts for each bootstrap. The parameter meanings and uncertainties are deciphered by the second R script that we have, `bestmodel_bootstrap.R`.
 
 ## Model selection ##
-Let's assume we have ten bootstrapped 2dSFS formatted for *moments* or *dadi*. Such file is nothing more than a line of numbers with a header line giving the dimensions of the spectrum ( 2 x N + 1 for each of the two populations, where N is the number of sampled diploids). See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD).
+Let's assume we have ten bootstrapped 2dSFS formatted for *moments* or *dadi* (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)).Such file is nothing more than a line of numbers with a header line giving the dimensions of the spectrum ( 2 x N + 1 for each of the two populations, where N is the number of sampled diploids). 
 Bootstrapped sfs shoudl be named like `p12_1.sfs`, `p12_2.sfs` etc. where `p12` is the name of population contrast.
 
 ```bash
@@ -31,7 +31,7 @@ cd [where your boostrapped SFS files are]
 cp ~/AFS-analysis-with-moments/multimodel_inference/allmodels_unfolded allmodels
 # if your SFS needs to be folded, use this line instead:
 # cp ~/AFS-analysis-with-moments/multimodel_inference/allmodels_folded allmodels
-NREPS=6
+NREPS=6 # number of random restarts per model per bootstrap rep
 >mods
 for i in `seq 1 $NREPS`;do 
 cat allmodels >>mods;
@@ -61,14 +61,60 @@ grep RESULT p12.stdout -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o\d+\S//'
 # extracting numbers of parameters and likelihoods
 cut -f 2,3,4,5,6 -d " " p12.res >p12.likes
 ```
-Lastly, open `modelSelection_10boots.R`, enter the name of the `*.likes` file(s) on line 8, and run it.
-
+Lastly, run `modelSelection.R` on the file `p12.res`:
+```bash
+Rscript modelSelection.R infile=p12.likes
+```
 Two plots will be generated. The first one is the boxplot of best AIC scores for each model for all bootstrap replicates:
 ![all boxplots](all_boxplots.png)
 
 And the second one is the plot of just the AIC medians for the top 10 models:
 
 ![top10](top10_medians.png)
+
+## Bootstrapping the winning model ## 
+Assuming we have 100 boostrapped SFS (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)), we are now going to run just the winning model on all of them, with 6 random restarts per bootstrap replicate. 
+
+```bash
+CONTRAST=p12
+ARGS="p1 p2 16 16 0.02 0.005"
+WINNER="SC3ielsm1.py" # winning model, accodring to stage 1
+
+NREPS=6 # number of random restarts per bootstrap rep
+>mods
+for i in `seq 1 $NREPS`;do 
+echo $WINNER >>mods;
+done
+
+>winboots
+for B in `seq 1 100`; do
+INFILE=${CONTRAST}_${B}.sfs;
+echo $INFILE;
+NMODELS=`cat mods | wc -l`
+>args
+for i in `seq 1 $NMODELS`; do
+echo "$INFILE $ARGS" >>args;
+done;
+paste mods args -d " " >>winboots;
+done
+```
+Run all commands in `winboots`, collecting all the STDOUT output in a file, say `winboots.out`. Then extract results from that file and run `bestmodel_bootstrap.R` on them:
+```bash
+grep RESULT winboots.out -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o\d+\S//' | perl -pe 's/\n//' | perl -pe 's/[\[\]]//g' | perl -pe 's/RESULT/\nRESULT/g' | grep RESULT >winboots.res
+Rscript bestmodel_bootstrap.R infile=winboots.res
+```
+Additonal options to `bestmodel_bootstrap.R` are:
+- `topq`: top quantile cutoff. Only boostrap runs in this top quantile will be summarized. Default 0.25.
+- `path2models`: path to the subdir `multimodel_inference` within this cloned repository. Default `~/AFS-analysis-with-moments/multimodel_inference/`.
+
+This will generate the histogram of likelihoods and red line for top=quantile cutoff:
+![boots histogram](boothist.png)
+...and, finally, boxplots for parameter estimates:
+![params](boot_params.png)
+
+The script also saves an RData bundle containing the summary dataframe (medians, 25% quantile, 75% quantile for all parameters) and the big dataframe containing all summarized bootstrap data.
+
+
 
 ## Appendix ## 
 
