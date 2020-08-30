@@ -13,7 +13,7 @@ infile=[filename]    results of bootstraps. Obtained by summarizing the STDOUT o
 grep RESULT myboots.out -A 4 | grep -E \"[0-9]|\\]\" | perl -pe 's/^100.+\\.o\\d+\\S//' | perl -pe 's/\\n//' | perl -pe 's/[\\[\\]]//g' | perl -pe 's/RESULT/\\nRESULT/g' | grep RESULT >myboots.res
 
 				
-topq=0.25        top quantile to summarize. 0.25 means that only the best-likelihood 25% 
+topq=0.5        top quantile to summarize. 0.25 means that only the best-likelihood 25% 
                 of bootstrap replicates will be used to summarize paramter values.
                 
 path2models=\"~/AFS-analysis-with-moments/multimodel_inference/\"   path to the cloned repository
@@ -26,7 +26,7 @@ if (length(infl)==0) { stop ("specify input file (infile=filename)\nRun script w
 infile=sub("infile=","", commandArgs()[infl])
 
 topq =grep("topq=",commandArgs())
-if(length(topq)>0) { topq=as.numeric(sub("topq=","", commandArgs()[topq])) } else { topq=0.25 }
+if(length(topq)>0) { topq=as.numeric(sub("topq=","", commandArgs()[topq])) } else { topq=0.5 }
 
 path2models =grep("path2models=",commandArgs())
 if(length(path2models)>0) { topq=sub("path2models=","", commandArgs()[path2models]) } else { path2models="~/AFS-analysis-with-moments/multimodel_inference/" }

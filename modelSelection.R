@@ -11,7 +11,6 @@ infile=[filename]    results of model runs. Obtained by summarizing the STDOUT o
                      by running 
                      
 grep RESULT manymodels.out -A 4 | grep -E \"[0-9]|\\]\" | perl -pe 's/^100.+\\.o\\d+\\S//' | perl -pe 's/\\n//' | perl -pe 's/[\\[\\]]//g' | perl -pe 's/RESULT/\\nRESULT/g' | grep RESULT >manymodels.res
-cut -f 2,3,4,5,6 -d \" \" manymodels.res > manymodels.likes
 
 topq=0.25        top quantile to summarize. 0.25 means that only the best-likelihood 25% 
                 of bootstrap replicates will be used to summarize paramter values.
@@ -23,12 +22,14 @@ infl=grep("infile=",commandArgs())
 if (length(infl)==0) { stop ("specify input file (infile=filename)\nRun script without arguments to see all options\n") }
 infile=sub("infile=","", commandArgs()[infl])
 
-
-#infile="c14.likes"
+#infile="c14.res"
 
 library(ggplot2)
 
-npl=read.table(infile)
+system(paste("cut -f 2,3,4,5,6 -d ' ' ",infile," > ",infile,".likes",sep=""))
+npl=read.table(paste(infile,".likes",sep=""))
+system(paste("rm ",infile,".likes",sep=""))
+
 names(npl)=c("model","id","npara","ll","boot")
 #head(npl)
 #npl=npl[grep(infile,npl$boot),]
@@ -73,5 +74,18 @@ pdf(width=15,height=5,file=paste(infile,"_modsel_allBoxplots.pdf",sep=""))
 pp=ggplot(awt,aes(model,aic))+geom_boxplot()+scale_y_log10()+theme(axis.text.x = element_text(angle = 45,hjust=1))
 plot(pp)
 dev.off()
+
+# ----- extracting name and parameters of the winning model
+
+winner=as.character(modmed[1,1])
+
+system(paste("grep ",winner," ", infile," > ",infile,".winmod",sep=""))
+npl0=read.table(paste(infile,".winmod",sep=""))
+system(paste("rm ",infile,".winmod",sep=""))
+
+npl0=npl0[which(npl0$V5==max(npl0$V5)),]
+params=as.vector(npl0[1,c(9:(ncol(npl0)-1))])
+write.table(params,file=paste(infile,".",winner,sep=""),quote=F,col.names=F,row.names=F)
+
 print(as.character(modmed[1,1]),quote=F)
 
