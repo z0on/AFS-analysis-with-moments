@@ -167,7 +167,7 @@ done
 
 ```
 Execute all commands in `b100`.
-Finally, we do "bagging" (averaging of 5 boostrap replicates within each of the 100 series):
+Finally, we do "bagging" (averaging of 5 bootstrap replicates within each of the 100 series):
 
 ```bash
 SFSIZE="21 21" # 2N+1 for each population. In this case we assume that we have sampled 10 diploid individuals from each `p1` and `p2`.
