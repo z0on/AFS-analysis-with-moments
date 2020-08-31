@@ -162,7 +162,7 @@ Now we generate the bootstrapped data (100 series of 6 bootstraps):
 export GENOME_REF=mygenome.fasta # reference to which the reads were mapped
 >b100
 for B in `seq 1 100`; do
-echo "sleep $B && realSFS p1.saf.idx p2.saf.idx -ref $GENOME_REF -anc $GENOME_REF -bootstrap 6 -P 1 -resample_chr 1 >p12_$B">b100;
+echo "sleep $B && realSFS p1.saf.idx p2.saf.idx -ref $GENOME_REF -anc $GENOME_REF -bootstrap 6 -P 1 -resample_chr 1 >p12_$B">>b100;
 done
 
 ```
