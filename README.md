@@ -166,7 +166,7 @@ echo "sleep $B && realSFS p1.saf.idx p2.saf.idx -ref $GENOME_REF -anc $GENOME_RE
 done
 
 ```
-Execute all commands in `b100`.
+Execute all commands in `b100` - this will take a while so better do it in parallel.
 Finally, we do "bagging" (averaging of 5 bootstrap replicates within each of the 100 series):
 
 ```bash
