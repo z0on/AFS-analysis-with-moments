@@ -100,7 +100,7 @@ done;
 paste mods args -d " " >>winboots;
 done
 ```
-Run all commands in `winboots`, collecting all the text output in a file `p12.boots`. Then extract results from that file and run `bestmodel_bootstrap.R` on them:
+Run all commands in `winboots`, all the text output will be collected in the file `p12.boots`. Then extract results from that file and run `bestmodel_bootstrap.R` on them:
 ```bash
 grep RESULT ${CONTRAST}.boots -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o\d+\S//' | perl -pe 's/\n//' | perl -pe 's/[\[\]]//g' | perl -pe 's/RESULT/\nRESULT/g' | grep RESULT >${CONTRAST}.boots.res
 Rscript bestmodel_bootstrap.R infile=${CONTRAST}.boots.res
