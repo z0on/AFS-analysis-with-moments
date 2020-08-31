@@ -146,7 +146,8 @@ zcat p12.mafs.gz | cut -f 1,2 | tail -n +2 > goodsites
 angsd sites index goodsites
 
 ```
-Next, we use the same `goodsites` sites to obtain SAF data in both populations:
+Next, we use the same `goodsites` to obtain SAF data for both populations:
+>Note: don't worry about folding at this point. We will fold the spectra later, when running *moments* models, if needed.
 
 ```bash
 export GENOME_REF=mygenome.fasta # reference to which the reads were mapped
@@ -156,7 +157,6 @@ angsd -sites goodsites -b p2.bams -GL 1 -P 4 $TODO -out p2 &
 ```
 
 Now we generate the bootstrapped data (100 series of 6 bootstraps):
->note: don't worry about folding at this point. We will fold the spectra later, when running *moments* models, if needed.
 
 ```bash
 export GENOME_REF=mygenome.fasta # reference to which the reads were mapped
