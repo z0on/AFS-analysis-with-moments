@@ -107,7 +107,7 @@ Rscript bestmodel_bootstrap.R infile=${CONTRAST}.boots.res
 ```
 >Note: Additonal options to `bestmodel_bootstrap.R` are:
 >- `topq`: top quantile cutoff. Only boostrap runs in this top quantile will be summarized. Default 0.25.
->- `path2models`: path to the subdir `multimodel_inference` within this cloned repository. Default `~/AFS-analysis-with-moments/multimodel_inference/`.
+>- `path2models`: path to the subdir `multimodel_inference`. Default `~/AFS-analysis-with-moments/multimodel_inference/`.
 
 This will generate the histogram of likelihoods and red line for top=quantile cutoff:
 
@@ -120,8 +120,66 @@ This will generate the histogram of likelihoods and red line for top=quantile cu
 The script also saves an RData bundle containing the summary dataframe (medians, 25% quantile, 75% quantile for all parameters) and the big dataframe containing all summarized bootstrap data.
 
 
-
 ## Appendix ## 
+
+### Obtaining bootstrapped SFS with ANGSD ###
+
+Here we obtain 100 series of 6 bootstrap replicates. For each of the series, we discard the first replicate (it is just the original data, according to ANGSD pundit Nate Pope) and average the remaining 5. This procedure is called "bagging" and is designed to mitigate the noise that ANGSD-derived SFS often show, especially for small datasets (i.e. RAD-seq). The resulting 100 "bagged" datasets are going to be our bootstrap replicates.
+
+Let's assume we have two populations, `p1` and `p2`, and we have two text files, `p1.bams` and p2.bams`, listing `\*.bam` files for each population. First we need to collect sites (variable and invariable!) that pass our filters in both populations:
+
+```bash
+
+GRate=0.8 # genotyping rate filter - a site must be genotyped in this fraction of all samples.
+cat p1.bams p2.bams > p12.bams
+
+FILTERS='-uniqueOnly 1 -skipTriallelic 1 -minMapQ 30 -minQ 30 -doHWE 1 -maxHetFreq 0.5 -hetbias_pval 1e-5 -minInd $MI'
+# add `-sb_pval 1e-5` (strand bias) to FILTERS if you have 2bRAD, GBS, or WGS data, but not if you have used any other type of RAD it would only sequence one strand.
+
+TODO='-doMajorMinor 1 -doMaf 1 -dosnpstat 1 -doPost 2 -doGeno 11'
+echo 'export NIND=`cat p12.bams | wc -l`; export MI=`echo "($NIND*$GRate+0.5)/1" | bc`' >calc
+source calc && angsd -b p12.bams -GL 1 -P 4 $FILTERS $TODO -out p12 &
+
+# wait a while...
+
+zcat p12.mafs.gz | cut -f 1,2 | tail -n +2 > goodsites
+angsd sites index goodsites
+
+```
+Next, we use the same `goodsites` sites to obtain SAF data in both populations:
+
+```bash
+export GENOME_REF=mygenome.fasta # reference to which the reads were mapped
+TODO="-doSaf 1 -doMajorMinor 1 -doMaf 1 -doPost 1 -anc $GENOME_REF -ref $GENOME_REF"
+angsd -sites goodsites -b p1.bams -GL 1 -P 4 $TODO -out p1 &
+angsd -sites goodsites -b p2.bams -GL 1 -P 4 $TODO -out p2 &
+```
+
+Now we generate the bootstrapped data (100 series of 6 bootstraps):
+>note: don't worry about folding at this point. We will fold the spectra later, when running *moments* models, if needed.
+
+```bash
+export GENOME_REF=mygenome.fasta # reference to which the reads were mapped
+>b100
+for B in `seq 1 100`; do
+echo "sleep $B && realSFS p1.saf.idx p2.saf.idx -ref $GENOME_REF -anc $GENOME_REF -bootstrap 6 -P 1 -resample_chr 1 >p12_$B">b100;
+done
+
+```
+Execute all commands in `b100`.
+Finally, we do "bagging" (averaging of 5 boostrap replicates within each of the 100 series):
+
+```bash
+SFSIZE="21 21" # 2N+1 for each population. In this case we assume that we have sampled 10 diploid individuals from each `p1` and `p2`.
+for B in `seq 1 100`; do
+echo $SFSIZE >p12_${B}.sfs;
+tail -5 p12_${B} | awk '{for (i=1;i<=NF;i++){a[i]+=$i;}} END {for (i=1;i<=NF;i++){printf "%.3f", a[i]/NR; printf "\t"};printf "\n"}' >> p12_${B}.sfs;
+done
+
+```
+And voila, we end up with 100 "bagged" bootstrapped SFS spectra named `p12_1.sfs`, `p12_2.sfs`, ..., `p12_100.sfs`.
+
+### Links ###
 
 [Link to original *Moments* paper]( http://www.genetics.org/content/early/2017/05/08/genetics.117.200493)
 
