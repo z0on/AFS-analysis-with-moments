@@ -53,7 +53,8 @@ done;
 paste mods args -d " " >>modsel;
 done
 ```
-Run all commands in `modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 2 hours each. Best run these on an HPC cluster, in parallel! Note that all the screen output is collected in a file, `p12.stdout` in this case.
+Run all commands in `modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 1 hour each. Best run these on an HPC cluster, in parallel! All the screen output is going to be collected in a file, `p12.stdout` in this case.
+>Note: some model runs may not finish in 1 hour; just let them die. These are hopeless runs where the parameter search algorithm is stuck, they will have horrible fit even if they eventually finish.
 
 Then, to extract results:
 ```bash
