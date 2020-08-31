@@ -24,7 +24,7 @@ Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-w
 
 ## Model selection ##
 Let's assume we have ten bootstrapped 2dSFS formatted for *moments* or *dadi* (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)).Such file is nothing more than a line of numbers with a header line giving the dimensions of the spectrum ( 2 x N + 1 for each of the two populations, where N is the number of sampled diploids). 
-Bootstrapped sfs shoudl be named like `p12_1.sfs`, `p12_2.sfs` etc. where `p12` is the name of population contrast.
+Bootstrapped sfs should be named like `p12_1.sfs`, `p12_2.sfs`, etc. where `p12` is the name of population contrast.
 
 ```bash
 cd [where your boostrapped SFS files are]
@@ -126,7 +126,7 @@ The script also saves an RData bundle containing the summary dataframe (medians,
 
 Here we obtain 100 series of 6 bootstrap replicates. For each of the series, we discard the first replicate (it is just the original data, according to ANGSD pundit Nate Pope) and average the remaining 5. This procedure is called "bagging" and is designed to mitigate the noise that ANGSD-derived SFS often show, especially for small datasets (i.e. RAD-seq). The resulting 100 "bagged" datasets are going to be our bootstrap replicates.
 
-Let's assume we have two populations, `p1` and `p2`, and we have two text files, `p1.bams` and p2.bams`, listing `\*.bam` files for each population. First we need to collect sites (variable and invariable!) that pass our filters in both populations:
+Let's assume we have two populations, `p1` and `p2`, and we have two text files, `p1.bams` and `p2.bams`, listing `\*.bam` files for each population. First we need to collect sites (variable and invariable!) that pass our filters in both populations:
 
 ```bash
 
