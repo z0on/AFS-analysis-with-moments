@@ -106,7 +106,7 @@ grep RESULT ${CONTRAST}.boots -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o\
 Rscript bestmodel_bootstrap.R infile=${CONTRAST}.boots.res
 ```
 >Note: Additonal options to `bestmodel_bootstrap.R` are:
->- `topq`: top quantile cutoff. Only boostrap runs in this top quantile will be summarized. Default 0.25.
+>- `topq`: top quantile cutoff. Only boostrap runs in this top quantile will be summarized. Default 0.5
 >- `path2models`: path to the subdir `multimodel_inference`. Default `~/AFS-analysis-with-moments/multimodel_inference/`.
 
 This will generate the histogram of likelihoods with red line for top-quantile cutoff:
