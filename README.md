@@ -109,7 +109,7 @@ Rscript bestmodel_bootstrap.R infile=${CONTRAST}.boots.res
 >- `topq`: top quantile cutoff. Only boostrap runs in this top quantile will be summarized. Default 0.25.
 >- `path2models`: path to the subdir `multimodel_inference`. Default `~/AFS-analysis-with-moments/multimodel_inference/`.
 
-This will generate the histogram of likelihoods and red line for top=quantile cutoff:
+This will generate the histogram of likelihoods with red line for top-quantile cutoff:
 
 ![boots histogram](boothist.png)
 
