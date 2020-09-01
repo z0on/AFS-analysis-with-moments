@@ -63,7 +63,7 @@ grep RESULT ${CONTRAST}.stdout -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o
 ```
 Lastly, run `modelSelection.R` on the file `${CONTRAST}.res`:
 ```bash
-Rscript modelSelection.R infile=${CONTRAST}.res
+Rscript ~/AFs-analysis-with-moments/modelSelection.R infile=${CONTRAST}.res
 ```
 Two plots will be generated. The first one is the boxplot of best AIC scores for each model for all bootstrap replicates:
 ![all boxplots](all_boxplots.png)
@@ -104,7 +104,7 @@ done
 Run all commands in `winboots`, all the text output will be collected in the file `p12.boots`. Then extract results from that file and run `bestmodel_bootstrap.R` on them:
 ```bash
 grep RESULT ${CONTRAST}.boots -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o\d+\S//' | perl -pe 's/\n//' | perl -pe 's/[\[\]]//g' | perl -pe 's/RESULT/\nRESULT/g' | grep RESULT >${CONTRAST}.boots.res
-Rscript bestmodel_bootstrap.R infile=${CONTRAST}.boots.res
+Rscript ~/AFS-analysis-with-moments/bestmodel_bootstrap.R infile=${CONTRAST}.boots.res
 ```
 >Note: Additonal options to `bestmodel_bootstrap.R` are:
 >- `topq`: top quantile cutoff. Only boostrap runs in this top quantile will be summarized. Default 0.5
