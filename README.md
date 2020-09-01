@@ -63,7 +63,7 @@ grep RESULT ${CONTRAST}.stdout -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o
 ```
 Lastly, run `modelSelection.R` on the file `${CONTRAST}.res`:
 ```bash
-Rscript ~/AFs-analysis-with-moments/modelSelection.R infile=${CONTRAST}.res
+Rscript ~/AFS-analysis-with-moments/modelSelection.R infile=${CONTRAST}.res
 ```
 Two plots will be generated. The first one is the boxplot of best AIC scores for each model for all bootstrap replicates:
 ![all boxplots](all_boxplots.png)
