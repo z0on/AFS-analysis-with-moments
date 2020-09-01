@@ -79,7 +79,7 @@ Assuming we have 100 boostrapped SFS (See **Appendix** for instructions how to o
 
 ```bash
 CONTRAST=p12 
-WINNER="sc3ielsm1" # change this to your winning model, according to stage 1
+WINNER=`ls ${CONTRAST}.res.* | perl -pe 's/.+\.//'`
 ARGS="p1 p2 16 16 0.02 0.005 ${CONTRAST}.res.${WINNER}"
 
 NREPS=6 # number of random restarts per bootstrap rep
