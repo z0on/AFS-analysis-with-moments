@@ -12,8 +12,9 @@ infile=[filename]    results of bootstraps. Obtained by summarizing the STDOUT o
                      
 grep RESULT myboots.out -A 4 | grep -E \"[0-9]|\\]\" | perl -pe 's/^100.+\\.o\\d+\\S//' | perl -pe 's/\\n//' | perl -pe 's/[\\[\\]]//g' | perl -pe 's/RESULT/\\nRESULT/g' | grep RESULT >myboots.res
 
+folded=FALSE    whether the analysis was using folded SFS
 				
-topq=0.5        top quantile to summarize. 0.25 means that only the best-likelihood 25% 
+topq=0.5        top quantile to summarize. For example 0.25 means that only the best-likelihood 25% 
                 of bootstrap replicates will be used to summarize paramter values.
                 
 path2models=\"~/AFS-analysis-with-moments/multimodel_inference/\"   path to the cloned repository
@@ -31,19 +32,25 @@ if(length(topq)>0) { topq=as.numeric(sub("topq=","", commandArgs()[topq])) } els
 path2models =grep("path2models=",commandArgs())
 if(length(path2models)>0) { topq=sub("path2models=","", commandArgs()[path2models]) } else { path2models="~/AFS-analysis-with-moments/multimodel_inference/" }
 
+if(length(grep("folded=T",commandArgs()))>0) { folded=TRUE } else { folded=FALSE }
+
 require(ggplot2)
 
-  # infile="c34wins.res"
-  # path2models="~/AFS-analysis-with-moments/multimodel_inference/"
- # topq=0.75
+#   infile="c34wins.res"
+#   path2models="~/AFS-analysis-with-moments/multimodel_inference/"
+#  topq=0.5
 
 npl=read.table(infile)
 pdf(paste(infile,"_plots.pdf",sep=""),height=3, width=8)
 
 #------ retrieving parameter names, applying them
 
-pa=readLines(paste(path2models,"unfolded_params",sep=""))
-wmod=sub("sc","SC",npl[1,2])
+if (folded) { 
+  pa=readLines(paste(path2models,"folded_params",sep=""))
+} else {
+  pa=readLines(paste(path2models,"unfolded_params",sep=""))
+}
+wmod=as.character(npl[1,2])
 npl=npl[,-c(1:2)]
 params=c(strsplit(gsub("[ \t]","",pa[grep(wmod,pa)]),split="[:,]")[[1]][-1],"theta")
 names(npl)=c("id","np","ll","boot","p1","p2",params)
@@ -59,7 +66,7 @@ for (b in 1:length(levels(npl$boot))) {
 #head(maxlike)
 
 # ---- leaving only topq % of bootstraps
-hist(maxlike$ll,breaks=50,main="boostrap likes")
+hist(maxlike$ll,breaks=50,main="bootstrap likes")
 abline(v=quantile(maxlike$ll,(1-topq)),col="red")
 #abline(v=quantile(maxlike$ll,topq+(1-topq)/2),col="red")
 maxlike=maxlike[maxlike$ll>quantile(maxlike$ll,(1-topq)),]
