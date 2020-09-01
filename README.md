@@ -16,7 +16,7 @@ python setup.py build_ext --inplace
 cd
 ```
 Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-with-moments/multimodel_inference/py2/` or from `/AFS-analysis-with-moments/multimodel_inference/py3/` (depending on your `python` version) to where you keep your executables (for example, `~/bin`). 
-> NOTE: all code examples here assume the repository is cloned in the home directory, `~/`. If you cloned it elsewhere, make sure to replace `~/` in all examples with the actual path.
+> NOTE: all code examples here assume the repository is cloned in the home directory, `~/`. If you cloned it elsewhere, make sure to replace `~/AFS-analysis-with-moments` in all examples with the actual path.
 
 ## Overview of the method ##
 - The first step is **model selection**, where we run all possible models on 10 bootstrapped SFS. We actually run each model on each bootstrap six times (six random restarts), to make sure the model converges to its best likelihood at least once. Then we use an `R` script `model_selection.R` to select the best-fitted instance (out of 6) for each model for each bootstrap, and compare the AIC scores for all models. The best model is the one with the *lowest median AIC score among bootstrap replicates*.  
@@ -53,7 +53,8 @@ done;
 paste mods args -d " " >>modsel;
 done
 ```
-Run all commands in `modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 2 hours each. Best run these on an HPC cluster, in parallel! Note that all the screen output is collected in a file, `p12.stdout` in this case.
+Run all commands in `modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 1 hour each. Best run these on an HPC cluster, in parallel! All the screen output is going to be collected in a file, `p12.stdout` in this case.
+>Note: some model runs may not finish in 1 hour; just let them die. These are hopeless runs where the parameter search algorithm is stuck, they will have horrible fit even if they eventually finish.
 
 Then, to extract results:
 ```bash
@@ -62,7 +63,7 @@ grep RESULT ${CONTRAST}.stdout -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o
 ```
 Lastly, run `modelSelection.R` on the file `${CONTRAST}.res`:
 ```bash
-Rscript modelSelection.R infile=${CONTRAST}.res
+Rscript ~/AFS-analysis-with-moments/modelSelection.R infile=${CONTRAST}.res
 ```
 Two plots will be generated. The first one is the boxplot of best AIC scores for each model for all bootstrap replicates:
 ![all boxplots](all_boxplots.png)
@@ -78,7 +79,7 @@ Assuming we have 100 boostrapped SFS (See **Appendix** for instructions how to o
 
 ```bash
 CONTRAST=p12 
-WINNER="sc3ielsm1" # change this to your winning model, according to stage 1
+WINNER=`ls ${CONTRAST}.res.* | perl -pe 's/.+\.//'`
 ARGS="p1 p2 16 16 0.02 0.005 ${CONTRAST}.res.${WINNER}"
 
 NREPS=6 # number of random restarts per bootstrap rep
@@ -103,7 +104,7 @@ done
 Run all commands in `winboots`, all the text output will be collected in the file `p12.boots`. Then extract results from that file and run `bestmodel_bootstrap.R` on them:
 ```bash
 grep RESULT ${CONTRAST}.boots -A 4 | grep -E "[0-9]|\]" | perl -pe 's/^100.+\.o\d+\S//' | perl -pe 's/\n//' | perl -pe 's/[\[\]]//g' | perl -pe 's/RESULT/\nRESULT/g' | grep RESULT >${CONTRAST}.boots.res
-Rscript bestmodel_bootstrap.R infile=${CONTRAST}.boots.res
+Rscript ~/AFS-analysis-with-moments/bestmodel_bootstrap.R infile=${CONTRAST}.boots.res
 ```
 >Note: Additonal options to `bestmodel_bootstrap.R` are:
 >- `topq`: top quantile cutoff. Only boostrap runs in this top quantile will be summarized. Default 0.5
@@ -162,7 +163,7 @@ Now we generate the bootstrapped data (100 series of 6 bootstraps):
 export GENOME_REF=mygenome.fasta # reference to which the reads were mapped
 >b100
 for B in `seq 1 100`; do
-echo "sleep $B && realSFS p1.saf.idx p2.saf.idx -ref $GENOME_REF -anc $GENOME_REF -bootstrap 6 -P 1 -resample_chr 1 >p12_$B">b100;
+echo "sleep $B && realSFS p1.saf.idx p2.saf.idx -ref $GENOME_REF -anc $GENOME_REF -bootstrap 6 -P 1 -resample_chr 1 >p12_$B">>b100;
 done
 
 ```
