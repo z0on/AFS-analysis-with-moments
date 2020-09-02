@@ -12,9 +12,6 @@ infile=[filename]    results of model runs. Obtained by summarizing the STDOUT o
                      
 grep RESULT manymodels.out -A 4 | grep -E \"[0-9]|\\]\" | perl -pe 's/^100.+\\.o\\d+\\S//' | perl -pe 's/\\n//' | perl -pe 's/[\\[\\]]//g' | perl -pe 's/RESULT/\\nRESULT/g' | grep RESULT >manymodels.res
 
-topq=0.25        top quantile to summarize. 0.25 means that only the best-likelihood 25% 
-                of bootstrap replicates will be used to summarize paramter values.
-
 ")
 }
 
@@ -78,8 +75,8 @@ dev.off()
 # ----- extracting name and parameters of the winning model
 
 winner=as.character(modmed[1,1])
+system(paste("grep \"",winner," \" ", infile," > ",infile,".winmod",sep=""))
 
-system(paste("grep ",winner," ", infile," > ",infile,".winmod",sep=""))
 npl0=read.table(paste(infile,".winmod",sep=""))
 system(paste("rm ",infile,".winmod",sep=""))
 
