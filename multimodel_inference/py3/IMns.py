@@ -17,9 +17,9 @@ infile=sys.argv[1]
 pop_ids=[sys.argv[2],sys.argv[3]]
 projections=[int(sys.argv[4]),int(sys.argv[5])]
 if len(sys.argv)==9:
-  params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
+    params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
 else:
-  params=[1,1,1,0.01]
+    params=[1,1,1,0.01]
 
 # mutation rate per sequenced portion of genome per generation: for A.millepora, 0.02
 mu=float(sys.argv[6])
