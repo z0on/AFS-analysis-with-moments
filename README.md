@@ -129,7 +129,7 @@ The script also saves an RData bundle containing the summary dataframe (medians,
 
 Here we obtain 100 series of 6 bootstrap replicates. For each of the series, we discard the first replicate (it is just the original data, according to ANGSD pundit Nate Pope) and average the remaining 5. This procedure is called "bagging" and is designed to mitigate the noise that ANGSD-derived SFS often show, especially for small datasets (i.e. RAD-seq). The resulting 100 "bagged" datasets are going to be our bootstrap replicates.
 
-Let's assume we have two populations, `p1` and `p2`, and we have two text files, `p1.bams` and `p2.bams`, listing `\*.bam` files for each population. First we need to collect sites (variable and invariable!) that pass our filters in both populations:
+Let's assume we have two populations, `p1` and `p2`, each with 10 sequenced individuals, and we have two text files, `p1.bams` and `p2.bams`, listing `*.bam` files for each population. First we need to collect sites (variable and invariable!) that pass our filters in both populations:
 
 ```bash
 
@@ -137,9 +137,9 @@ GRate=0.8 # genotyping rate filter - a site must be genotyped in this fraction o
 cat p1.bams p2.bams > p12.bams
 
 FILTERS='-uniqueOnly 1 -skipTriallelic 1 -minMapQ 30 -minQ 30 -doHWE 1 -maxHetFreq 0.5 -hetbias_pval 1e-5 -minInd $MI'
-# add `-sb_pval 1e-5` (strand bias) to FILTERS if you have 2bRAD, GBS, or WGS data, but not if you have used any other type of RAD it would only sequence one strand.
+# add `-sb_pval 1e-5` (strand bias) to FILTERS if you have 2bRAD, GBS, or WGS data. Other types of RAD only sequence one strand so -sb_pval filter would remove everything.
 
-TODO='-doMajorMinor 1 -doMaf 1 -dosnpstat 1 -doPost 2 -doGeno 11'
+TODO='-doMajorMinor 1 -doMaf 1 -dosnpstat 1 -doPost 2'
 echo 'export NIND=`cat p12.bams | wc -l`; export MI=`echo "($NIND*$GRate+0.5)/1" | bc`' >calc
 source calc && angsd -b p12.bams -GL 1 -P 4 $FILTERS $TODO -out p12 &
 
@@ -180,7 +180,7 @@ tail -5 p12_${B} | awk '{for (i=1;i<=NF;i++){a[i]+=$i;}} END {for (i=1;i<=NF;i++
 done
 
 ```
-And voila, we end up with 100 "bagged" bootstrapped SFS spectra named `p12_1.sfs`, `p12_2.sfs`, ..., `p12_100.sfs`.
+And voila, we have 100 "bagged" bootstrapped SFS spectra named `p12_1.sfs`, `p12_2.sfs`, ..., `p12_100.sfs`.
 
 ### Links ###
 
