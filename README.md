@@ -23,8 +23,8 @@ Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-w
 - The second step is running the winning model on 100 bootstrapped SFS, to **evaluate parameter uncertainties**. Once again, we will have to do 6 random restarts for each bootstrap. The parameter meanings and uncertainties are deciphered by the second R script that we have, `bestmodel_bootstrap.R`.
 
 ## Model selection ##
-Let's assume we have ten bootstrapped 2dSFS formatted for *moments* or *dadi* (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)).Such file is nothing more than a line of numbers with a header line giving the dimensions of the spectrum ( 2 x N + 1 for each of the two populations, where N is the number of sampled diploids). 
-Bootstrapped sfs should be named like `p12_1.sfs`, `p12_2.sfs`, etc. where `p12` is the name of population contrast.
+Let's assume we have ten bootstrapped 2dSFS formatted for *moments* or *dadi* (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)). Such file is nothing more than a line of numbers with a header line giving the dimensions of the spectrum ( 2 x N + 1 for each of the two populations, where N is the number of sampled diploids). 
+Bootstrapped SFS files should be named like `p12_1.sfs`, `p12_2.sfs`, etc. where `p12` is the name of population contrast.
 
 ```bash
 cd [where your boostrapped SFS files are]
@@ -37,7 +37,7 @@ for i in `seq 1 $NREPS`;do
 cat allmodels >>mods;
 done
 
-CONTRAST=p12 # name of population comparison, should be matching the leading part of the bootstapped SFS names
+CONTRAST=p12 # name of population comparison, should match the leading part of the bootstapped SFS names
 ARGS="p1 p2 16 16 0.02 0.005" # pop1, pop2, projection for pop1, projection for pop2, mutation rate (per genotyped portion of the genome per generation), generation time in thousands of years. Population names can be anything. For ANGSD-derived SFS, projections should be 0.8*2N for each population (ronded to integer); in the case shown here, each population was represented by 10 individuals.
 
 >modsel
