@@ -125,7 +125,7 @@ cors=c()
 for(i in 1:ncol(idpara)){
 	cors=c(cors,cor(medians,idpara[,i]))
 }
-bestrun=maxlike$id[which(cors==max(cors))]
+bestrun=maxlike$id[which(cors==max(cors))[1]]
 system(paste("cp *_",bestrun,"_*pdf ",infile,"_representativeModel.pdf",sep=""))
 system(paste("cp *_",bestrun,"_*png ",infile,"_representativeModel.png",sep=""))
 message("representative run: ",bestrun)
