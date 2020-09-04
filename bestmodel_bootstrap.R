@@ -36,9 +36,11 @@ if(length(grep("folded=T",commandArgs()))>0) { folded=TRUE } else { folded=FALSE
 
 require(ggplot2)
 
-#   infile="c34wins.res"
-#   path2models="~/AFS-analysis-with-moments/multimodel_inference/"
-#  topq=0.5
+   # setwd("~/Dropbox/Documents/perl_bin/moments_scripts/")
+   # infile="c23.boots.res"
+   # path2models="~/AFS-analysis-with-moments/multimodel_inference/"
+   # topq=0.5
+   # folded=F
 
 npl=read.table(infile)
 pdf(paste(infile,"_plots.pdf",sep=""),height=3, width=8)
@@ -115,3 +117,15 @@ mres=data.frame(cbind(medians, q25,q75))
 save(mres,maxlike,file=paste(infile,"_bootres.RData",sep=""))
 print(medians)
 dev.off()
+
+# ---- finding represenative run (most similar to medians)
+
+idpara=t(maxlike[,7:ncol(maxlike)])
+cors=c()
+for(i in 1:ncol(idpara)){
+	cors=c(cors,cor(medians,idpara[,i]))
+}
+bestrun=maxlike$id[which(cors==max(cors))]
+system(paste("cp *_",bestrun,"_*pdf ",infile,"_representativeModel.pdf",sep=""))
+system(paste("cp *_",bestrun,"_*png ",infile,"_representativeModel.png",sep=""))
+message("representative run: ",bestrun)
