@@ -54,7 +54,7 @@ if (folded) {
 }
 wmod=as.character(npl[1,2])
 npl=npl[,-c(1:2)]
-params=c(strsplit(gsub("[ \t]","",pa[grep(wmod,pa)]),split="[:,]")[[1]][-1],"theta")
+params=c(strsplit(gsub("[ \t]","",pa[grep(paste0(wmod,".py"),pa)]),split="[:,]")[[1]][-1],"theta")
 names(npl)=c("id","np","ll","boot","p1","p2",params)
 #head(npl)
 
