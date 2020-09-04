@@ -86,6 +86,8 @@ NREPS=6 # number of random restarts per bootstrap rep
 >mods
 for i in `seq 1 $NREPS`;do 
 echo ${WINNER}.py >>mods;
+# if the analysis is folded, use this line instead of the one above:
+# echo fold_${WINNER}.py >>mods;
 done
 
 >winboots
