@@ -45,12 +45,22 @@ for B in `seq 1 10`; do
 INFILE=${CONTRAST}_${B}.sfs;
 echo $INFILE;
 NMODELS=`cat mods | wc -l`
+
+# writing sleep delays to ensure replicates have different random seeds
+>sleeps
+for NN in `seq 1 nreps`; do
+for MM in `seq 1 $NMODELS`; do
+echo $NN >>sleeps;
+done;
+done
+
+# putting model commands together
 >args
 >${CONTRAST}.stdout
 for i in `seq 1 $NMODELS`; do
 echo "$INFILE $ARGS >>${CONTRAST}.stdout" >>args;
 done;
-paste mods args -d " " >>modsel;
+paste sleeps mods args -d " " >>modsel;
 done
 ```
 Run all commands in `modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 1 hour each. Best run these on an HPC cluster, in parallel! All the screen output is going to be collected in a file, `p12.stdout` in this case.
@@ -85,9 +95,9 @@ ARGS="p1 p2 16 16 0.02 0.005 ${CONTRAST}.res.${WINNER}"
 NREPS=6 # number of random restarts per bootstrap rep
 >mods
 for i in `seq 1 $NREPS`;do 
-echo ${WINNER}.py >>mods;
+echo "sleep $i && ${WINNER}.py" >>mods;
 # if the analysis is folded, use this line instead of the one above:
-# echo fold_${WINNER}.py >>mods;
+# echo "sleep $i && fold_${WINNER}.py" >>mods;
 done
 
 >winboots
