@@ -48,7 +48,7 @@ NMODELS=`cat mods | wc -l`
 
 # writing sleep delays to ensure replicates have different random seeds
 >sleeps
-for NN in `seq 1 nreps`; do
+for NN in `seq 1 $NREPS`; do
 for MM in `seq 1 $NMODELS`; do
 echo $NN >>sleeps;
 done;
