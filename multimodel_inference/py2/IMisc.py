@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-# split with growth starting after some time, asymmetric migration upon secondary contact, "genomic islands" of two different migration regimes
+# split with growth starting after some time, asymmetric migration upon secondary contact, 
+#"genomic islands" of two different migration regimes
 # n(para): 12
 
 import matplotlib
