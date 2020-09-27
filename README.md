@@ -22,45 +22,23 @@ Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-w
 - The first step is **model selection**, where we run all possible models on 10 bootstrapped SFS. We actually run each model on each bootstrap six times (six random restarts), to make sure the model converges to its best likelihood at least once. Then we use an `R` script `model_selection.R` to select the best-fitted instance (out of 6) for each model for each bootstrap, and compare the AIC scores for all models. The best model is the one with the *lowest median AIC score among bootstrap replicates*.  
 - The second step is running the winning model on 100 bootstrapped SFS, to **evaluate parameter uncertainties**. Once again, we will have to do 6 random restarts for each bootstrap. The parameter meanings and uncertainties are deciphered by the second R script that we have, `bestmodel_bootstrap.R`.
 
+## Overview of models ##
+
+
 ## Model selection ##
 Let's assume we have ten bootstrapped 2dSFS formatted for *moments* or *dadi* (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)). Such file is nothing more than a line of numbers with a header line giving the dimensions of the spectrum ( 2 x N + 1 for each of the two populations, where N is the number of sampled diploids). 
 Bootstrapped SFS files should be named like `p12_1.sfs`, `p12_2.sfs`, etc. where `p12` is the name of population contrast.
 
+To create a list of AFS models to run, do this:
+
 ```bash
 cd [where your boostrapped SFS files are]
-cp ~/AFS-analysis-with-moments/multimodel_inference/allmodels_unfolded allmodels
-# if your SFS needs to be folded, use this line instead:
-# cp ~/AFS-analysis-with-moments/multimodel_inference/allmodels_folded allmodels
-NREPS=6 # number of random restarts per model per bootstrap rep
->mods
-for i in `seq 1 $NREPS`;do 
-cat allmodels >>mods;
-done
-
-CONTRAST=p12 # name of population comparison, should match the leading part of the bootstapped SFS names
-ARGS="p1 p2 16 16 0.02 0.005" # pop1, pop2, projection for pop1, projection for pop2, mutation rate (per genotyped portion of the genome per generation), generation time in thousands of years. Population names can be anything. For ANGSD-derived SFS, projections should be 0.8*2N for each population (ronded to integer); in the case shown here, each population was represented by 10 individuals.
-
-# writing sleep delays to ensure replicates have different random seeds
-NMODELS=`cat mods | wc -l`
->sleeps
-for NN in `seq 1 $NREPS`; do
-for MM in `seq 1 $NMODELS`; do
-echo "sleep $NN " >>sleeps;
-done;
-done
-
->modsel
-for B in `seq 1 10`; do
-INFILE=${CONTRAST}_${B}.sfs;
-echo $INFILE;
->args
->${CONTRAST}.stdout
-for i in `seq 1 $NMODELS`; do
-echo "$INFILE $ARGS >>${CONTRAST}.stdout" >>args;
-done;
-paste sleeps mods args -d " " >>modsel;
-done
+Rscript modSel_write.R contrast=p12 args="p1 p2 16 16 0.02 0.005"
 ```
+where
+- `contrast` : the name of population comparison. It should match the leading part of the bootstapped SFS names (in example here, `p12`)
+- `args`     : very important argument: a list of parameters for AFS models, in the following order: name of pop1, name of pop2, projection for pop1, projection for pop2, mutation rate (per genotyped portion of the genome per generation), generation time in thousands of years. Population names can be anything. For ANGSD-derived SFS, projections should be 1.6N for each population (ronded to integer); in the case shown here, each population was represented by 10 individuals.
+
 Run all commands in `modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 1 hour each. Best run these on an HPC cluster, in parallel! All the screen output is going to be collected in a file, `p12.stdout` in this case.
 >Note: some model runs may not finish in 1 hour; just kill them. These are hopeless runs where the parameter search algorithm is stuck, they will have horrible fit even if they eventually finish.
 
