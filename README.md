@@ -33,11 +33,23 @@ To create a list of AFS models to run, do this:
 
 ```bash
 cd [where your boostrapped SFS files are]
-Rscript ~/AFS-analysis-with-moments/moments_scripts/modSel_write.R contrast=p12 args="p1 p2 16 16 0.02 0.005"
+Rscript ~/AFS-analysis-with-moments/modSel_write.R contrast=p12 args="p1 p2 16 16 0.02 0.005"
 ```
 where
 - `contrast` : the name of population comparison. It should match the leading part of the bootstapped SFS names (in example here, `p12`)
-- `args`     : very important argument: a list of parameters for AFS models, in the following order: name of pop1, name of pop2, projection for pop1, projection for pop2, mutation rate (per genotyped portion of the genome per generation), generation time in thousands of years. Population names can be anything. For ANGSD-derived SFS, projections should be 1.6N for each population (ronded to integer); in the case shown here, each population was represented by 10 individuals.
+- `args`     : list of parameters for AFS models, in the following order: 
+-- name of pop1, name of pop2, 
+-- projection for pop1, 
+-- projection for pop2, 
+-- mutation rate (per genotyped portion of the genome per generation), 
+-- generation time in thousands of years. 
+
+Population names can be anything. For ANGSD-derived SFS, projections should be 1.6N for each population (ronded to integer); in the case shown here, each population was represented by 10 individuals.
+
+Additional arguments to `modSel_write.R` (defaults):
+- `nreps` (6)   : number of random restarts for each model for each bootstrap rep.
+- `nboots` (10) : number of bootstrap replicates to use. 10 seems to be optimal.
+- `path2models` (~/AFS-analysis-with-moments/multimodel_inference/) : path to where model listings live
 
 Run all commands in `modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 1 hour each. Best run these on an HPC cluster, in parallel! All the screen output is going to be collected in a file, `p12.stdout` in this case.
 >Note: some model runs may not finish in 1 hour; just kill them. These are hopeless runs where the parameter search algorithm is stuck, they will have horrible fit even if they eventually finish.
