@@ -33,7 +33,7 @@ To create a list of AFS models to run, do this:
 
 ```bash
 cd [where your boostrapped SFS files are]
-Rscript modSel_write.R contrast=p12 args="p1 p2 16 16 0.02 0.005"
+Rscript ~/AFS-analysis-with-moments/moments_scripts/modSel_write.R contrast=p12 args="p1 p2 16 16 0.02 0.005"
 ```
 where
 - `contrast` : the name of population comparison. It should match the leading part of the bootstapped SFS names (in example here, `p12`)
