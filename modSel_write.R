@@ -12,7 +12,7 @@ Bootstrapped SFS files should be named like p12_1.sfs, p12_2.sfs, etc. where 
 
 contrast=\"p12\"                   name of the contrast: leading part of the bootstrapped sfs file names, for example, p12_1.sfs, p12_2.sfs etc.
 
-nreps=3                            number of random restarts for each model for each bootstrap replicate 
+nreps=6                            number of random restarts for each model for each bootstrap replicate 
 nboots=10                          number of bootstrap replicates to use
 
 args=[list of arguments]           names of pop1 and pop2, projection for pop1, projection for pop2, mutation rate (per genotyped portion of the 
@@ -39,11 +39,11 @@ args =sub("args=","", commandArgs()[args])
 path2models =grep("path2models=",commandArgs())
 if(length(path2models)>0) { path2models=sub("path2models=","", commandArgs()[path2models]) } else { path2models="~/AFS-analysis-with-moments/multimodel_inference/" }
 
-nreps =grep("nreps=",commandArgs())
-if(length(nreps)>0) { nreps=as.numeric(sub("nreps=","", commandArgs()[nreps])) } else { nreps=3 }
+nr=grep("nreps=",commandArgs())
+if(length(nr)>0) { nreps=as.numeric(sub("nreps=","", commandArgs()[nr])) } else { nreps=6 }
 
 nboots =grep("nboots=",commandArgs())
-if(length(nboots)>0) { nreps=as.numeric(sub("nboots =","", commandArgs()[nboots])) } else { nboots=100 }
+if(length(nboots)>0) { nreps=as.numeric(sub("nboots=","", commandArgs()[nboots])) } else { nboots=10 }
 
 if(length(grep("folded=T",commandArgs()))>0) { folded=TRUE } else { folded=FALSE }
 
