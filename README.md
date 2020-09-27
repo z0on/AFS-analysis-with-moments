@@ -40,17 +40,25 @@ done
 CONTRAST=p12 # name of population comparison, should match the leading part of the bootstapped SFS names
 ARGS="p1 p2 16 16 0.02 0.005" # pop1, pop2, projection for pop1, projection for pop2, mutation rate (per genotyped portion of the genome per generation), generation time in thousands of years. Population names can be anything. For ANGSD-derived SFS, projections should be 0.8*2N for each population (ronded to integer); in the case shown here, each population was represented by 10 individuals.
 
+# writing sleep delays to ensure replicates have different random seeds
+NMODELS=`cat mods | wc -l`
+>sleeps
+for NN in `seq 1 $NREPS`; do
+for MM in `seq 1 $NMODELS`; do
+echo "sleep $NN " >>sleeps;
+done;
+done
+
 >modsel
 for B in `seq 1 10`; do
 INFILE=${CONTRAST}_${B}.sfs;
 echo $INFILE;
-NMODELS=`cat mods | wc -l`
 >args
 >${CONTRAST}.stdout
 for i in `seq 1 $NMODELS`; do
 echo "$INFILE $ARGS >>${CONTRAST}.stdout" >>args;
 done;
-paste mods args -d " " >>modsel;
+paste sleeps mods args -d " " >>modsel;
 done
 ```
 Run all commands in `modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 1 hour each. Best run these on an HPC cluster, in parallel! All the screen output is going to be collected in a file, `p12.stdout` in this case.
@@ -85,9 +93,9 @@ ARGS="p1 p2 16 16 0.02 0.005 ${CONTRAST}.res.${WINNER}"
 NREPS=6 # number of random restarts per bootstrap rep
 >mods
 for i in `seq 1 $NREPS`;do 
-echo ${WINNER}.py >>mods;
+echo "sleep $i && ${WINNER}.py" >>mods;
 # if the analysis is folded, use this line instead of the one above:
-# echo fold_${WINNER}.py >>mods;
+# echo "sleep $i && fold_${WINNER}.py" >>mods;
 done
 
 >winboots
