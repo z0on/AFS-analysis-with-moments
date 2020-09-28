@@ -66,7 +66,7 @@ Additional arguments to `modSel_write.R` (defaults):
 - `folded` (FALSE) : whether to fold the SFS for analysis
 > Note: if you want to analyze folded SFS, generate unfolded ones and specify `folded=TRUE` here and at the next stage.
 
-Run all commands in `[contrast].modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 1 hour each. Best run these on an HPC cluster, in parallel! All the screen output is going to be collected in a file, `p12.stdout` in this case.
+Run all commands in `[contrast].modsel.runs` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 1 hour each. Best run these on an HPC cluster, in parallel! All the screen output is going to be collected in a file, `p12.modsel` in this case.
 >Note: some model runs may not finish in 1 hour; just kill them. These are hopeless runs where the parameter search algorithm is stuck, they will have horrible fit even if they eventually finish.
 
 The results file that is supposed to be created after running all this will be `[contrast].modsel.res`.
@@ -96,7 +96,7 @@ The script also outputs the text file named `[contrast].[modelname]`, **where `[
 Lastly, the script outputs a file `[contrast].winboots.runs` that contains all the commands to run the next stage.
 
 ## Bootstrapping the winning model ## 
-Assuming we have 100 boostrapped SFS (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)), we are now going to run just the winning model on all of them. The commands file to do that has been already created by running `modSel_summary.R`, in the current example it is the file `p12.winboots.runs`. Now we need to do is to run all these commands, much preferably in parallel. As before, let them run for a max of one hour, kill whatever processes did not finish.
+Assuming we have 100 boostrapped SFS (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)), we are now going to run just the winning model on all of them. The commands file to do that has been already created by running `modSel_summary.R`, in the current example it is the file `p12.winboots.runs`. Now we need to do is to run all these commands, much preferably in parallel. As before, let them run for a one hour, kill whatever processes did not finish.
 
 The text output will be collected in the file `p12.winboots`. To summarize it all we need to do is
 ```bash
@@ -105,7 +105,7 @@ Rscript ~/AFS-analysis-with-moments/bestBoot_summary.R bootRes=p12.boots
 Additonal options to `bestBoot_summary.R` are:
 - `topq`: top quantile cutoff. Only boostrap runs in this top quantile will be summarized. Default 0.5
 - `path2models`: path to the subdir `multimodel_inference`. Default `~/AFS-analysis-with-moments/multimodel_inference/`.
-- `folded` (FALSE) : whether analysis is using folded SFS.
+- `folded` (FALSE) : whether the analysis must fold the SFS.
 
 This will generate the histogram of likelihoods with red line for top-quantile cutoff:
 
