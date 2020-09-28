@@ -46,7 +46,7 @@ Additional arguments to `modSel_write.R` (defaults):
 - `nboots` (10) : number of bootstrap replicates to use. 10 seems to be optimal at this stage.
 - `path2models` (~/AFS-analysis-with-moments/multimodel_inference/) : path to where model listings live
 - `folded` (FALSE) : whether to fold the SFS for analysis
-> Note: if you want to analyze folded SFS, generate unfolded ones and specify `folded=TRUE` here and in the next stage).
+> Note: if you want to analyze folded SFS, generate unfolded ones and specify `folded=TRUE` here and at the next stage.
 
 Run all commands in `[contrast].modsel` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 1 hour each. Best run these on an HPC cluster, in parallel! All the screen output is going to be collected in a file, `p12.stdout` in this case.
 >Note: some model runs may not finish in 1 hour; just kill them. These are hopeless runs where the parameter search algorithm is stuck, they will have horrible fit even if they eventually finish.
