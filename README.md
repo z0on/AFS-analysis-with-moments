@@ -103,7 +103,7 @@ The script also saves an RData bundle containing the summary dataframe (medians,
 
 ### Obtaining bootstrapped SFS with ANGSD ###
 
-Here we obtain 100 series of 6 bootstrap replicates. For each of the series, we discard the first replicate (it is just the original data, according to ANGSD pundit Nate Pope) and average the remaining 5. This procedure is called "bagging" and is designed to mitigate the noise that ANGSD-derived SFS often show, especially for small datasets (i.e. RAD-seq). The resulting 100 "bagged" datasets are going to be our bootstrap replicates.
+Here we obtain 100 series of 5 bootstrap replicates, which we then average. This procedure is called "bagging" and is designed to mitigate the noise that ANGSD-derived SFS often show, especially for small datasets (i.e. RAD-seq). The resulting 100 "bagged" datasets are going to be our bootstrap replicates.
 
 Let's assume we have two populations, `p1` and `p2`, each with 10 sequenced individuals, and we have two text files, `p1.bams` and `p2.bams`, listing `*.bam` files for each population. First we need to collect sites (variable and invariable!) that pass our filters in both populations:
 
@@ -135,13 +135,13 @@ angsd -sites goodsites -b p1.bams -GL 1 -P 4 $TODO -out p1 &
 angsd -sites goodsites -b p2.bams -GL 1 -P 4 $TODO -out p2 &
 ```
 
-Now we generate the bootstrapped data (100 series of 6 bootstraps):
+Now we generate the bootstrapped data (100 series of 5 bootstraps):
 
 ```bash
 export GENOME_REF=mygenome.fasta # reference to which the reads were mapped
 >b100
 for B in `seq 1 100`; do
-echo "sleep $B && realSFS p1.saf.idx p2.saf.idx -ref $GENOME_REF -anc $GENOME_REF -bootstrap 6 -P 1 -resample_chr 1 >p12_$B">>b100;
+echo "sleep $B && realSFS p1.saf.idx p2.saf.idx -ref $GENOME_REF -anc $GENOME_REF -bootstrap 5 -P 1 -resample_chr 1 >p12_$B">>b100;
 done
 
 ```
@@ -152,7 +152,7 @@ Finally, we do "bagging" (averaging of 5 bootstrap replicates within each of the
 SFSIZE="21 21" # 2N+1 for each population. In this case we assume that we have sampled 10 diploid individuals from each `p1` and `p2`.
 for B in `seq 1 100`; do
 echo $SFSIZE >p12_${B}.sfs;
-tail -5 p12_${B} | awk '{for (i=1;i<=NF;i++){a[i]+=$i;}} END {for (i=1;i<=NF;i++){printf "%.3f", a[i]/NR; printf "\t"};printf "\n"}' >> p12_${B}.sfs;
+cat p12_${B} | awk '{for (i=1;i<=NF;i++){a[i]+=$i;}} END {for (i=1;i<=NF;i++){printf "%.3f", a[i]/NR; printf "\t"};printf "\n"}' >> p12_${B}.sfs;
 done
 
 ```
