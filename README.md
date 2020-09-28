@@ -26,8 +26,8 @@ Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-w
 The models are designed to test the following basic aspects of population configuration:
 - are these really two demographically distinct populations, or we simply sampled the same population twice? (i.e., does the model fits significantly better if it actually has a split between populations, as opposed to just some population size changes)
 - were there changes in population size(s) through time? (models can include up to three "epochs" where population size could change)
-- if there is a split, was there still migration? (during some or all of the epochs)
-- if there was migration, was it symmetrical or asymmetrical?
+- if there is a split, is there still migration? (during some or all of the epochs)
+- if there is migration, is it symmetrical or asymmetrical?
 - are their parts of the genome that introgress at a dfferent rate? ("islands of differentiation") - this is one way to model non-neutral processes such as spatially varying selection.
 
 So the models differ by: 
