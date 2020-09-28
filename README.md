@@ -41,7 +41,7 @@ There are also models with exponential (rather than instantaneous) change in pop
 The name of a model is therefore a kind of code to its structure, for example:
 `sc3ielsm2` : 3 epochs; "genomic islands"; migration is only during early and late epochs (no migration during middle epoch); migration is symmetrical in the second "migration epoch".
 
-Sadly not all model names currently conform to this convention (sorry, I'll fix it soon). The summary of the structure of all models and their names are listed in the file `multimodel_inference/moments_multimodels.xlsx`. 
+Sadly, not all model names currently conform to this convention. The summary of the structure of all models and their names are listed in the file `multimodel_inference/moments_multimodels.xlsx`. 
 
 ## Model selection ##
 Let's assume we have ten bootstrapped 2dSFS formatted for *moments* or *dadi* (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)). Such file is nothing more than a line of numbers with a header line giving the dimensions of the spectrum ( 2 x N + 1 for each of the two populations, where N is the number of sampled diploids). 
