@@ -23,7 +23,25 @@ Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-w
 - The second step is running the winning model on 100 bootstrapped SFS, to **evaluate parameter uncertainties**. Once again, we will have to do 6 random restarts for each bootstrap. The parameter meanings and uncertainties are deciphered by the second R script that we have, `bestmodel_bootstrap.R`.
 
 ## Overview of models ##
+The models are designed to test the following basic aspects of population configuration:
+- are these really two demographically distinct populations, or we simply sampled the same population twice? (i.e., does the model fits significantly better if it actually has a split between populations, as opposed to just some population size changes)
+- were there changes in population size(s) through time? (models can include up to three "epochs" where population size could change)
+- if there is a split, was there still migration? (during some or all of the epochs)
+- if there was migration, was it symmetrical or asymmetrical?
+- are their parts of the genome that introgress at a dfferent rate? ("islands of differentiation") - this is one way to model non-neutral processes such as spatially varying selection.
 
+So the models differ by: 
+- split / no split (`ns` in model name)
+- number of epochs (1-3) (`sc1`,`sc2` or `sc3` in model name) 
+- migration at some or all of the epochs, which can be symmetrical (`sm`) or asymmetrical.  `e`,`m`, and `l` in model name stands for migration during early, mid, and late epoch. 
+- presence of "genomic islands" experiencing different introgression rate (`i` in model name).
+
+There are also models with exponential (rather than instantaneous) change in population size, such as the venerable `IM` model (and its derivatives with multiple epochs).
+
+The name of a model is therefore a kind of code to its structure, for example:
+`sc3ielsm2` : 3 epochs; "genomic islands"; migration is only during early and late epochs (no migration during middle epoch); migration is symmetrical in the second "migration epoch".
+
+Sadly not all model names currently conform to this convention (sorry, I'll fix it soon). The summary of the structure of all models and their names are listed in the file `multimodel_inference/moments_multimodels.xlsx`. 
 
 ## Model selection ##
 Let's assume we have ten bootstrapped 2dSFS formatted for *moments* or *dadi* (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)). Such file is nothing more than a line of numbers with a header line giving the dimensions of the spectrum ( 2 x N + 1 for each of the two populations, where N is the number of sampled diploids). 
@@ -39,7 +57,7 @@ where
 - `contrast` : the name of population comparison. It should match the leading part of the bootstapped SFS names (in example here, `p12`)
 - `args`     : list of parameters for AFS models, in the following order: name of pop1, name of pop2, projection for pop1, projection for pop2, mutation rate (per genotyped portion of the genome per generation), generation time in thousands of years. 
 
-Population names can be anything. For ANGSD-derived SFS, projections should be 1.6N for each population (ronded to integer); in the case shown here, each population was represented by 10 individuals.
+Population names can be anything. For ANGSD-derived SFS, projections should be 1.6N for each population (rounded to integer); in the case shown here, each population was represented by 10 individuals.
 
 Additional arguments to `modSel_write.R` (defaults):
 - `nreps` (6)   : number of random restarts for each model for each bootstrap rep.
