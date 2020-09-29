@@ -37,10 +37,10 @@ if(length(grep("folded=T",commandArgs()))>0) { folded=TRUE } else { folded=FALSE
 
 require(ggplot2)
 
- bootRes="c23.boots"
- path2models="~/AFS-analysis-with-moments/multimodel_inference/"
- topq=0.5
- folded=FALSE
+ # bootRes="c23.boots"
+ # path2models="~/AFS-analysis-with-moments/multimodel_inference/"
+ # topq=0.5
+ # folded=FALSE
 
 system(paste("grep RESULT ", bootRes," -A 4 | grep -v Launcher | grep -E \"[0-9]|\\]\" | perl -pe 's/^100.+\\.o\\d+\\S//' | perl -pe 's/\\n//' | perl -pe 's/[\\[\\]]//g' | perl -pe 's/RESULT/\\nRESULT/g' | grep RESULT >", bootRes,".res",sep=""))
 
