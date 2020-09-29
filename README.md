@@ -100,7 +100,7 @@ Assuming we have 100 boostrapped SFS (See **Appendix** for instructions how to o
 
 The text output will be collected in the file `p12.winboots`. To summarize it all we need to do is
 ```bash
-Rscript ~/AFS-analysis-with-moments/bestBoot_summary.R bootRes=p12.boots
+Rscript ~/AFS-analysis-with-moments/bestBoot_summary.R bootRes=p12.winboots
 ```
 Additonal options to `bestBoot_summary.R` are:
 - `topq`: top quantile cutoff. Only boostrap runs in this top quantile will be summarized. Default 0.5
