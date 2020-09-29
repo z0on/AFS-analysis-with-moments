@@ -37,10 +37,10 @@ if(length(grep("folded=T",commandArgs()))>0) { folded=TRUE } else { folded=FALSE
 
 require(ggplot2)
 
-# bootRes="c23.boots"
-# path2models="~/AFS-analysis-with-moments/multimodel_inference/"
-# topq=0.5
-# folded=FALSE
+ bootRes="c23.boots"
+ path2models="~/AFS-analysis-with-moments/multimodel_inference/"
+ topq=0.5
+ folded=FALSE
 
 system(paste("grep RESULT ", bootRes," -A 4 | grep -v Launcher | grep -E \"[0-9]|\\]\" | perl -pe 's/^100.+\\.o\\d+\\S//' | perl -pe 's/\\n//' | perl -pe 's/[\\[\\]]//g' | perl -pe 's/RESULT/\\nRESULT/g' | grep RESULT >", bootRes,".res",sep=""))
 
@@ -72,30 +72,35 @@ for (b in 1:length(levels(npl$boot))) {
 #head(maxlike)
 
 # ---- leaving only topq % of bootstraps
+
 hist(maxlike$ll,breaks=50,main="bootstrap likes")
 abline(v=quantile(maxlike$ll,(1-topq)),col="red")
 #abline(v=quantile(maxlike$ll,topq+(1-topq)/2),col="red")
 maxlike=maxlike[maxlike$ll>quantile(maxlike$ll,(1-topq)),]
 #hist(maxlike$ll,breaks=20)
 
-# ----- "folding" genomic islands
-
-fold=rep(FALSE,nrow(maxlike))
-fold[maxlike$P>0.5]=TRUE
-
-mxl=maxlike
-migrations=grep("^m",names(maxlike))
-migrations.i=grep("^m.*i",names(maxlike))
-migrations= migrations[!(migrations %in% migrations.i)]
-
-maxlike[fold,migrations]=mxl[fold,migrations.i]
-maxlike[fold,migrations.i]=mxl[fold,migrations]
-maxlike[fold,"P"]=1-maxlike[fold,"P"]
-
 # ---- log-transforming migration rates
 
 migrations=grep("^m",names(maxlike))
 maxlike[,migrations]=apply(maxlike[,migrations],2,log,base=10)
+
+# ----- "folding" genomic islands such that island migration is lower on average
+
+if(length(grep("i",wmod))>0) { 
+	
+	mxl=maxlike
+	migrations=grep("^m",names(maxlike))
+	migrations.i=grep("^m.*i",names(maxlike))
+	migrations=migrations[!(migrations %in% migrations.i)]
+
+	mm=apply(mxl[,migrations],1,mean)
+	mi=apply(mxl[,migrations.i],1,mean)
+		
+	maxlike[mm<mi,migrations]=mxl[mm<mi,migrations.i]
+	maxlike[mm<mi,migrations.i]=mxl[mm<mi,migrations]
+	maxlike[mm<mi,"P"]=1-maxlike[mm<mi,"P"]
+}
+
 
 # ---- makig a long table, defining parameter types
 
