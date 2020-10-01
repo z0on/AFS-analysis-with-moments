@@ -96,7 +96,7 @@ The script also outputs the text file named `[contrast].[modelname]`, **where `[
 Lastly, the script outputs a file `[contrast].winboots.runs` that contains all the commands to run the next stage.
 
 ## Bootstrapping the winning model ## 
-Assuming we have 100 boostrapped SFS (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)), we are now going to run just the winning model on all of them. The commands file to do that has been already created by running `modSel_summary.R`, in the current example it is the file `p12.winboots.runs`. Now we need to do is to run all these commands, much preferably in parallel. As before, let them run for a one hour, kill whatever processes did not finish.
+Assuming we have 100 boostrapped SFS (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)), we are now going to run just the winning model on all of them. The commands file to do that has been already created by running `modSel_summary.R`, in the current example it is the file `p12.winboots.runs`. Now we need to do is to run all these commands, much preferably in parallel. As before, let them run for one hour, kill all that did not finish.
 
 The text output will be collected in the file `p12.winboots`. To summarize it all we need to do is
 ```bash
@@ -123,7 +123,7 @@ The script also saves an RData bundle containing the summary dataframe (medians,
 
 ### Obtaining bootstrapped SFS with ANGSD ###
 
-Here we obtain 100 series of 5 bootstrap replicates, which we then average. This procedure is called "bagging" and is designed to mitigate the noise that ANGSD-derived SFS often show, especially for small datasets (i.e. RAD-seq). The resulting 100 "bagged" datasets are going to be our bootstrap replicates.
+Here we obtain 100 series of 5 block-bootstrap replicates, which we then average. This averaging procedure is called "bagging" and is meant to mitigate the noise that ANGSD-derived SFS often show in the area of high-frequency (implying low count) variants. The resulting 100 "bagged" datasets are going to be our bootstrap replicates.
 
 Let's assume we have two populations, `p1` and `p2`, each with 10 sequenced individuals, and we have two text files, `p1.bams` and `p2.bams`, listing `*.bam` files for each population. First we need to collect sites (variable and invariable!) that pass our filters in both populations:
 
