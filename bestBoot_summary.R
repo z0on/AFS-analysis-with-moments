@@ -47,7 +47,7 @@ system(paste("grep RESULT ", bootRes," -A 4 | grep -v Launcher | grep -E \"[0-9]
 infile=paste(bootRes,".res",sep="")
 
 npl=read.table(infile)
-pdf(paste(infile,"_plots.pdf",sep=""),height=3, width=8)
+pdf(paste(bootRes,"_plots.pdf",sep=""),height=3, width=8)
 
 #------ retrieving parameter names, applying them
 
@@ -123,7 +123,7 @@ medians=apply(maxlike[,7:ncol(maxlike)],2,median)
 q25=apply(maxlike[,7:ncol(maxlike)],2,quantile,prob=0.25)
 q75=apply(maxlike[,7:ncol(maxlike)],2,quantile,prob=0.75)
 mres=data.frame(cbind(medians, q25,q75))
-save(mres,maxlike,file=paste(infile,"_bootres.RData",sep=""))
+save(mres,maxlike,file=paste(bootRes,"_bootres.RData",sep=""))
 print(medians)
 dev.off()
 
@@ -135,6 +135,6 @@ for(i in 1:ncol(idpara)){
 	cors=c(cors,cor(medians,idpara[,i]))
 }
 bestrun=maxlike$id[which(cors==max(cors))[1]]
-system(paste("cp *_",bestrun,"_*pdf ",infile,"_representativeModel.pdf",sep=""))
-system(paste("cp *_",bestrun,".png ",infile,"_representativeModel.png",sep=""))
+system(paste("cp *_",bestrun,"_*pdf ", bootRes,"_representativeModel.pdf",sep=""))
+system(paste("cp *_",bestrun,".png ", bootRes,"_representativeModel.png",sep=""))
 message("representative run: ",bestrun)
