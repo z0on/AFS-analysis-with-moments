@@ -34,7 +34,7 @@ So the models differ by:
 - split / no split (`ns` in model name)
 - number of epochs (1-3) (`sc1`,`sc2` or `sc3` in model name) 
 - migration at some or all of the epochs, which can be symmetrical (`sm`) or asymmetrical.  `e`,`m`, and `l` in model name stands for migration during early, mid, and late epoch. 
-- presence of "genomic islands" experiencing different introgression rate (`i` in model name).
+- presence of "genomic islands" experiencing lower introgression rate (`i` in model name).
 
 There are also models with exponential (rather than instantaneous) change in population size, such as the venerable `IM` model (and its derivatives with multiple epochs).
 
