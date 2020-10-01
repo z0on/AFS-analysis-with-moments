@@ -28,7 +28,7 @@ The models are designed to test the following basic aspects of population config
 - were there changes in population size(s) through time? (models can include up to three "epochs" where population size could change)
 - if there is a split, is there still migration? (during some or all of the epochs)
 - if there is migration, is it symmetrical or asymmetrical?
-- are their parts of the genome that introgress at a dfferent rate? ("islands of differentiation") - this is one way to model non-neutral processes such as spatially varying selection.
+- are their parts of the genome that introgress at a lower rate? ("islands of differentiation") - this is one way to model non-neutral processes such as spatially varying selection.
 
 So the models differ by: 
 - split / no split (`ns` in model name)
