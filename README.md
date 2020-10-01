@@ -119,8 +119,8 @@ This will generate the histogram of likelihoods with red line for top-quantile c
 The script also saves an RData bundle containing the summary dataframe (medians, 25% quantile, 75% quantile for all parameters) and the big dataframe containing all summarized bootstrap data.
 
 Last but not least, the script identifies the model run that is the closest to the median across bootstrap replicates and saves two plots for it: 
--`[input filename]_representativeModel.png` : model structure
--`*[input filename]_representativeModel.pdf` : comparison of real and model-derived AFS.
+- `[input filename]_representativeModel.png` : model structure
+- `[input filename]_representativeModel.pdf` : comparison of real and model-derived AFS.
 
 
 ## Appendix ## 
