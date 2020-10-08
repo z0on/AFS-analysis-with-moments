@@ -69,8 +69,6 @@ Additional arguments to `modSel_write.R` (defaults):
 Run all commands in `[contrast].modsel.runs` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 1 hour each. Best run these on an HPC cluster, in parallel! All the screen output is going to be collected in a file, `p12.modsel` in this case.
 >Note: some model runs may not finish in 1 hour; just kill them. These are hopeless runs where the parameter search algorithm is stuck, they will have horrible fit even if they eventually finish.
 
-The results file that is supposed to be created after running all this will be `[contrast].modsel.res`.
-
 Then, to summarize results and write the list of commands for the next step (bootstrapping the winnign model):
 ```bash
 Rscript ~/AFS-analysis-with-moments/modSel_summary.R modselResult=p12.modsel args="p1 p2 16 16 0.02 0.005"
