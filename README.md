@@ -28,18 +28,18 @@ The models are designed to test the following basic aspects of population config
 - were there changes in population size(s) through time? (models can include up to three "epochs" where population size could change)
 - if there is a split, is there still migration? (during some or all of the epochs)
 - if there is migration, is it symmetrical or asymmetrical?
-- are their parts of the genome that introgress at a lower rate? ("islands of differentiation") - this is one way to model non-neutral processes such as spatially varying selection.
+- do some parts of the genome ("islands of differentiation") introgress at a lower rate than the rest? This is one way to model non-neutral processes such as spatially varying selection.
 
 So the models differ by: 
 - split / no split (`ns` in model name)
 - number of epochs (1-3) (`sc1`,`sc2` or `sc3` in model name) 
 - migration at some or all of the epochs, which can be symmetrical (`sm`) or asymmetrical.  `e`,`m`, and `l` in model name stands for migration during early, mid, and late epoch. 
-- presence of "genomic islands" experiencing lower introgression rate (`i` in model name).
+- presence of "islands of differentiation" experiencing lower introgression rate (`i` in model name).
 
 There are also models with exponential (rather than instantaneous) change in population size, such as the venerable `IM` model (and its derivatives with multiple epochs).
 
 The name of a model is therefore a kind of code to its structure, for example:
-`sc3ielsm2` : 3 epochs; "genomic islands"; migration is only during early and late epochs (no migration during middle epoch); migration is symmetrical in the second "migration epoch".
+`sc3ielsm2` : 3 epochs, "islands of differentiation", migration is only during early and late epochs (no migration during middle epoch), migration is symmetrical in the second "migration epoch".
 
 Sadly, not all model names currently conform to this convention. The summary of the structure of all models and their names are listed in the file `multimodel_inference/moments_multimodels.xlsx`. 
 
