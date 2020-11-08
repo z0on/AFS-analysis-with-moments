@@ -77,9 +77,9 @@ where
 - `modselResult` : the name of the resulting file from model selection, typically `[contrast].modsel`. 
 - `args`     : same argument as for `modSel_write.R`
 
-Additional arguments to `modSel_summary.R` (defaults):
+Additional arguments to `modSel_summary.R` that will influence the next stage, bootstrapping the winning model (defaults):
 - `nreps` (6)   : number of random restarts for each model for each bootstrap rep.
-- `nboots` (100) : number of bootstrap replicates to use.
+- `nboots` (100) : number of bootstrap replicates.
 - `folded` (FALSE) : whether analysis is using folded SFS.
 
 Two plots will be generated. The first one is the boxplot of best AIC scores for each model for all bootstrap replicates:
