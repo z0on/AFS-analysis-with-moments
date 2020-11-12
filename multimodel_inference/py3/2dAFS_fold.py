@@ -18,6 +18,16 @@ fs=fs.fold()
 data=fs.project(projections)
 ns=data.sample_sizes
 
+# writing projected data
+pr1=str(int(sys.argv[4])+1)
+pr2=str(int(sys.argv[5])+1)
+np.savetxt("proj",data.flatten(),delimiter="\t",newline="\t",fmt="%.2f")
+pr=open("proj","r")
+f=open(sys.argv[1]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.projected',"w")
+f.write(pr1+" "+pr2+"\n"+pr.read()+"\n")
+f.close()
+
+
 '''
 # masking singletons 
 #data.mask[:,0]=True
