@@ -4,7 +4,7 @@
 
 The problem with *moments* and *dadi* is, they can evaluate the fit of a pre-specified demographic model but are **not designed to search for the general model structure** that best fits the data (i.e., was there population split or not, is there any migration and if yes, is it symmetrical or not, were there additional growth periods before or after spit, etc). Our solution to this problem is pretty simple: to fit all the two-population models we can possibly think of to our experimental 2dSFS and use Akaike Information Criterion to select the best one.
 
-See [GADMA](https://github.com/ctlab/GADMA) for the alternative solution to this problem. Compared to GADMA, we are far less elegant but somewhat more flexible (we can incorporate essentially any model, for example, involving selection and heterogeneous introgression rates across the genome). Our approach also lets the user evaluate how much better the winning model is compared to certain "null" alternatives (for example, models with no population split, with symmetrical migration, or with constant population sizes), which provides statistical evidence for general aspects of the model structure. Our disadvantage is a ridiculously huge number of model-fit runs that we have to perform; the good news is, all this can be done in parallel, and each single-model run takes no more than 1 hour.
+See [GADMA](https://github.com/ctlab/GADMA) for the alternative solution to this problem. Compared to GADMA, we are far less elegant but somewhat more flexible (we can incorporate essentially any model, for example, involving selection and heterogeneous introgression rates across the genome). Our approach also lets the user evaluate how much better the winning model is compared to certain "null" alternatives (for example, models with no population split, with symmetrical migration, or with constant population sizes), which provides statistical evidence for general aspects of the model structure. Our disadvantage (besides the fact that we only do two-pop models and GADMA also does three-pop models) is a ridiculously huge number of model-fit runs that we have to perform. The good news is, all this can be done in parallel, and each single-model run takes no more than 1 hour.
 
 ## Installation ##
 First of all, install *moments*. The example below would clone it into root directory and install it for a specific user.
@@ -18,6 +18,8 @@ cd
 Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-with-moments/multimodel_inference/py2/` or from `/AFS-analysis-with-moments/multimodel_inference/py3/` (depending on your `python` version) to where you keep your executables (for example, `~/bin`). 
 > NOTE: all code examples here assume the repository is cloned in the home directory, `~/`. If you cloned it elsewhere, make sure to replace `~/AFS-analysis-with-moments` in all examples with the actual path.
 
+> NOTE: R scripts were tested with R versions 3.5.1 and 3.6.3. Not sure about R version 4.
+
 ## Overview of the method ##
 - The first step is **model selection**, where we run all possible models on 10 bootstrapped SFS. We  run each model on each bootstrap six times (six random restarts), to make sure the model converges to its best likelihood at least once. All these commands are written by the `R` script `modSel_write.R`. Then we use the `R` script `modSel_summarize.R` to select the best-fitted instance (out of 6) for each model for each bootstrap, and compare the AIC scores for all models. The best model is the one with the *lowest median AIC score among bootstrap replicates*.  
 - The second step is running the winning model on 100 bootstrapped SFS, to **evaluate parameter uncertainties**. The commands for this stage are actually written by the `modSel_summary.R` script. Once again, we are doing 6 random restarts for each bootstrap replicate. The parameter meanings and uncertainties are deciphered by the third `R` script that we have, `bestBoot_summary.R`. All three `R` scripts are designed for command-line usage.
@@ -28,18 +30,18 @@ The models are designed to test the following basic aspects of population config
 - were there changes in population size(s) through time? (models can include up to three "epochs" where population size could change)
 - if there is a split, is there still migration? (during some or all of the epochs)
 - if there is migration, is it symmetrical or asymmetrical?
-- are their parts of the genome that introgress at a lower rate? ("islands of differentiation") - this is one way to model non-neutral processes such as spatially varying selection.
+- do some parts of the genome ("islands of differentiation") introgress at a lower rate than the rest? This is one way to model non-neutral processes such as spatially varying selection.
 
 So the models differ by: 
 - split / no split (`ns` in model name)
 - number of epochs (1-3) (`sc1`,`sc2` or `sc3` in model name) 
 - migration at some or all of the epochs, which can be symmetrical (`sm`) or asymmetrical.  `e`,`m`, and `l` in model name stands for migration during early, mid, and late epoch. 
-- presence of "genomic islands" experiencing different introgression rate (`i` in model name).
+- presence of "islands of differentiation" experiencing lower introgression rate (`i` in model name).
 
 There are also models with exponential (rather than instantaneous) change in population size, such as the venerable `IM` model (and its derivatives with multiple epochs).
 
 The name of a model is therefore a kind of code to its structure, for example:
-`sc3ielsm2` : 3 epochs; "genomic islands"; migration is only during early and late epochs (no migration during middle epoch); migration is symmetrical in the second "migration epoch".
+`sc3ielsm2` : 3 epochs, "islands of differentiation", migration is only during early and late epochs (no migration during middle epoch), migration is symmetrical in the second "migration epoch".
 
 Sadly, not all model names currently conform to this convention. The summary of the structure of all models and their names are listed in the file `multimodel_inference/moments_multimodels.xlsx`. 
 
@@ -69,8 +71,6 @@ Additional arguments to `modSel_write.R` (defaults):
 Run all commands in `[contrast].modsel.runs` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 1 hour each. Best run these on an HPC cluster, in parallel! All the screen output is going to be collected in a file, `p12.modsel` in this case.
 >Note: some model runs may not finish in 1 hour; just kill them. These are hopeless runs where the parameter search algorithm is stuck, they will have horrible fit even if they eventually finish.
 
-The results file that is supposed to be created after running all this will be `[contrast].modsel.res`.
-
 Then, to summarize results and write the list of commands for the next step (bootstrapping the winnign model):
 ```bash
 Rscript ~/AFS-analysis-with-moments/modSel_summary.R modselResult=p12.modsel args="p1 p2 16 16 0.02 0.005"
@@ -79,9 +79,9 @@ where
 - `modselResult` : the name of the resulting file from model selection, typically `[contrast].modsel`. 
 - `args`     : same argument as for `modSel_write.R`
 
-Additional arguments to `modSel_summary.R` (defaults):
+Additional arguments to `modSel_summary.R` that will influence the next stage, bootstrapping the winning model (defaults):
 - `nreps` (6)   : number of random restarts for each model for each bootstrap rep.
-- `nboots` (100) : number of bootstrap replicates to use.
+- `nboots` (100) : number of bootstrap replicates.
 - `folded` (FALSE) : whether analysis is using folded SFS.
 
 Two plots will be generated. The first one is the boxplot of best AIC scores for each model for all bootstrap replicates:
