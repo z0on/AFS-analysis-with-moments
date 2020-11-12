@@ -43,7 +43,7 @@ nreps =grep("nreps=",commandArgs())
 if(length(nreps)>0) { nreps=as.numeric(sub("nreps=","", commandArgs()[nreps])) } else { nreps=6 }
 
 nboots =grep("nboots=",commandArgs())
-if(length(nboots)>0) { nreps=as.numeric(sub("nboots =","", commandArgs()[nboots])) } else { nboots=100 }
+if(length(nboots)>0) { nreps=as.numeric(sub("nboots=","", commandArgs()[nboots])) } else { nboots=100 }
 
 if(length(grep("folded=T",commandArgs()))>0) { folded=TRUE } else { folded=FALSE }
 
