@@ -44,7 +44,7 @@ def sc3ei(params , ns):
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs.integrate([nu1], T1)
-    fs = moments.Manips.split_1D_to_2D(fs, ns[1], ns[2])
+    fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
     fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, m12], [m21, 0]]))
 
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
