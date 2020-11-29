@@ -53,7 +53,7 @@ def sc3ei(params , ns):
     fsi = moments.Spectrum(stsi)
     fsi.integrate([nu1], T1)
     fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1_1*Fs1, nu2_1*Fs2], T, m = np.array([[0, m12], [m21, 0]]))
+    fsi.integrate([nu1_2*Fs1, nu2_2*Fs2], T2, m = np.array([[0, m12], [m21, 0]]))
 
     fs2=P*fsi+(1-P)*fs
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
