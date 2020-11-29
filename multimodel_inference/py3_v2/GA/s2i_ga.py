@@ -39,7 +39,7 @@ np.set_printoptions(precision=3)
 def s2mi(params , ns):
 #    p_misid: proportion of misidentified ancestral states
 # P: proportion of sites with lower migration
-# Fi: factor of migration reduction (0.001 - 0.99999)
+# Fi: factor of migration reduction (1e-5 - 0.99999)
     nu1_1,nu2_1,T,m12,m21,Fi_12,Fi_21,P,p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
@@ -55,8 +55,8 @@ def s2mi(params , ns):
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
  
 func=s2mi
-upper_bound = [100, 100, 100, 200,200,0.99999,0.999,0.999,0.25]
-lower_bound = [1e-5,1e-3,1e-3,1e-5,1e-5,1e-3,1e-3,1e-3,1e-5]
+upper_bound = [100, 100, 100, 200,200,0.99999,0.99999,0.99999,0.25]
+lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 par_labels = ('nu1_1','nu2_1','T1','m12','m21','Fi_12','Fi_21','F_gen','f_misid')
@@ -89,7 +89,7 @@ ll_model = moments.Inference.ll_multinom(model, data)
 theta = moments.Inference.optimal_sfs_scaling(model, data)
 
 # random index for this replicate
-ind=str(random.randint(0.99999999))
+ind=str(random.randint(0,99999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)

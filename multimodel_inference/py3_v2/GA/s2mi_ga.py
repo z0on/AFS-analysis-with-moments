@@ -54,7 +54,7 @@ def s2mi(params , ns):
  
 func=s2mi
 upper_bound = [100, 100, 100, 200,200,200,200,0.99999,0.25]
-lower_bound = [1e-5,1e-3,1e-3,1e-5,1e-5,1e-5,1e-5,1e-3,1e-5]
+lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
@@ -83,7 +83,7 @@ ll_model = moments.Inference.ll_multinom(model, data)
 theta = moments.Inference.optimal_sfs_scaling(model, data)
 
 # random index for this replicate
-ind=str(random.randint(0.99999999))
+ind=str(random.randint(0,99999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
