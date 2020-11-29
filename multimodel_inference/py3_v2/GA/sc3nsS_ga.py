@@ -74,13 +74,14 @@ par_labels = ('nu1','nu2','nu3','T1','T2','T3','F_ne','F_gen','f_misid')
 #                                   verbose=False, maxiter=30)
 result = gadma.Inference.optimize_ga(data=data,
                                      model_func=func,
+                                     verbose=0,
                                      engine='moments',
                                      args=(),
                                      p_ids = par_labels,
                                      lower_bound=lower_bound,
                                      upper_bound=upper_bound,
                                      local_optimizer='BFGS_log',
-                                     ga_maxiter=150,
+                                     ga_maxiter=100,
                                      ls_maxiter=1)
 poptg=result.x                                    
 
