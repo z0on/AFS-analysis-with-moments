@@ -94,7 +94,7 @@ theta = moments.Inference.optimal_sfs_scaling(model, data)
 ind=str(random.randint(0,999999))
 
 # plotting demographic model
-#plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
+plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
 moments.ModelPlot.plot_model(plot_mod, save_file="sc3nsS_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
