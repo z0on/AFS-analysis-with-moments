@@ -38,7 +38,7 @@ np.set_printoptions(precision=3)
 
 def s2m(params , ns):
 #    p_misid: proportion of misidentified ancestral states
-    nu1_1, nu2_1,T, m12,m21, p_misid = params
+    nu1, nu2,T, m12,m21, p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
@@ -52,7 +52,7 @@ lower_bound = [1e-3,1e-3,1e-3,1e-5,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
-par_labels = ('nu1_1','nu2_1','T1','m12','m21','f_misid')
+par_labels = ('nu1','nu2','T1','m12','m21','f_misid')
 
 #poptg = moments.Inference.optimize_log(params, data, func,
 #                                   lower_bound=lower_bound,
