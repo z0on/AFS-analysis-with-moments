@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-# split, constant pop size, asymmetric migration, genomic islangs
-# n(para): 9
+# split, constant pop size afetr split, asymmetric migration, genomic islangs of lower migration
 
 import matplotlib
 matplotlib.use('PDF')
@@ -40,7 +39,7 @@ def s2mi(params , ns):
 #    p_misid: proportion of misidentified ancestral states
 # P: proportion of sites with lower migration
 # Fi: factor of migration reduction (1e-5 - 0.99999)
-    nu1_1,nu2_1,T,m12,m21,Fi,P,p_misid = params
+    nu1,nu2,T,m12,m21,Fi,P,p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
@@ -49,7 +48,7 @@ def s2mi(params , ns):
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
     fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1_1, nu2_1], T, m = np.array([[0, m12*Fi], [m21*Fi, 0]]))
+    fsi.integrate([nu1, nu2], T, m = np.array([[0, m12*Fi], [m21*Fi, 0]]))
 
     fs2=P*fsi+(1-P)*fs
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
@@ -59,7 +58,7 @@ upper_bound = [100, 100, 100, 200,200,0.99999,0.99999,0.25]
 lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
-par_labels = ('nu1_1','nu2_1','T1','m12','m21','F_isl','F_gen','f_misid')
+par_labels = ('nu1','nu2','T1','m12','m21','F_isl','F_gen','f_misid')
 
 #poptg = moments.Inference.optimize_log(params, data, func,
 #                                   lower_bound=lower_bound,

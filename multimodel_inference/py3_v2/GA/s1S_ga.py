@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-# split, constant pop size, asymmetric migration, genomic islangs
-# n(para): 9
+# split, constant pop size after split, asymmetric migration, genomic islangs of lower Ne
+# example: python3 s1S_ga.py ny_1.sfs n y 30 30 0.02 0.005
 
 import matplotlib
 matplotlib.use('PDF')
@@ -55,20 +55,16 @@ def s2mi(params , ns):
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
  
 func=s2mi
-upper_bound = [100, 100, 100, 200,200,0.99999,0.99999,0.25]
-lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
+upper_bound = [100, 100, 100, 200,200,0.99,0.99999,0.25]
+lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,1e-2,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
-par_labels = ('nu1_1','nu2_1','T','m12','m21','F_ne','F_gen','f_misid')
+par_labels = ('nu1','nu2','T','m12','m21','F_ne','F_gen','f_misid')
 
-#poptg = moments.Inference.optimize_log(params, data, func,
-#                                   lower_bound=lower_bound,
-#                                   upper_bound=upper_bound,
-#                                   verbose=False, maxiter=30)
 result = gadma.Inference.optimize_ga(data=data,
                                      model_func=func,
-                                     verbose=0,
+                                     verbose=1,
                                      engine='moments',
                                      args=(),
                                      p_ids = par_labels,
@@ -79,7 +75,6 @@ result = gadma.Inference.optimize_ga(data=data,
                                      ls_maxiter=1)
 poptg=result.x                                    
 
-
 # extracting model predictions, likelihood and theta
 model = func(poptg, ns)
 ll_model = moments.Inference.ll_multinom(model, data)
@@ -88,15 +83,15 @@ theta = moments.Inference.optimal_sfs_scaling(model, data)
 # random index for this replicate
 ind=str(random.randint(0,99999999))
 
+# printing parameters and their SDs
+print( "RESULT","s1S",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
+                                    
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
 moments.ModelPlot.plot_model(plot_mod, save_file="s1S_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
 
-# printing parameters and their SDs
-print( "RESULT","s1S",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
-                                    
 # plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=0.1, resid_range=3,
                                     pop_ids =pop_ids)
