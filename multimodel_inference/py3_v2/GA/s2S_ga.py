@@ -58,8 +58,8 @@ def sc2S (params , ns):
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
  
 func=sc2S
-upper_bound = [100, 100, 100,100,100,100,200,200,200,200,0.99,0.99999,0.25]
-lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-2,1e-5,1e-5]
+upper_bound = [100, 100, 100,100,100,100,200,200,200,200,0.999,0.99999,0.25]
+lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,0.01,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
