@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
-# split, constant pop size, asymmetric migration, genomic islangs
-# n(para): 9
+# split, three epochs in each pop, asymmetric migration at same rates in all epochs
+# genomic islands
+# n(para): 15
+
 
 import matplotlib
 matplotlib.use('PDF')
@@ -20,7 +22,7 @@ projections=[int(sys.argv[4]),int(sys.argv[5])]
 if len(sys.argv)==9:
     params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
 else:
-    params=[1,1,1,1,1,0.5,0.01]
+    params=[1,1,1,1,1,1,1,0.5,0.01]
 
 # mutation rate per sequenced portion of genome per generation: for A.millepora, 0.02
 mu=float(sys.argv[6])
@@ -36,31 +38,33 @@ np.set_printoptions(precision=3)
 #-------------------
 # split into unequal pop sizes with asymmetrical migration
 
-def s2mi(params , ns):
+def sc3ei(params , ns):
 #    p_misid: proportion of misidentified ancestral states
 # P: proportion of sites with lower Ne
 # Fs: factor of Ne reduction (1e-5 - 0.99999)
-    nu1_1,nu2_1,T,Fs1,Fs2,P,p_misid = params
+    nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,Fs,P,p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1_1, nu2_1], T, m = np.array([[0, 0], [0, 0]]))
+    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, 0], [0, 0]]))
+    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, 0], [0, 0]]))
 
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
     fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1_1*Fs1, nu2_1*Fs2], T, m = np.array([[0, 0], [0, 0]]))
+    fsi.integrate([nu1_1*Fs1, nu2_1*Fs2], T1, m = np.array([[0, 0], [0, 0]]))
+    fsi.integrate([nu1_2*Fs1, nu2_2*Fs2], T2, m = np.array([[0, 0], [0, 0]]))
 
     fs2=P*fsi+(1-P)*fs
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
  
-func=s2mi
-upper_bound = [100, 100, 100,100,0.99999,0.99999,0.25]
-lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
+func=sc3ei
+upper_bound = [100, 100,100,100,100,100,0.99999,0.99999,0.25]
+lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
-par_labels = ('nu1_1','nu2_1','T','F_ne1','F_ne2','F_gen','f_misid')
+par_labels = ('nu1_1','nu2_1','nu1_2','nu2_2','T1','T2','F_ne','F_gen','f_misid')
 
 #poptg = moments.Inference.optimize_log(params, data, func,
 #                                   lower_bound=lower_bound,

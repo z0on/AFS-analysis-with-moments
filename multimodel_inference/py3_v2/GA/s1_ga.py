@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 
-# split, three epochs in each pop, asymmetric migration at same rates in all epochs
-# genomic islands
-# n(para): 15
-
-# uses genetic algorithm from GADMA for optimization
+# split, constant pop size, symmetric migration
+# n(para): 6
 
 import matplotlib
 matplotlib.use('PDF')
@@ -23,7 +20,7 @@ projections=[int(sys.argv[4]),int(sys.argv[5])]
 if len(sys.argv)==9:
     params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
 else:
-    params=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.5,0.01]
+    params=[1,1,1,1,1,0.01]
 
 # mutation rate per sequenced portion of genome per generation: for A.millepora, 0.02
 mu=float(sys.argv[6])
@@ -39,33 +36,23 @@ np.set_printoptions(precision=3)
 #-------------------
 # split into unequal pop sizes with asymmetrical migration
 
-def sc3ei(params , ns):
+def s2m(params , ns):
 #    p_misid: proportion of misidentified ancestral states
-# P: proportion of sites with lower migration
-# Fi: factor of migration reduction (1e-5 - 0.99999)
-    nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12_1,m21_1,m12_2,m21_2,m12_1i,m21_1i,m12_2i,m21_2i,P,p_misid = params
+    nu1, nu2,T, m12,m21, p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, m12_1], [m21_1, 0]]))
-    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, m12_2], [m21_2, 0]]))
+    fs.integrate([nu1, nu2], T, m = np.array([[0, m12], [m21, 0]]))
 
-    stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
-    fsi = moments.Spectrum(stsi)
-    fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1_1, nu2_1], T1, m = np.array([[0, m12_1i], [m21_1i, 0]]))
-    fsi.integrate([nu1_2, nu2_2], T2, m = np.array([[0, m12_2i], [m21_2i, 0]]))
-
-    fs2=P*fsi+(1-P)*fs
-    return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
+    return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
  
-func=sc3ei
-
-upper_bound = [100, 100, 100,100,100,100,200,200,200,200,200,200,200,200,0.99999,0.25]
-lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
+func=s2m
+upper_bound = [ 100, 100, 100, 200,200,0.25]
+lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
-par_labels = ('nu1_1','nu2_1','nu1_2','nu2_2','T1','T2','m12_1','m21_1','m12_2','m21_2','m12_1i','m21_1i','m12_2i','m21_2i','F_gen','f_misid')
+
+par_labels = ('nu1','nu2','T1','m12','m21','f_misid')
 
 #poptg = moments.Inference.optimize_log(params, data, func,
 #                                   lower_bound=lower_bound,
@@ -83,7 +70,7 @@ result = gadma.Inference.optimize_ga(data=data,
                                      ga_maxiter=100,
                                      ls_maxiter=1)
 poptg=result.x                                    
-                                     
+
 # extracting model predictions, likelihood and theta
 model = func(poptg, ns)
 ll_model = moments.Inference.ll_multinom(model, data)
@@ -94,15 +81,15 @@ ind=str(random.randint(0,99999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
-moments.ModelPlot.plot_model(plot_mod, save_file="sc2mi_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
+moments.ModelPlot.plot_model(plot_mod, save_file="s1_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
 
 # printing parameters and their SDs
-print( "RESULT","sc2mi",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
+print( "RESULT","s1",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=0.1, resid_range=3,
                                     pop_ids =pop_ids)
-plt.savefig("sc2mi_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
+plt.savefig("s1_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 
