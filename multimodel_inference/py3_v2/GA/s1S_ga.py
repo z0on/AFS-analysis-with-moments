@@ -56,7 +56,7 @@ def s2mi(params , ns):
  
 func=s2mi
 upper_bound = [100, 100, 100, 200,200,0.999,0.99999,0.25]
-lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,0.01,1e-5,1e-5]
+lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,0.1,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
