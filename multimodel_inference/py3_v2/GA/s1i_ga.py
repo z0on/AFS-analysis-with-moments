@@ -43,7 +43,7 @@ def s2mi(params , ns):
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1_1, nu2_1], T, m = np.array([[0, m12], [m21, 0]]))
+    fs.integrate([nu1, nu2], T, m = np.array([[0, m12], [m21, 0]]))
 
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
@@ -55,7 +55,7 @@ def s2mi(params , ns):
  
 func=s2mi
 upper_bound = [100, 100, 100, 200,200,0.99999,0.99999,0.25]
-lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
+lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,1e-3,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 par_labels = ('nu1','nu2','T1','m12','m21','F_isl','F_gen','f_misid')
