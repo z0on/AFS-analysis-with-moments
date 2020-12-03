@@ -60,7 +60,7 @@ def sc12nm(params , ns):
  
 func=sc12nm
 upper_bound = [100,100,100,100,0.999,0.99999,0.25]
-lower_bound = [1e-5,1e-5,1e-5,1e-5,0.1,1e-5,1e-5]
+lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-3,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
@@ -79,7 +79,7 @@ result = gadma.Inference.optimize_ga(data=data,
                                      lower_bound=lower_bound,
                                      upper_bound=upper_bound,
                                      local_optimizer='BFGS_log',
-                                     ga_maxiter=100,
+                                     ga_maxiter=150,
                                      ls_maxiter=1)
 poptg=result.x                                    
 

@@ -56,22 +56,41 @@ def s2mi(params , ns):
  
 func=s2mi
 upper_bound = [100, 100, 100, 200,200,0.999,0.99999,0.25]
-lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,0.1,1e-5,1e-5]
+lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,1e-3,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
 par_labels = ('nu1','nu2','T','m12','m21','F_ne','F_gen','f_misid')
 
+# calculating time limit for GADMA evaluations (the generation will re-spawn if stuck for longer than that)
+
+import timeit
+# allowed fold-excess in evaluation time
+X = 20
+num_init=50
+variables = gadma.cli.get_variables(par_labels, lower_bound, upper_bound)
+X_init = [[var.resample() for var in variables] for _ in range(num_init)]
+Y_init = []
+def f():
+    for x in X_init:
+        Y_init.append(func(x, ns))
+total_time = timeit.timeit(f, number=1)
+mean_time = total_time / num_init
+
+
 result = gadma.Inference.optimize_ga(data=data,
                                      model_func=func,
-                                     verbose=1,
+                                     verbose=0,
                                      engine='moments',
+#                                     X_init=X_init,
+#                                     Y_init=Y_init,
+                                     maxtime_per_eval = mean_time * X,
                                      args=(),
                                      p_ids = par_labels,
                                      lower_bound=lower_bound,
                                      upper_bound=upper_bound,
                                      local_optimizer='BFGS_log',
-                                     ga_maxiter=100,
+                                     ga_maxiter=150,
                                      ls_maxiter=1)
 poptg=result.x                                    
 

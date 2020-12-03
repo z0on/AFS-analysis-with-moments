@@ -67,7 +67,7 @@ result = gadma.Inference.optimize_ga(data=data,
                                      lower_bound=lower_bound,
                                      upper_bound=upper_bound,
                                      local_optimizer='BFGS_log',
-                                     ga_maxiter=100,
+                                     ga_maxiter=150,
                                      ls_maxiter=1)
 poptg=result.x                                    
 
