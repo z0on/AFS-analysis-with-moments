@@ -62,7 +62,7 @@ def sc3ei(params , ns):
 func=sc3ei
 
 upper_bound = [100, 100, 100,100,100,100,200,200,200,200,0.99999,0.99999,0.25]
-lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-3,1e-5,1e-5]
+lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 par_labels = ('nu1_1','nu2_1','nu1_2','nu2_2','T1','T2','m12_1','m21_1','m12_2','m21_2','F_isl','F_gen','f_misid')
