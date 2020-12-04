@@ -54,16 +54,26 @@ params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
 
 par_labels = ('nu1','nu2','T1','m12','m21','f_misid')
 
-#poptg = moments.Inference.optimize_log(params, data, func,
-#                                   lower_bound=lower_bound,
-#                                   upper_bound=upper_bound,
-#                                   verbose=False, maxiter=30)
+import timeit
+# allowed fold-excess in evaluation time
+X = 20
+num_init=50
+variables = gadma.cli.get_variables(par_labels, lower_bound, upper_bound)
+X_init = [[var.resample() for var in variables] for _ in range(num_init)]
+Y_init = []
+def f():
+    for x in X_init:
+        Y_init.append(func(x, ns))
+total_time = timeit.timeit(f, number=1)
+mean_time = total_time / num_init
+
 result = gadma.Inference.optimize_ga(data=data,
                                      model_func=func,
                                      verbose=0,
                                      engine='moments',
                                      args=(),
                                      p_ids = par_labels,
+                                     maxtime_per_eval = mean_time * X,
                                      lower_bound=lower_bound,
                                      upper_bound=upper_bound,
                                      local_optimizer='BFGS_log',

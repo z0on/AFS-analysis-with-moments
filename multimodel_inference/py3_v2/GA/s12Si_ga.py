@@ -57,15 +57,15 @@ def sc3ei(params , ns):
 
     stsis = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsis = moments.Spectrum(stsis)
-    fsi.integrate([nu1], T1)
-    fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1_2*Fs, nu2_2*Fs], T2, m = np.array([[0, m12*Fi], [m21*Fi, 0]]))
+    fsis.integrate([nu1], T1)
+    fsis = moments.Manips.split_1D_to_2D(fsis, ns[0], ns[1])
+    fsis.integrate([nu1_2*Fs, nu2_2*Fs], T2, m = np.array([[0, m12*Fi], [m21*Fi, 0]]))
 
     stss = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fss = moments.Spectrum(stss)
-    fsi.integrate([nu1], T1)
-    fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1_2*Fs, nu2_2*Fs], T2, m = np.array([[0, m12], [m21, 0]]))
+    fss.integrate([nu1], T1)
+    fss = moments.Manips.split_1D_to_2D(fss, ns[0], ns[1])
+    fss.integrate([nu1_2*Fs, nu2_2*Fs], T2, m = np.array([[0, m12], [m21, 0]]))
 
     fs2=Pi*(1-Ps)*fsi+Ps*(1-Pi)*fss+Pi*Ps*fsis+(1-Pi)*(1-Ps)*fs
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
