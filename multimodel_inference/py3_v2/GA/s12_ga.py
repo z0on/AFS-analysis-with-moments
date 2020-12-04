@@ -39,7 +39,7 @@ np.set_printoptions(precision=3)
 def sc3ei(params , ns):
 #    p_misid: proportion of misidentified ancestral states
 # P: proportion of sites with lower Ne
-# Fs: factor of Ne reduction (1e-5 - 0.99999)
+# Fs: factor of Ne reduction (1e-5 - 0.999)
     nu1,nu1_2,nu2_2,T1,T2,m12,m21,p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
@@ -81,7 +81,7 @@ ll_model = moments.Inference.ll_multinom(model, data)
 theta = moments.Inference.optimal_sfs_scaling(model, data)
 
 # random index for this replicate
-ind=str(random.randint(0,99999999))
+ind=str(random.randint(0,999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)

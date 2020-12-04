@@ -20,7 +20,7 @@ projections=[int(sys.argv[4]),int(sys.argv[5])]
 if len(sys.argv)==9:
     params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
 else:
-    params=[1,1,1,1,1,1,0.5,0.01]
+    params=[1,1,1,1,1,1,0.5,1,0.5,0.01]
 
 # mutation rate per sequenced portion of genome per generation: for A.millepora, 0.02
 mu=float(sys.argv[6])
@@ -38,9 +38,10 @@ np.set_printoptions(precision=3)
 
 def s2mi(params , ns):
 #    p_misid: proportion of misidentified ancestral states
-# P: proportion of sites with lower Ne
-# Fs: factor of Ne reduction (1e-5 - 0.999)
-    nu1,nu2,T,m12,m21,Fs,P,p_misid = params
+# Pi: proportion of sites with lower migration
+# Fi: factor of migration reduction (1e-5 - 0.999)
+# Ps: proportion of sites with lower Ne
+    nu1,nu2,T,m12,m21,Fi,Pi,Fs,Ps,p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
@@ -49,18 +50,28 @@ def s2mi(params , ns):
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
     fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1*Fs, nu2*Fs], T, m = np.array([[0, m12], [m21, 0]]))
+    fsi.integrate([nu1, nu2], T, m = np.array([[0, m12*Fi], [m21*Fi, 0]]))
 
-    fs2=P*fsi+(1-P)*fs
+    stsis = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
+    fsis = moments.Spectrum(stsis)
+    fsis = moments.Manips.split_1D_to_2D(fsis, ns[0], ns[1])
+    fsis.integrate([nu1*Fs, nu2*Fs], T, m = np.array([[0, m12*Fi], [m21*Fi, 0]]))
+
+    stss = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
+    fss = moments.Spectrum(stss)
+    fss = moments.Manips.split_1D_to_2D(fss, ns[0], ns[1])
+    fss.integrate([nu1*Fs, nu2*Fs], T, m = np.array([[0, m12], [m21, 0]]))
+
+    fs2=Pi*(1-Ps)*fsi+Ps*(1-Pi)*fss+Pi*Ps*fsis+(1-Pi)*(1-Ps)*fs
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
  
 func=s2mi
-upper_bound = [100, 100, 100, 200,200,0.999,0.999,0.25]
-lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,1e-1,1e-5,1e-5]
+upper_bound = [100, 100, 100, 200,200,0.999,0.999,0.999,0.999,0.25]
+lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-1,1e-5,1e-5]
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
                               lower_bound=lower_bound)
 
-par_labels = ('nu1','nu2','T','m12','m21','F_ne','F_gen','f_misid')
+par_labels = ('nu1','nu2','T','m12','m21','Fi','F_gi','Fs','F_gs','f_misid')
 
 # calculating time limit for GADMA evaluations (the generation will re-spawn if stuck for longer than that)
 

@@ -42,14 +42,14 @@ np.set_printoptions(precision=3)
 def sc3ei(params , ns):
 #    p_misid: proportion of misidentified ancestral states
 # P: proportion of sites with lower migration
-# Fi: factor of migration reduction (1e-5 - 0.99999)
+# Fi: factor of migration reduction (1e-5 - 0.999)
 # migration is asymmetric, scales with pop size
     nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, m12], [m21, 0]]))
-    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, 0], [0, 0]]))
+    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, 0], [0, 0]]))
+    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, m12], [m21, 0]]))
 
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
  
@@ -84,19 +84,19 @@ ll_model = moments.Inference.ll_multinom(model, data)
 theta = moments.Inference.optimal_sfs_scaling(model, data)
 
 # random index for this replicate
-ind=str(random.randint(0,99999999))
+ind=str(random.randint(0,999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
-moments.ModelPlot.plot_model(plot_mod, save_file="s20_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
+moments.ModelPlot.plot_model(plot_mod, save_file="sc_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
 
 # printing parameters and their SDs
-print( "RESULT","s20",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
+print( "RESULT","sc",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=0.1, resid_range=3,
                                     pop_ids =pop_ids)
-plt.savefig("s20_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
+plt.savefig("sc_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 

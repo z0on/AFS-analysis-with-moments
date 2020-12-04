@@ -39,7 +39,7 @@ np.set_printoptions(precision=3)
 def s2mi(params , ns):
 #    p_misid: proportion of misidentified ancestral states
 # P: proportion of sites with lower Ne
-# Fs: factor of Ne reduction (1e-5 - 0.99999)
+# Fs: factor of Ne reduction (1e-5 - 0.999)
     nu1,nu2,T,Fs,P,p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
@@ -55,8 +55,8 @@ def s2mi(params , ns):
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
  
 func=s2mi
-upper_bound = [100, 100, 100,0.999,0.99999,0.25]
-lower_bound = [1e-5,1e-5,1e-5,1e-3,1e-5,1e-5]
+upper_bound = [100, 100, 100,0.999,0.999,0.25]
+lower_bound = [1e-5,1e-5,1e-5,1e-1,1e-5,1e-5]
 
 par_labels = ('nu1_1','nu2_1','T','F_ne','F_gen','f_misid')
 
@@ -96,7 +96,7 @@ ll_model = moments.Inference.ll_multinom(model, data)
 theta = moments.Inference.optimal_sfs_scaling(model, data)
 
 # random index for this replicate
-ind=str(random.randint(0,99999999))
+ind=str(random.randint(0,999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)

@@ -81,7 +81,7 @@ ll_model = moments.Inference.ll_multinom(model, data)
 theta = moments.Inference.optimal_sfs_scaling(model, data)
 
 # random index for this replicate
-ind=str(random.randint(0,99999999))
+ind=str(random.randint(0,999999))
 
 # plotting demographic model
 #plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
