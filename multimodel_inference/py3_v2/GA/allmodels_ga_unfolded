@@ -2,6 +2,20 @@ am_ga.py
 ami_ga.py
 amS_ga.py
 amSi_ga.py
+IMi_ga.py
+IMi.py
+s103_ga.py
+s103i_ga.py
+s103S_ga.py
+s103Si_ga.py
+s123_ga.py
+s123i_ga.py
+s123imne_ga.py
+s123mne_ga.py
+s123S_ga.py
+s123Si_ga.py
+s123Simne_ga.py
+s123Smne_ga.py
 s12_ga.py
 s12i_ga.py
 s12nm_ga.py
@@ -17,6 +31,7 @@ s1Si_ga.py
 s2_ga.py
 s2i_ga.py
 s2imne_ga.py
+s2mne_ga.py
 s2nm_ga.py
 s2nmS_ga.py
 s2ns_ga.py
@@ -24,6 +39,8 @@ s2nsS_ga.py
 s2S_ga.py
 s2Si_ga.py
 s2Simne_ga.py
+s3imne_ga.py
+s3mne_ga.py
 sc_ga.py
 sci_ga.py
 scS_ga.py

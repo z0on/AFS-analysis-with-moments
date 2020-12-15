@@ -17,10 +17,6 @@ import gadma
 infile=sys.argv[1]
 pop_ids=[sys.argv[2],sys.argv[3]]
 projections=[int(sys.argv[4]),int(sys.argv[5])]
-if len(sys.argv)==9:
-    params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
-else:
-    params=[1,1,1,1,1,1,0.5,1,0.5,0.01]
 
 # mutation rate per sequenced portion of genome per generation: for A.millepora, 0.02
 mu=float(sys.argv[6])
@@ -68,8 +64,15 @@ def s2mi(params , ns):
 func=s2mi
 upper_bound = [100, 100, 100, 200,200,0.999,0.999,0.999,0.999,0.25]
 lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-1,1e-5,1e-5]
-params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
-                              lower_bound=lower_bound)
+
+if len(sys.argv)==9:
+     params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
+#     params = moments.Misc.perturb_params(params, fold=1.5, upper_bound=upper_bound, lower_bound=lower_bound)
+     Xinit=[params]
+     nGA=1
+else:
+     Xinit=None
+     nGA=150
 
 par_labels = ('nu1','nu2','T','m12','m21','Fi','F_gi','Fs','F_gs','f_misid')
 
@@ -92,6 +95,7 @@ mean_time = total_time / num_init
 result = gadma.Inference.optimize_ga(data=data,
                                      model_func=func,
                                      verbose=0,
+                                     X_init=Xinit,
                                      engine='moments',
 #                                     X_init=X_init,
 #                                     Y_init=Y_init,
@@ -101,7 +105,7 @@ result = gadma.Inference.optimize_ga(data=data,
                                      lower_bound=lower_bound,
                                      upper_bound=upper_bound,
                                      local_optimizer='BFGS_log',
-                                     ga_maxiter=150,
+                                     ga_maxiter=nGA,
                                      ls_maxiter=1)
 poptg=result.x                                    
 
@@ -114,7 +118,7 @@ theta = moments.Inference.optimal_sfs_scaling(model, data)
 ind=str(random.randint(0,999999))
 
 # printing parameters and their SDs
-print( "RESULT","s1Si",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
+print( "RESULT","s1Si",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
                                     
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)

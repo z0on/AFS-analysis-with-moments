@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# split, two epochs in each pop, asymmetric migration only in the second epoch ("secondary contact").
+# split, two epochs in each pop, asymmetric migration at different rates in different epochs.
 # genomic islands (lower migration)
 
 
@@ -40,27 +40,23 @@ def sc3ei(params , ns):
 # P: proportion of sites with lower migration
 # Fi: factor of migration reduction (1e-5 - 0.999)
 # migration is asymmetric, scales with pop size
-    nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,P,p_misid = params
+    nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, 0], [0, 0]]))
-    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, m12], [m21, 0]]))
+    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, nu2_1*m12], [nu1_1*m21, 0]]))
+    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, nu2_2*m12], [nu1_2*m21, 0]]))
 
-    stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
-    fsi = moments.Spectrum(stsi)
-    fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1_1, nu2_1], T1, m = np.array([[0, 0], [0, 0]]))
-    fsi.integrate([nu1_2, nu2_2], T2, m = np.array([[0, m12*Fi], [m21*Fi, 0]]))
-
-    fs2=P*fsi+(1-P)*fs
-    return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
+    return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
  
 func=sc3ei
 
-upper_bound = [100, 100, 100,100,100,100,200,200,0.999,0.999,0.25]
-lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
+upper_bound = [100, 100, 100,100,100,100,100,100,0.25]
+lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
 
+
+# if initial parameters are supplied as the last argument, use them for local optimizaiton only (assuming bootstrap)
+# if not, perform 150 generations of GA
 if len(sys.argv)==9:
      params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
 #     params = moments.Misc.perturb_params(params, fold=1.5, upper_bound=upper_bound, lower_bound=lower_bound)
@@ -70,7 +66,7 @@ else:
      Xinit=None
      nGA=150
 
-par_labels = ('nu1_1','nu2_1','nu1_2','nu2_2','T1','T2','m12','m21','F_isl','F_gen','f_misid')
+par_labels = ('nu1_1','nu2_1','nu1_2','nu2_2','T1','T2','m12','m21','f_misid')
 
 # calculating time limit for GADMA evaluations (the generation will re-spawn if stuck for longer than that)
 
@@ -87,11 +83,9 @@ def f():
 total_time = timeit.timeit(f, number=1)
 mean_time = total_time / num_init
 
-
 result = gadma.Inference.optimize_ga(data=data,
                                      model_func=func,
                                      verbose=0,
-                                     X_init=Xinit,
                                      X_init=Xinit,
                                      engine='moments',
                                      args=(),
@@ -114,15 +108,15 @@ ind=str(random.randint(0,999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
-moments.ModelPlot.plot_model(plot_mod, save_file="sci_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
+moments.ModelPlot.plot_model(plot_mod, save_file="s2mne_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
 
 # printing parameters and their SDs
-print( "RESULT","sci",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
+print( "RESULT","s2mne",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=0.1, resid_range=3,
                                     pop_ids =pop_ids)
-plt.savefig("sci_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
+plt.savefig("s2mne_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 

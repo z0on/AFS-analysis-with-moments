@@ -19,10 +19,6 @@ import gadma
 infile=sys.argv[1]
 pop_ids=[sys.argv[2],sys.argv[3]]
 projections=[int(sys.argv[4]),int(sys.argv[5])]
-if len(sys.argv)==9:
-    params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
-else:
-    params=[1,1,1,1,1,1,1,1,0.5,1,0.5,0.05]
 
 # mutation rate per sequenced portion of genome per generation: for A.millepora, 0.02
 mu=float(sys.argv[6])
@@ -73,8 +69,14 @@ def sc3ei(params , ns):
 func=sc3ei
 upper_bound = [100,100,100,100,100,200,200,0.999,0.999,0.999,0.999,0.25]
 lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-1,1e-5,1e-5]
-params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound,
-                              lower_bound=lower_bound)
+if len(sys.argv)==9:
+     params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
+#     params = moments.Misc.perturb_params(params, fold=1.5, upper_bound=upper_bound, lower_bound=lower_bound)
+     Xinit=[params]
+     nGA=1
+else:
+     Xinit=None
+     nGA=150
 
 par_labels = ('nu1','nu1_2','nu2_2','T1','T2','m12','m21','Fi','F_gi','Fs','F_gs','f_misid')
 
@@ -96,6 +98,7 @@ mean_time = total_time / num_init
 result = gadma.Inference.optimize_ga(data=data,
                                      model_func=func,
                                      verbose=0,
+                                     X_init=Xinit,
                                      engine='moments',
                                      args=(),
                                      p_ids = par_labels,
@@ -103,7 +106,7 @@ result = gadma.Inference.optimize_ga(data=data,
                                      lower_bound=lower_bound,
                                      upper_bound=upper_bound,
                                      local_optimizer='BFGS_log',
-                                     ga_maxiter=150,
+                                     ga_maxiter=nGA,
                                      ls_maxiter=1)
 poptg=result.x                                    
 
@@ -123,7 +126,7 @@ moments.ModelPlot.plot_model(plot_mod, save_file="s12Si_"+ind+".png", pop_labels
 # bootstrapping for SDs of params and theta
 
 # printing parameters and their SDs
-print( "RESULT","s12Si",ind,len(params),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
+print( "RESULT","s12Si",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=0.1, resid_range=3,
