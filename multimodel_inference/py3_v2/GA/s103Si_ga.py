@@ -86,7 +86,7 @@ else:
      Xinit=None
      nGA=150
 
-par_labels = ('nu0','nu1_1','nu2_1','nu1_2','nu2_2','T0','T1','T2','m12_1','m21_1','m12_2','m21_2','Fi','Fgi','Fs','Fgs','f_misid')
+par_labels = ('nu0','nu1_1','nu2_1','nu1_2','nu2_2','T0','T1','T2','m12','m21','Fi','Fgi','Fs','Fgs','f_misid')
 
 # calculating time limit for GADMA evaluations (the generation will re-spawn if stuck for longer than that)
 

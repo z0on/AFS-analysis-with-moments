@@ -41,7 +41,7 @@ def sc3ei(params , ns):
 # Fi: factor of migration reduction (1e-5 - 0.999)
 # Ps: proportion of sites with lower Ne
 # Fs: factor of Ns reduction (1e-5 - 0.999)
-    nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_1,m21,m12,Fi,Pi,Fs,Ps,p_misid = params
+    nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21,Fi,Pi,Fs,Ps,p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs.integrate([nu0], T0)

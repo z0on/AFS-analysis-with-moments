@@ -46,7 +46,7 @@ def sc3ei(params , ns):
     fs.integrate([nu0], T0)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
     fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, m12*nu2_1], [m21*nu1_1, 0]]))
-    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, m12*nu2_2]], [m21*nu1_2], 0]]))
+    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, m12*nu2_2], [m21*nu1_2, 0]]))
 
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
  
