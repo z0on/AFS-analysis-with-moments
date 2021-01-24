@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # split, same size but two migration epochs, different asymmetric migration in each epochs
 # genomic islands

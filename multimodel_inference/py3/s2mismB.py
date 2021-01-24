@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # split, constant pop size, genomic islands, symmetric migration for one genome type, asymmetric for other 
 # n(para): 8

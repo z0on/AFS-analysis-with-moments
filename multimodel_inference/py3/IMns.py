@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # steady epoch then growth, NO SPLIT
 # n(para): 4

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # simple "primary contact"
 # split, same size but two migration epochs in each pop, no migration in first epoch, symmetric in second epoch

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # split with growth, asymmetric migration, "genomic islands" of two different migration regimes
 # n(para): 11

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # "secondary contact"
 # split with asymmetric migration in first epoch, symmetric in second

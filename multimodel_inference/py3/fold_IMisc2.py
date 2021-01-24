@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # split into two diff sizes, then secondary contact with instantaneous size change followed by growth, with asymmetric migration
 # "genomic islands" of two different migration regimes

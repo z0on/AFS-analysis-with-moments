@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # split with growth, SYMMETRIC migration upon secondary contact, "genomic islands" of two different migration regimes
 # n(para): 9

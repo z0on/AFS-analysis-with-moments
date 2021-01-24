@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # split with growth starting after some time, asymmetric migration upon secondary contact, 
 # "genomic islands" of two different migration regimes

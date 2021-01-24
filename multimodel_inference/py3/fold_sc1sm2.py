@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # split, constant pop size but two migration epochs: asymmetric in early, symmetric  in late 
 # n(para): 8

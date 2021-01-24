@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # split, three epochs in each pop, asymmetric migration only in LAST epoch
 # genomic islands

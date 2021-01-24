@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # 2 growth epochs before split, one epoch after, NO migration
 # n(para): 8

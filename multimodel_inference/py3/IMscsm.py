@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # split with growth starting after some time, symmetric migration upon secondary contact
 # n(para): 8

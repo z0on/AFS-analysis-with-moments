@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # size change before split, one epoch after split, NO migration
 # n(para): 6

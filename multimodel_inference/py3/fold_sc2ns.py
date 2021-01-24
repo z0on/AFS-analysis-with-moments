@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # 2 growth epochs, no split, two "pop" samples
 # n(para): 7

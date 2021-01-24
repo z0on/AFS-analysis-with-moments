@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # split into two different sizes with growth, NO migration
 # n(para): 6
