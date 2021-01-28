@@ -2,7 +2,7 @@
 
 # Ne change, then split
 # asymmetric migration
-# migration "islands"
+# genomic islands (lower migrtation)
 
 
 import matplotlib

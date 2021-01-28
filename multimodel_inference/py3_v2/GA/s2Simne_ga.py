@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
-# split, two epochs in each pop, asymmetric migration at different rates in different epochs.
+# split, two epochs in each pop, asymmetric migration.
 # genomic islands (lower migration)
+# lower Ne in a fractiion of genome (background selection)
+# migration scales with size of source population
 
 
 # uses genetic algorithm from GADMA for optimization

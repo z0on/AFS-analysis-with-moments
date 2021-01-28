@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
 # ancestrap pop size change,
-# split, two epochs in each pop, asymmetric migration at different rates in different epochs.
-# genomic islands (lower migration)
+# split, two epochs in each pop, asymmetric migration at different rates ONLY IN SECOND EPOCH.
 
 
 # uses genetic algorithm from GADMA for optimization
@@ -38,9 +37,7 @@ np.set_printoptions(precision=3)
 
 def sc3ei(params , ns):
 #    p_misid: proportion of misidentified ancestral states
-# P: proportion of sites with lower migration
-# Fi: factor of migration reduction (1e-5 - 0.999)
-    nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21,p_misid = params
+=    nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21,p_misid = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs.integrate([nu0], T0)

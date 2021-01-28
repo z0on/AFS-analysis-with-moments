@@ -18,7 +18,7 @@ The following parameters are about writing commands for bootstrapping the winnin
 (NOT about the completed run for model selection):
 
 nboots=100                       number of boostrap replicates to run for the winning model
-nreps=6                          number of random restarts for each boostrap replicate
+nreps=3                          number of random restarts for each boostrap replicate
 folded=FALSE                     whether the analysis is using folded SFS
 args=[list of arguments]           names of pop1 and pop2, projection for pop1, projection for pop2, mutation rate (per genotyped portion of the 
                                    genome per generation), generation time in thousands of years. Population names can be anything. 
@@ -40,37 +40,40 @@ args =sub("args=","", commandArgs()[args])
 if(length(grep("folded=T",commandArgs()))>0) { folded=TRUE } else { folded=FALSE }
 
 nreps =grep("nreps=",commandArgs())
-if(length(nreps)>0) { nreps=as.numeric(sub("nreps=","", commandArgs()[nreps])) } else { nreps=6 }
+if(length(nreps)>0) { nreps=as.numeric(sub("nreps=","", commandArgs()[nreps])) } else { nreps=3 }
 
 nboots =grep("nboots=",commandArgs())
 if(length(nboots)>0) { nreps=as.numeric(sub("nboots=","", commandArgs()[nboots])) } else { nboots=100 }
 
 if(length(grep("folded=T",commandArgs()))>0) { folded=TRUE } else { folded=FALSE }
 
-# modselResult="c23.stdout"
-# path2models="~/AFS-analysis-with-moments/multimodel_inference/"
-# folded=FALSE
-# args="p1 p2 16 16 0.02 0.005"
-# nreps=3
-# nboots=100
 
-system(paste("grep RESULT ", modselResult," -A 4 | grep -v Launcher | grep -E \"[0-9]|\\]\" | perl -pe 's/^100.+\\.o\\d+\\S//' | perl -pe 's/\\n//' | perl -pe 's/[\\[\\]]//g' | perl -pe 's/RESULT/\\nRESULT/g' | grep RESULT >", modselResult,".res",sep=""))
-
+'setwd("~/Dropbox/Documents/perl_bin/moments_scripts/multimodel_inference/py3_v2/")
+ modselResult="ok.modsel.ga"
+ path2models="~/Dropbox/Documents/perl_bin/moments_scripts/multimodel_inference/py3_v2/"
+ folded=FALSE
+ args="o k 58 42 0.02 0.005"
+ nreps=3
+ nboots=100
+'
+#system(paste("grep RESULT ", modselResult," -A 4 | grep -v Launcher | grep -E \"[0-9]|\\]\" | perl -pe 's/^100.+\\.o\\d+\\S//' | perl -pe 's/\\n//' | perl -pe 's/[\\[\\]]//g' | perl -pe 's/RESULT/\\nRESULT/g' | grep RESULT | perl -pe 's/array//g' | perl -pe \"s/[\\(\\)\\' ]//g\"  >", modselResult,".res",sep=""))
+system(paste("grep RESULT ", modselResult," -A 4 | grep -v Launcher | grep -E \"[0-9]|\\]\" | perl -pe 's/^100.+\\.o\\d+\\S//' | perl -pe 's/\\n//' | perl -pe 's/[\\[\\]]//g' | perl -pe 's/RESULT/\\nRESULT/g' | grep RESULT | perl -pe 's/array//g' | perl -pe 's/Generation.+$//' | perl -pe 's/#.+//' | perl -pe \"s/[\\(\\)\\']//g\"  >", modselResult,".res",sep=""))
 infile=paste(modselResult,".res",sep="")
 
 library(ggplot2)
 
 system(paste("cut -f 2,3,4,5,6 -d ' ' ",infile," > ",infile,".likes",sep=""))
-npl=read.table(paste(infile,".likes",sep=""))
+npl=read.table(paste(infile,".likes",sep=""),sep=" ")
 system(paste("rm ",infile,".likes",sep=""))
 
 names(npl)=c("model","id","npara","ll","boot")
 contrast=sub("_.+","", npl$boot[1])
+npl$boot=factor(npl$boot)
 
-#head(npl)
+head(npl)
 #npl=npl[grep(infile,npl$boot),]
 aics=list()
-for (b in 1:length(unique(npl$boot))) {
+for (b in 1:length(levels(npl$boot))) {
 	bb=levels(npl$boot)[b]
 	nplb=subset(npl,boot==bb)
 	maxlike=c();nmod=c()
@@ -101,8 +104,9 @@ modmed=modmed[order(med),]
 modmed$mod=factor(modmed$mod,levels=modmed$mod)
 awt$model=factor(awt$model,levels=modmed$mod)
 
+nmods=5
 pdf(width=2.2,height=2,file=paste(contrast,"_modsel_top10medians.pdf",sep=""))
-pp=ggplot(modmed[1:10,],aes(mod, med))+geom_point()+theme(axis.text.x = element_text(angle = 45,hjust=1))
+pp=ggplot(modmed[1:nmods,],aes(mod, med))+geom_point()+theme(axis.text.x = element_text(angle = 45,hjust=1))
 #ggplot(modmed,aes(mod, med))+geom_point()+theme(axis.text.x = element_text(angle = 45,hjust=1))
 plot(pp)
 dev.off()
@@ -114,12 +118,14 @@ dev.off()
 # ----- extracting name and parameters of the winning model, writing them to a file
 
 winner=as.character(modmed[1,1])
+winner=as.character(modmed[2,1])
+
 npl0=subset(npl,model==winner)
 npl0=npl0[which(npl0$ll==max(npl0$ll)),]
-system(paste("grep \"",npl0$id," \" ", infile," > ",infile,".winmod",sep=""))
+system(paste("grep \"",npl0$id,",\" ", infile," > ",infile,".winmod2",sep=""))
 system(paste("rm ",infile,sep=""))
 
-npl0=read.table(paste(infile,".winmod",sep=""))
+npl0=read.table(paste(infile,".winmod",sep=""),sep=",")
 params=as.vector(npl0[1,c(9:(ncol(npl0)-1))])
 write.table(params,file=paste(contrast,".",winner,sep=""),quote=F,col.names=F,row.names=F)
 
@@ -138,7 +144,7 @@ for (b in 1:nboots) {
 	for (n in 1:nreps) {
 		for (m in mods) {
 			bname=paste(contrast,"_",b,".sfs",sep="")
-			args2=c(args2,paste("sleep ",n," && ",m,".py ",bname," ",args," ",paste(contrast,".",winner,sep="")," >>",contrast,".winboots",sep=""))
+			args2=c(args2,paste("sleep ",n," && ",m,"_ga.py ",bname," ",args," ",paste(contrast,".",winner,sep="")," >>",contrast,".winboots",sep=""))
 		}
 	}
 }

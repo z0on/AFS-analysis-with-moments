@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # split, two epochs in each pop, asymmetric migration only in the second epoch ("secondary contact").
-# genomic islands (lower Ne)
+# reduced pop size in fraction of genome (background selection)
 
 
 # uses genetic algorithm from GADMA for optimization

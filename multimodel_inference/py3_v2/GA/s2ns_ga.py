@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-# 3 growth epochs, no split, two "pop" samples
-# n(para): 7
+# 2 growth epochs, no split, two "pop" samples
 
 
 import matplotlib

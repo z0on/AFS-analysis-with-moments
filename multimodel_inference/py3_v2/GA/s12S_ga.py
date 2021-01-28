@@ -2,7 +2,7 @@
 
 # Ne change, then split
 # asymmetric migration
-# genomis islands for Ne post-split
+# reduced pop size in fraction of genome (background selection)
 
 
 import matplotlib

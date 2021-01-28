@@ -3,6 +3,7 @@
 # ancestrap pop size change,
 # split, two epochs in each pop, asymmetric migration at different rates in different epochs.
 # genomic islands (lower migration)
+# migration scales with source populaiton size
 
 
 # uses genetic algorithm from GADMA for optimization

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-# split, constant pop size, asymmetric migration, genomic islangs
-# n(para): 9
+# split, constant pop size, NO migration
+# lower Ne in a fractiion of genome (background selection)
+
 
 import matplotlib
 matplotlib.use('PDF')

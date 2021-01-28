@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-# split, constant pop size, symmetric migration
-# n(para): 6
+# split, constant pop size, NO migration
+
 
 import matplotlib
 matplotlib.use('PDF')

@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
-# split, constant pop size after split, asymmetric migration, genomic islangs of lower Ne
-# example: python3 s1S_ga.py ny_1.sfs n y 30 30 0.02 0.005
+# split, constant pop size after split, asymmetric migration
+# genomic islands (lower migration)
+# lower Ne in a fractiion of genome (background selection)
+
 
 import matplotlib
 matplotlib.use('PDF')

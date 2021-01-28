@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-# split, constant pop size afetr split, asymmetric migration, genomic islangs of lower migration
+# split, constant pop size afetr split, asymmetric migration
+# genomic islangs of lower migration
 
 import matplotlib
 matplotlib.use('PDF')

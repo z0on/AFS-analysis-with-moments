@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
-# split, three epochs in each pop, asymmetric migration at same rates in all epochs
-# genomic islands
-# n(para): 15
+# split, two epochs in each pop, NO migration
+# lower Ne in a fractiion of genome (background selection)
 
 
 import matplotlib

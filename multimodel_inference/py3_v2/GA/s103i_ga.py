@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # ancestrap pop size change,
-# split, two epochs in each pop, asymmetric migration at different rates in different epochs.
+# split, two epochs in each pop, asymmetric migration only in the last epoch.
 # genomic islands (lower migration)
 
 
