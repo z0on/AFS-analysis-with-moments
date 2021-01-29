@@ -36,7 +36,7 @@ np.set_printoptions(precision=3)
 #-------------------
 # split into unequal pop sizes with asymmetrical migration
 
-def sc3ei(params , ns):
+def s2Smne(params , ns):
 #    p_misid: proportion of misidentified ancestral states
 # Ps: proportion of sites with lower Ne
 # Fs: factor of Ne reduction (0.1 - 0.999)
@@ -56,7 +56,7 @@ def sc3ei(params , ns):
     fs2=P*fss+(1-P)*fs
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
  
-func=sc3ei
+func=s2Smne
 
 upper_bound = [100, 100, 100,100,100,100,100,100,0.999,0.999,0.25]
 lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-1,1e-3,1e-5]
