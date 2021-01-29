@@ -53,7 +53,7 @@ def s2Smne(params , ns):
     fss.integrate([nu1_1*Fs, nu2_1*Fs], T1, m = np.array([[0, nu2_1*m12*Fs], [nu1_1*m21*Fs, 0]]))
     fss.integrate([nu1_2*Fs, nu2_2*Fs], T2, m = np.array([[0, nu2_2*m12*Fs], [nu1_2*m21*Fs, 0]]))
 
-    fs2=P*fss+(1-P)*fs
+    fs2=Ps*fss+(1-Ps)*fs
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
  
 func=s2Smne
