@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
-
-# split into two different sizes with growth, aymmetric migration scales with pop size
-
+'''
+   Isolation-with-migration after secondary contact:
+    split into two arbtrary sizes with no migration at T1
+    asymmetric migration and exponential size change start after T2
+    Migration scales with the size of the source population
+    p_misid: proportion of misidentified ancestral states
+'''
 
 import matplotlib
 matplotlib.use('PDF')
@@ -41,12 +45,14 @@ np.set_printoptions(precision=3)
 # split with growth and asymmetrical migration; with genomic islands
 def IM(params, ns):
     """
-    Isolation-with-migration model with split into two arbtrary sizes
-    Migration is asymmetric and scales with the size of the source population
+    Isolation-with-migration after secondary contact:
+    split into two arbtrary sizes with no migration at T1
+    asymmetric migration and exponential size change start after T2
+    Migration scales with the size of the source population
     p_misid: proportion of misidentified ancestral states
     
     """
-    nu1_0,nu2_0,nu1,nu2,T,m12,m21,p_misid = params
+    nu1_0,nu2_0,nu1,nu2,T1,T2,m12,m21,p_misid = params
     nu1_func = lambda t: nu1_0 * (nu1/nu1_0)**(t/T)
     nu2_func = lambda t: nu2_0 * (nu2/nu2_0)**(t/T)
     nu_func = lambda t: [nu1_func(t), nu2_func(t)]
@@ -58,13 +64,14 @@ def IM(params, ns):
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate(nu_func, T, dt_fac=0.01, m=migs)
+    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, 0], [0, 0]]))    
+    fs.integrate(nu_func, T2, dt_fac=0.01, m=migs)
 
     return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
 
 func=IM
-upper_bound = [100,100,100, 100, 10, 100,100,0.25]
-lower_bound = [1e-3,1e-3,1e-3,1e-3, 1e-3,1e-5,1e-5,1e-5]
+upper_bound = [100,100,100, 100, 10, 10, 100,100,0.25]
+lower_bound = [1e-3,1e-3,1e-3,1e-3,1e-3, 1e-3,1e-5,1e-5,1e-5]
 
 # if starting parameterss are supplied, don't run GA; if not, run 150 generations of GA
 if len(sys.argv)==9:
@@ -76,7 +83,7 @@ else:
      Xinit=None
      nGA=150
 
-par_labels = ('nu1_0','nu2_0','nu1','nu2','T','m12','m21','f_misid')
+par_labels = ('nu1_0','nu2_0','nu1','nu2','T1','T2','m12','m21','f_misid')
 
 import timeit
 # allowed fold-excess in evaluation time
@@ -116,15 +123,15 @@ ind=str(random.randint(0,999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
-moments.ModelPlot.plot_model(plot_mod, save_file="IM_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
+moments.ModelPlot.plot_model(plot_mod, save_file="scIM_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
 
 # printing parameters and their SDs
-print( "RESULT","IM",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
+print( "RESULT","scIM",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=0.1, resid_range=3,
                                     pop_ids =pop_ids)
-plt.savefig("IM_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
+plt.savefig("scIM_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 

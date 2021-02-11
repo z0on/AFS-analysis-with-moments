@@ -38,11 +38,12 @@ if(length(grep("folded=T",commandArgs()))>0) { folded=TRUE } else { folded=FALSE
 require(ggplot2)
 
 '
-setwd("/work/01211/cmonstr/newmom1")
-bootRes="ok.winboots"
+setwd("/home/misha/Dropbox/yap_hetcheck_2020")
+bootRes="ny.winboots"
 folded=F
-topq=1
-path2models="~/AFS-analysis-with-moments/multimodel_inference/py3_v2/GA/"
+topq=0.9
+path2models="/home/misha/Dropbox/Documents/perl_bin/moments_scripts/multimodel_inference/py3_v2/GA/"
+
 '
 
 system(paste("grep RESULT ", bootRes," -A 4 | grep -v Launcher | grep -E \"[0-9]|\\]\" | perl -pe 's/^100.+\\.o\\d+\\S//' | perl -pe 's/\\n//' | perl -pe 's/[\\[\\]]//g' | perl -pe 's/RESULT/\\nRESULT/g' | grep RESULT >", bootRes,".res",sep=""))
@@ -61,7 +62,8 @@ if (folded) {
 }
 wmod=as.character(npl[1,2])
 npl=npl[,-c(1:2)]
-params=c(strsplit(gsub("[ \t]","",pa[grep(paste0(wmod,"_ga.py"),pa)]),split="[:,]")[[1]][-1],"theta")
+#params=c(strsplit(gsub("[ \t]","",pa[grep(paste0(wmod,"_ga.py"),pa)]),split="[:,]")[[1]][-1],"theta")
+params=c(strsplit(pa[grep(wmod,pa)],split="[ ,]")[[1]][-1],"theta")
 names(npl)=c("id","np","ll","boot","p1","p2",params)
 npl$boot=factor(npl$boot)
 

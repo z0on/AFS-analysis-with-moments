@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 # split into two different sizes with growth, aymmetric migration scales with pop size
 
@@ -32,6 +32,7 @@ gtime=float(sys.argv[7])
 #projections=[32,38]
 
 fs = moments.Spectrum.from_file(infile)
+fs=fs.fold()
 data=fs.project(projections)
 ns=data.sample_sizes
 np.set_printoptions(precision=3)     
@@ -46,7 +47,7 @@ def IM(params, ns):
     p_misid: proportion of misidentified ancestral states
     
     """
-    nu1_0,nu2_0,nu1,nu2,T,m12,m21,p_misid = params
+    nu1_0,nu2_0,nu1,nu2,T,m12,m21 = params
     nu1_func = lambda t: nu1_0 * (nu1/nu1_0)**(t/T)
     nu2_func = lambda t: nu2_0 * (nu2/nu2_0)**(t/T)
     nu_func = lambda t: [nu1_func(t), nu2_func(t)]
@@ -60,11 +61,11 @@ def IM(params, ns):
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
     fs.integrate(nu_func, T, dt_fac=0.01, m=migs)
 
-    return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
+    return fs
 
 func=IM
-upper_bound = [100,100,100, 100, 10, 100,100,0.25]
-lower_bound = [1e-3,1e-3,1e-3,1e-3, 1e-3,1e-5,1e-5,1e-5]
+upper_bound = [100,100,100, 100, 10, 100,100]
+lower_bound = [1e-3,1e-3,1e-3,1e-3, 1e-3,1e-5,1e-5]
 
 # if starting parameterss are supplied, don't run GA; if not, run 150 generations of GA
 if len(sys.argv)==9:
@@ -76,7 +77,7 @@ else:
      Xinit=None
      nGA=150
 
-par_labels = ('nu1_0','nu2_0','nu1','nu2','T','m12','m21','f_misid')
+par_labels = ('nu1_0','nu2_0','nu1','nu2','T','m12','m21')
 
 import timeit
 # allowed fold-excess in evaluation time
