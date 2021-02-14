@@ -2,32 +2,46 @@
 
 [*Moments*](https://bitbucket.org/simongravel/moments/src/master/) is the site frequency spectrum (SFS) analysis method superficially similar to *dadi* but operating on different math (ordinary differential equations rather than diffusion approximation). It is considerably faster than *dadi* (although somewhat less accurate), handles up to five populations simultaneously, and plots cartoons of inferred demographic scenarios.
 
-The problem with *moments* and *dadi* is, they can evaluate the fit of a pre-specified demographic model but are **not designed to search for the general model structure** that best fits the data (i.e., was there population split or not, is there any migration and if yes, is it symmetrical or not, were there additional growth periods before or after spit, etc). Our solution to this problem is pretty simple: to fit all the two-population models we can possibly think of to our experimental 2dSFS and use Akaike Information Criterion to select the best one.
+The problem with *moments* and *dadi* is, they can evaluate the fit of a pre-specified demographic model but are **not designed to search for the general model structure** that best fits the data (i.e., was there population split or not, is there any migration and if yes, were there additional growth periods before or after spit, etc). Our solution to this problem is pretty simple: to fit all the two-population models we can possibly think of to our experimental 2dSFS and use Akaike Information Criterion to select the best one.
 
-See [GADMA](https://github.com/ctlab/GADMA) for the alternative solution to this problem. Compared to GADMA, we are far less elegant but somewhat more flexible (we can incorporate essentially any model, for example, involving background selection and heterogeneous introgression rates across the genome). Our approach also lets the user evaluate how much better the winning model is compared to certain "null" alternatives (for example, models with no population split or with constant population sizes), which provides statistical evidence for general aspects of the model structure. Our disadvantage (besides the fact that we only do two-pop models and GADMA also does three-pop models) is a huge number of model-fit runs that we have to perform. The good news is, all this can be done in parallel, and each single-model run takes no more than 1 hour.
+See [GADMA](https://github.com/ctlab/GADMA) for the alternative solution to this problem. Compared to GADMA, we are far less elegant but somewhat more flexible (we can incorporate essentially any model, including models involving background selection and heterogeneous introgression rates across the genome). Our approach also lets the user evaluate how much better the winning model is compared to certain "null" alternatives (for example, models with no population split or with constant population sizes), which provides statistical evidence for general aspects of the model structure. Our disadvantage (besides the fact that we only do two-pop models and GADMA also does three-pop models) is a huge number of model-fit runs that we have to perform. The good news is, all this can be done in parallel.
 
-Version 2 of this repository (`multimodel_inference/py3_v2`) actually uses GADMA genetic algorithm for find optimal parameters of a pre-specified model (no modificaion of model structure), which makes it much more robust, and has a completely revamped set of models to compare. The new models don't have versions with symmetrical migration, but include models with "background selection" (reduced Ne in a portion of the genome), "islands of divergence" (reduced migration in a portion of the genome) and a combination of the two. The previous version of the model collection is still there, with all corresponding scripts (python and R) in subdirectories `multimodel_inference/py2_v1` and `multimodel_inference/py3_v1`.
+Version 2 of this repository (`multimodel_inference/py3_v2`) actually uses GADMA genetic algorithm for find optimal parameters of a pre-specified model, which makes it much more robust, and has a completely revamped set of models to compare. The new models don't have versions with symmetrical migration (like in version 1), but include models with "background selection" (reduced Ne in a portion of the genome), "islands of divergence" (reduced migration in a portion of the genome) and a combination of the two. The previous version of the model collection is still there, with all corresponding scripts (python and R) in subdirectories `multimodel_inference/py2_v1` and `multimodel_inference/py3_v1`.
 
 ## Installation ##
-First of all, install *moments*. The example below would clone it into root directory and install it for a specific user.
+First of all, install *moments*. The example below would clone it into the user's home directory and install it for a specific user.
 ```bash
 cd
 git clone --branch devel https://bitbucket.org/simongravel/moments.git 
 cd moments
-python setup.py build_ext --inplace
+python3 setup.py build_ext --inplace
 cd
+# add moments to $PYTHONPATH (consider adding this line to your .bashrc):
+export PYTHONPATH=$PYTHONPATH:$HOME/moments
 ```
+Then, install GADMA:
+```bash
+# if you are root user:
+sudo python3 -m pip install numpy
+sudo python3 -m pip install gadma
+
+# if not:
+python3 -m pip install --user numpy
+python3 -m pip install --user gadma
+export PYTHONPATH=$PYTHONPATH:$HOME/.local/bin
+```
+
 Then, clone this repository and copy all the scripts and accessory filed *for the version you'd like to work with* into a newly created subdir `work`:
 
 ```bash
 cd
-git clone https://bitbucket.org/simongravel/moments.git
+git clone https://github.com/z0on/AFS-analysis-with-moments.git
 cd AFS-analysis-with-moments
 mkdir work
 cp multimodel_inference/py3_v2/GA/* work/
 # to use version 1 models:
 # cp multimodel_inference/py3_v1/* work/
-# or if you use python2
+# to use version 1 models for python2
 # cp multimodel_inference/py2_v1/* work/
 ```
 
