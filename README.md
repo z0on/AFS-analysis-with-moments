@@ -35,13 +35,13 @@ Then, clone this repository and copy all the scripts and accessory filed *for th
 
 ```bash
 cd
-git clone 
+git clone https://github.com/z0on/AFS-analysis-with-moments.git
 cd AFS-analysis-with-moments
 mkdir work
 cp multimodel_inference/py3_v2/GA/* work/
 # to use version 1 models:
 # cp multimodel_inference/py3_v1/* work/
-# or if you use python2
+# to use version 1 models for python2
 # cp multimodel_inference/py2_v1/* work/
 ```
 
