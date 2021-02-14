@@ -6,7 +6,7 @@ The problem with *moments* and *dadi* is, they can evaluate the fit of a pre-spe
 
 See [GADMA](https://github.com/ctlab/GADMA) for the alternative solution to this problem. Compared to GADMA, we are far less elegant but somewhat more flexible (we can incorporate essentially any model, for example, involving background selection and heterogeneous introgression rates across the genome). Our approach also lets the user evaluate how much better the winning model is compared to certain "null" alternatives (for example, models with no population split or with constant population sizes), which provides statistical evidence for general aspects of the model structure. Our disadvantage (besides the fact that we only do two-pop models and GADMA also does three-pop models) is a huge number of model-fit runs that we have to perform. The good news is, all this can be done in parallel, and each single-model run takes no more than 1 hour.
 
-Version 2 of this repository (`multimodel_inference/py3_v2`) actually uses GADMA genetic algorithm for find optimal parameters of a pre-specified model (no modificaion of model structure), and has a completely revamped set of models to compare. The new models don't have versions with symmetrical migration, but include models with "background selection" (reduced Ne in a portion of the genome), "islands of divergence" (reduced migration in a portion of the genome) and a combination of the two. The previous version of the model collection is still there, with all scripts (python and R) in subdirectories `multimodel_inference/py2_v1` and `multimodel_inference/py3_v1`.
+Version 2 of this repository (`multimodel_inference/py3_v2`) actually uses GADMA genetic algorithm for find optimal parameters of a pre-specified model (no modificaion of model structure), which makes it much more robust, and has a completely revamped set of models to compare. The new models don't have versions with symmetrical migration, but include models with "background selection" (reduced Ne in a portion of the genome), "islands of divergence" (reduced migration in a portion of the genome) and a combination of the two. The previous version of the model collection is still there, with all corresponding scripts (python and R) in subdirectories `multimodel_inference/py2_v1` and `multimodel_inference/py3_v1`.
 
 ## Installation ##
 First of all, install *moments*. The example below would clone it into root directory and install it for a specific user.
@@ -36,7 +36,7 @@ cp multimodel_inference/py3_v2/GA/* work/
 > NOTE: R scripts were tested with R versions 3.5.1 and 3.6.3. Not sure about R version 4.
 
 ## Overview of the method ##
-- The first step is **model selection**, where we run all possible models on 10 bootstrapped SFS. We  run each model on each bootstrap six times (six random restarts), to make sure the model converges to its best likelihood at least once. All these commands are written by the `R` script `modSel_write.R`. Then we use the `R` script `modSel_summarize.R` to select the best-fitted instance (out of 6) for each model for each bootstrap, and compare the AIC scores for all models. The best model is the one with the *lowest median AIC score among bootstrap replicates*.  
+- The first step is **model selection**, where we run all possible models on 10 bootstrapped SFS. We  run each model on each bootstrap three times (three random restarts), to make sure the model converges to its best likelihood at least once. All these commands are written by the `R` script `modSel_write.R`. Then we use the `R` script `modSel_summary.R` to select the best-fitted instance (out of 3) for each model for each bootstrap, and compare the AIC scores for all models. The best model is the one with the *lowest median AIC score among bootstrap replicates*.  
 - The second step is running the winning model on 100 bootstrapped SFS, to **evaluate parameter uncertainties**. The commands for this stage are actually written by the `modSel_summary.R` script. Once again, we are doing 6 random restarts for each bootstrap replicate. The parameter meanings and uncertainties are deciphered by the third `R` script that we have, `bestBoot_summary.R`. All three `R` scripts are designed for command-line usage.
 
 ## Overview of models ##
@@ -74,7 +74,7 @@ To create a list of AFS models to run, do this:
 
 ```bash
 cd [where your boostrapped SFS files are]
-Rscript ~/AFS-analysis-with-moments/modSel_write.R contrast=p12 args="p1 p2 16 16 0.02 0.005"
+Rscript ~/AFS-analysis-with-moments/work/modSel_write.R contrast=p12 args="p1 p2 16 16 0.02 0.005"
 ```
 where
 - `contrast` : the name of population comparison. It should match the leading part of the bootstapped SFS names (in example here, `p12`)
@@ -83,7 +83,7 @@ where
 Population names can be anything. For ANGSD-derived SFS, projections should be 1.6N for each population (rounded to integer); in the case shown here, each population was represented by 10 individuals.
 
 Additional arguments to `modSel_write.R` (defaults):
-- `nreps` (6)   : number of random restarts for each model for each bootstrap rep.
+- `nreps` (3)   : number of random restarts for each model for each bootstrap rep.
 - `nboots` (10) : number of bootstrap replicates to use. 10 seems to be optimal at this stage.
 - `path2models` (~/AFS-analysis-with-moments/multimodel_inference/) : path to where model listings live
 - `folded` (FALSE) : whether to fold the SFS for analysis
@@ -94,14 +94,14 @@ Run all commands in `[contrast].modsel.runs` file. This is the most computaitona
 
 Then, to summarize results and write the list of commands for the next step (bootstrapping the winnign model):
 ```bash
-Rscript ~/AFS-analysis-with-moments/modSel_summary.R modselResult=p12.modsel args="p1 p2 16 16 0.02 0.005"
+Rscript ~/AFS-analysis-with-moments/work/modSel_summary.R modselResult=p12.modsel args="p1 p2 16 16 0.02 0.005"
 ```
 where
 - `modselResult` : the name of the resulting file from model selection, typically `[contrast].modsel`. 
 - `args`     : same argument as for `modSel_write.R`
 
 Additional arguments to `modSel_summary.R` that will influence the next stage, bootstrapping the winning model (defaults):
-- `nreps` (6)   : number of random restarts for each model for each bootstrap rep.
+- `nreps` (3)   : number of random restarts for each model for each bootstrap rep.
 - `nboots` (100) : number of bootstrap replicates.
 - `folded` (FALSE) : whether analysis is using folded SFS.
 
@@ -121,7 +121,7 @@ Assuming we have 100 boostrapped SFS (See **Appendix** for instructions how to o
 
 The text output will be collected in the file `p12.winboots`. To summarize it all we need to do is
 ```bash
-Rscript ~/AFS-analysis-with-moments/bestBoot_summary.R bootRes=p12.winboots
+Rscript ~/AFS-analysis-with-moments/work/bestBoot_summary.R bootRes=p12.winboots
 ```
 Additonal options to `bestBoot_summary.R` are:
 - `topq`: top quantile cutoff. Only boostrap runs in this top quantile will be summarized. Default 0.5
