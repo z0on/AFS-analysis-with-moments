@@ -11,7 +11,7 @@ bootRes=[filename]    results of bootstraps (likely named as [pop.contrast].winb
                      
 folded=FALSE    whether the analysis was using folded SFS
 				
-topq=0.5        top quantile to summarize. For example 0.75 means that only the best-likelihood 75% 
+topq=0.9        top quantile to summarize. For example 0.9 means that only the best-likelihood 90% 
                 of bootstrap replicates will be used to summarize paramter values.
                 
 path2models=\"~/AFS-analysis-with-moments/multimodel_inference/\"   path to the cloned repository

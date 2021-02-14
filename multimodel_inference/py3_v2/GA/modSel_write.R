@@ -12,7 +12,7 @@ Bootstrapped SFS files should be named like p12_1.sfs, p12_2.sfs, etc. where 
 
 contrast=\"p12\"                   name of the contrast: leading part of the bootstrapped sfs file names, for example, p12_1.sfs, p12_2.sfs etc.
 
-nreps=6                            number of random restarts for each model for each bootstrap replicate 
+nreps=3                            number of random restarts for each model for each bootstrap replicate 
 nboots=10                          number of bootstrap replicates to use
 
 args=[list of arguments]           names of pop1 and pop2, projection for pop1, projection for pop2, mutation rate (per genotyped portion of the 
