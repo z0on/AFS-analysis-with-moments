@@ -65,7 +65,7 @@ def IM(params, ns):
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, 0], [0, 0]]))    
+    fs.integrate([nu1_0, nu2_0], T1, m = np.array([[0, 0], [0, 0]]))    
     fs.integrate(nu_func, T2, dt_fac=0.01, m=migs)
 
     return fs

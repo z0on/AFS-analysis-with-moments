@@ -61,13 +61,13 @@ def IMi(params, ns):
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, 0], [0, 0]]))    
+    fs.integrate([nu1_0, nu2_0], T1, m = np.array([[0, 0], [0, 0]]))    
     fs.integrate(nu_func, T2, dt_fac=0.01, m=migs)
  
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
     fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1_1, nu2_1], T1, m = np.array([[0, 0], [0, 0]]))    
+    fsi.integrate([nu1_0, nu2_0], T1, m = np.array([[0, 0], [0, 0]]))    
     fsi.integrate(nu_func, T2, dt_fac=0.01, m=migs.i)
 
     fs2=P*fsi+(1-P)*fs

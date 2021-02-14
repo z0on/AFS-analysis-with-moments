@@ -54,8 +54,6 @@ def sc3ei(params , ns):
 
     fs2=P*fsi+(1-P)*fs
     return fs2
-
-    return fs
  
 func=sc3ei
 upper_bound = [100,100,100,100,100,200,200,0.999,0.999]

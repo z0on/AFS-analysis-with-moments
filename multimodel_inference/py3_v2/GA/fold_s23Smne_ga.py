@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-# Ne change, then split
-# asymmetric migration
-# reduced pop size in fraction of genome (background selection)
+# split, three epochs in each pop, asymmetric migration
+# genomic islands (lower migration)
+# migration scales with size of source population
 
+# uses genetic algorithm from GADMA for optimization
 
 import matplotlib
 matplotlib.use('PDF')
@@ -27,6 +28,7 @@ gtime=float(sys.argv[7])
 
 # set Polarized=False below for folded AFS analysis
 fs = moments.Spectrum.from_file(infile)
+fs=fs.fold()
 data=fs.project(projections)
 ns=data.sample_sizes
 np.set_printoptions(precision=3)     
@@ -34,29 +36,32 @@ np.set_printoptions(precision=3)
 #-------------------
 # split into unequal pop sizes with asymmetrical migration
 
-def sc3ei(params , ns):
+def s23Smne(params , ns):
 #    p_misid: proportion of misidentified ancestral states
-# P: proportion of sites with lower Ne
-# Fs: factor of Ne reduction (1e-5 - 0.999)
-    nu1,nu1_2,nu2_2,T1,T2,m12,m21,Fs,P,p_misid = params
+# migration is asymmetric, scales with source pop size (ie m12 is probability of migration from 2 to 1)
+    nu1_1,nu2_1,nu1_2,nu2_2,nu1_3,nu2_3,T1,T2,T3,m12,m21,Fs,P = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
-    fs.integrate([nu1], T1)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, m12], [m21, 0]]))
+    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, nu2_1*m12], [nu1_1*m21, 0]]))
+    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, nu2_2*m12], [nu1_2*m21, 0]]))
+    fs.integrate([nu1_3, nu2_3], T3, m = np.array([[0, nu2_3*m12], [nu1_3*m21, 0]]))
 
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
-    fsi.integrate([nu1], T1)
     fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1_2*Fs, nu2_2*Fs], T2, m = np.array([[0, m12], [m21, 0]]))
+    fsi.integrate([nu1_1*Fs, nu2_1*Fs], T1, m = np.array([[0, nu2_1*m12*Fs], [nu1_1*m21*Fs, 0]]))
+    fsi.integrate([nu1_2*Fs, nu2_2*Fs], T2, m = np.array([[0, nu2_2*m12*Fs], [nu1_2*m21*Fs, 0]]))
+    fsi.integrate([nu1_3*Fs, nu2_3*Fs], T3, m = np.array([[0, nu2_3*m12*Fs], [nu1_3*m21*Fs, 0]]))
 
     fs2=P*fsi+(1-P)*fs
-    return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
+    return fs2
  
-func=sc3ei
-upper_bound = [100,100,100,100,100,200,200,0.999,0.999,0.25]
-lower_bound = [1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-1,1e-5,1e-5]
+func=s23Smne
+
+upper_bound = [100, 100, 100,100,100,100,100, 100,100,100,100,0.999,0.999]
+lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
+
 if len(sys.argv)==9:
      params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
 #     params = moments.Misc.perturb_params(params, fold=1.5, upper_bound=upper_bound, lower_bound=lower_bound)
@@ -66,7 +71,7 @@ else:
      Xinit=None
      nGA=150
 
-par_labels = ('nu1','nu1_2','nu2_2','T1','T2','m12','m21','F_ne','F_gen','f_misid')
+par_labels = ('nu1_1','nu2_1','nu1_2','nu2_2','nu1_3','nu2_3','T1','T2','T3','m12','m21','F_s','F_gs')
 
 # calculating time limit for GADMA evaluations (the generation will re-spawn if stuck for longer than that)
 
@@ -97,8 +102,7 @@ result = gadma.Inference.optimize_ga(data=data,
                                      ga_maxiter=nGA,
                                      ls_maxiter=1)
 poptg=result.x                                    
-
-
+                                     
 # extracting model predictions, likelihood and theta
 model = func(poptg, ns)
 ll_model = moments.Inference.ll_multinom(model, data)
@@ -109,15 +113,15 @@ ind=str(random.randint(0,999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
-moments.ModelPlot.plot_model(plot_mod, save_file="s12S_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
+moments.ModelPlot.plot_model(plot_mod, save_file="s23Smne_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
 
 # printing parameters and their SDs
-print( "RESULT","s12S",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
+print( "RESULT","s23Smne",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=0.1, resid_range=3,
                                     pop_ids =pop_ids)
-plt.savefig("s12S_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
+plt.savefig("s23Smne_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 

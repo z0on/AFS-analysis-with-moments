@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # split into two different sizes with growth, aymmetric migration scales with pop size
 

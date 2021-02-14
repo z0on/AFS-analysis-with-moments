@@ -53,8 +53,6 @@ def sc3ei(params , ns):
 
     fs2=P*fsi+(1-P)*fs
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
-
-    return (1-p_misid)*fs + p_misid*moments.Numerics.reverse_array(fs)
  
 func=sc3ei
 upper_bound = [100,100,100,100,100,200,200,0.999,0.999,0.25]

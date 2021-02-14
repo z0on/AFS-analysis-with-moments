@@ -67,7 +67,7 @@ else:
      Xinit=None
      nGA=150
 
-par_labels = ('nu1','nu2','T1','T2','F_ne','F_gen')
+par_labels = ('nu1','nu2','T1','T2','F_s','F_gs')
 
 import timeit
 # allowed fold-excess in evaluation time
