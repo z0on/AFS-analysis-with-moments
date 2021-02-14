@@ -29,7 +29,7 @@ topq =grep("topq=",commandArgs())
 if(length(topq)>0) { topq=as.numeric(sub("topq=","", commandArgs()[topq])) } else { topq=0.9 }
 
 path2models =grep("path2models=",commandArgs())
-if(length(path2models)>0) { path2models=sub("path2models=","", commandArgs()[path2models]) } else { path2models="~/AFS-analysis-with-moments/multimodel_inference/" }
+if(length(path2models)>0) { path2models=sub("path2models=","", commandArgs()[path2models]) } else { path2models="~/AFS-analysis-with-moments/work/" }
 
 if(length(grep("folded=T",commandArgs()))>0) { folded=TRUE } else { folded=FALSE }
 
@@ -107,7 +107,7 @@ maxlike[,migrations]=apply(maxlike[,migrations],2,log,base=10)
 # }
 # 
 
-# ---- makig a long table, defining parameter types
+# ---- making a long table, defining parameter types
 
 ms=stack(maxlike[,7:ncol(maxlike)])
 names(ms)[2]="parameter"
