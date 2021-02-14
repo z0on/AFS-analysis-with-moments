@@ -1,21 +1,36 @@
-# Multimodel demographic inference using *moments* 
+# Multimodel demographic inference using *moments* (version 2)
 
 [*Moments*](https://bitbucket.org/simongravel/moments/src/master/) is the site frequency spectrum (SFS) analysis method superficially similar to *dadi* but operating on different math (ordinary differential equations rather than diffusion approximation). It is considerably faster than *dadi* (although somewhat less accurate), handles up to five populations simultaneously, and plots cartoons of inferred demographic scenarios.
 
 The problem with *moments* and *dadi* is, they can evaluate the fit of a pre-specified demographic model but are **not designed to search for the general model structure** that best fits the data (i.e., was there population split or not, is there any migration and if yes, is it symmetrical or not, were there additional growth periods before or after spit, etc). Our solution to this problem is pretty simple: to fit all the two-population models we can possibly think of to our experimental 2dSFS and use Akaike Information Criterion to select the best one.
 
-See [GADMA](https://github.com/ctlab/GADMA) for the alternative solution to this problem. Compared to GADMA, we are far less elegant but somewhat more flexible (we can incorporate essentially any model, for example, involving selection and heterogeneous introgression rates across the genome). Our approach also lets the user evaluate how much better the winning model is compared to certain "null" alternatives (for example, models with no population split, with symmetrical migration, or with constant population sizes), which provides statistical evidence for general aspects of the model structure. Our disadvantage (besides the fact that we only do two-pop models and GADMA also does three-pop models) is a ridiculously huge number of model-fit runs that we have to perform. The good news is, all this can be done in parallel, and each single-model run takes no more than 1 hour.
+See [GADMA](https://github.com/ctlab/GADMA) for the alternative solution to this problem. Compared to GADMA, we are far less elegant but somewhat more flexible (we can incorporate essentially any model, for example, involving background selection and heterogeneous introgression rates across the genome). Our approach also lets the user evaluate how much better the winning model is compared to certain "null" alternatives (for example, models with no population split or with constant population sizes), which provides statistical evidence for general aspects of the model structure. Our disadvantage (besides the fact that we only do two-pop models and GADMA also does three-pop models) is a huge number of model-fit runs that we have to perform. The good news is, all this can be done in parallel, and each single-model run takes no more than 1 hour.
+
+Version 2 of this repository (`multimodel_inference/py3_v2`) actually uses GADMA genetic algorithm for find optimal parameters of a pre-specified model (no modificaion of model structure), and has a completely revamped set of models to compare. The new models don't have versions with symmetrical migration, but include models with "background selection" (reduced Ne in a portion of the genome), "islands of divergence" (reduced migration in a portion of the genome) and a combination of the two. The previous version of the model collection is still there, with all scripts (python and R) in subdirectories `multimodel_inference/py2_v1` and `multimodel_inference/py3_v1`.
 
 ## Installation ##
 First of all, install *moments*. The example below would clone it into root directory and install it for a specific user.
 ```bash
 cd
-git clone https://bitbucket.org/simongravel/moments.git 
+git clone --branch devel https://bitbucket.org/simongravel/moments.git 
 cd moments
 python setup.py build_ext --inplace
 cd
 ```
-Then, clone this repository and copy all the `*.py` files from `~/AFS-analysis-with-moments/multimodel_inference/py2/` or from `/AFS-analysis-with-moments/multimodel_inference/py3/` (depending on your `python` version) to where you keep your executables (for example, `~/bin`). 
+Then, clone this repository and copy all the scripts and accessory filed *for the version you'd like to work with* into a newly created subdir `work`:
+
+```bash
+cd
+git clone https://bitbucket.org/simongravel/moments.git
+cd AFS-analysis-with-moments
+mkdir work
+cp multimodel_inference/py3_v2/* work/
+# to use version 1 models:
+# cp multimodel_inference/py3_v1/* work/
+# or if you use python2
+# cp multimodel_inference/py2_v1/* work/
+```
+
 > NOTE: all code examples here assume the repository is cloned in the home directory, `~/`. If you cloned it elsewhere, make sure to replace `~/AFS-analysis-with-moments` in all examples with the actual path.
 
 > NOTE: R scripts were tested with R versions 3.5.1 and 3.6.3. Not sure about R version 4.
