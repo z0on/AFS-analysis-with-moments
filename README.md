@@ -24,7 +24,7 @@ cd
 git clone https://bitbucket.org/simongravel/moments.git
 cd AFS-analysis-with-moments
 mkdir work
-cp multimodel_inference/py3_v2/* work/
+cp multimodel_inference/py3_v2/GA/* work/
 # to use version 1 models:
 # cp multimodel_inference/py3_v1/* work/
 # or if you use python2
@@ -44,21 +44,27 @@ The models are designed to test the following basic aspects of population config
 - are these really two demographically distinct populations, or we simply sampled the same population twice? (i.e., does the model fits significantly better if it actually has a split between populations, as opposed to just some population size changes)
 - were there changes in population size(s) through time? (models can include up to three "epochs" where population size could change)
 - if there is a split, is there still migration? (during some or all of the epochs)
-- if there is migration, is it symmetrical or asymmetrical?
 - do some parts of the genome ("islands of differentiation") introgress at a lower rate than the rest? This is one way to model non-neutral processes such as spatially varying selection.
+- do some parts of the genome show lower population size than the rest? This is to model background selection.
+
 
 So the models differ by: 
-- split / no split (`ns` in model name)
-- number of epochs (1-3) (`sc1`,`sc2` or `sc3` in model name) 
-- migration at some or all of the epochs, which can be symmetrical (`sm`) or asymmetrical.  `e`,`m`, and `l` in model name stands for migration during early, mid, and late epoch. 
-- presence of "islands of differentiation" experiencing lower introgression rate (`i` in model name).
+- split / no split (`ns` in the model name)
+- no migration ever (`nm`), or some migration (all other models)
+- number of epochs (1-3) (`s1`,`s2` or `s3`) 
+- migration at some or all of the epochs (there are models with secondary contact, `sc`, or ancestral migration, `am`)
+- models with ancestral population size change before split (`12` with one epoch post-split, `123` with two epochs post-split, `103` is the secondary contact version of `123` - no migration in the middle epoch)
+- presence of "islands of differentiation" and/or "background selection" (`i` or `S`).
 
-There are also models with exponential (rather than instantaneous) change in population size, such as the venerable `IM` model (and its derivatives with multiple epochs).
+**New in V2**: All models with more than one epoch post-split are of `mne` kind, which means that migration scales with the size of the source population.
+>NOTE for version 2: `IM` models are currently not included in the main collection of models since they take substanitally longer to fit (`IMimne` type of model can take 3-4 hours). If you want to include them, copy the extended model lists over the standard ones:
+```bash
+cp ~/AFS-analysis-with-moments/work/allmodels_IMextra_unfolded ~/AFS-analysis-with-moments/work/allmodels_unfolded
+cp ~/AFS-analysis-with-moments/work/allmodels_IMextra_folded ~/AFS-analysis-with-moments/work/allmodels_folded
+```
 
-The name of a model is therefore a kind of code to its structure, for example:
-`sc3ielsm2` : 3 epochs, "islands of differentiation", migration is only during early and late epochs (no migration during middle epoch), migration is symmetrical in the second "migration epoch".
+See the spreadsheet `work/multimodels_v2.xlsx` for summaries of model structure.
 
-Sadly, not all model names currently conform to this convention. The summary of the structure of all models and their names are listed in the file `multimodel_inference/moments_multimodels.xlsx`. 
 
 ## Model selection ##
 Let's assume we have ten bootstrapped 2dSFS formatted for *moments* or *dadi* (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)). Such file is nothing more than a line of numbers with a header line giving the dimensions of the spectrum ( 2 x N + 1 for each of the two populations, where N is the number of sampled diploids). 
