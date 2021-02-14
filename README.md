@@ -106,11 +106,11 @@ Additional arguments to `modSel_summary.R` that will influence the next stage, b
 - `folded` (FALSE) : whether analysis is using folded SFS.
 
 Two plots will be generated. The first one is the boxplot of best AIC scores for each model for all bootstrap replicates:
-![all boxplots](all_boxplots.png)
+![all boxplots](multimodel_inference/allmodels_boxplots.png)
 
 And the second one is the plot of just the AIC medians for the top 10 models:
 
-![top10](top10_medians.png)
+![top10](multimodel_inference/top10_medians.png)
 
 The script also outputs the text file named `[contrast].[modelname]`, **where `[modelname]` is the name of the winning model**. This file contains the fitted parameter values for the winning model, which will be used at the next stage as "guiding values" for random restarts.
 
@@ -128,13 +128,9 @@ Additonal options to `bestBoot_summary.R` are:
 - `path2models`: path to the subdir `multimodel_inference`. Default `~/AFS-analysis-with-moments/multimodel_inference/`.
 - `folded` (FALSE) : whether the analysis must fold the SFS.
 
-This will generate the histogram of likelihoods with red line for top-quantile cutoff:
+This will generate the boxplots for parameter estimates:
 
-![boots histogram](boothist.png)
-
-...and, finally, boxplots for parameter estimates:
-
-![params](boot_params.png)
+![params](multimodel_inference/bestboot_params_boxplot.png)
 > Note: names of migration rate parameters are not entirely systematized across models (I should spend some time cleaning those). In general the higher number (i.e. `_3` in `m12_3`) indicates later epoch, but they may not exactly follow the number of epochs actually present in the model.
 
 The script also saves an RData bundle containing the summary dataframe (medians, 25% quantile, 75% quantile for all parameters) and the big dataframe containing all summarized bootstrap data.
