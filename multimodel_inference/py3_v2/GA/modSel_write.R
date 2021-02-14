@@ -40,7 +40,7 @@ path2models =grep("path2models=",commandArgs())
 if(length(path2models)>0) { path2models=sub("path2models=","", commandArgs()[path2models]) } else { path2models="~/AFS-analysis-with-moments/work/" }
 
 nr=grep("nreps=",commandArgs())
-if(length(nr)>0) { nreps=as.numeric(sub("nreps=","", commandArgs()[nr])) } else { nreps=6 }
+if(length(nr)>0) { nreps=as.numeric(sub("nreps=","", commandArgs()[nr])) } else { nreps=3 }
 
 nboots =grep("nboots=",commandArgs())
 if(length(nboots)>0) { nreps=as.numeric(sub("nboots=","", commandArgs()[nboots])) } else { nboots=10 }
