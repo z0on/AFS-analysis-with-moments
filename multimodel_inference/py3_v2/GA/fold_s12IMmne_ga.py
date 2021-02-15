@@ -34,6 +34,7 @@ gtime=float(sys.argv[7])
 #projections=[32,38]
 
 fs = moments.Spectrum.from_file(infile)
+fs=fs.fold()
 data=fs.project(projections)
 ns=data.sample_sizes
 np.set_printoptions(precision=3)     
@@ -51,7 +52,7 @@ def s12IMi(params, ns):
     Fs: factor of Ne reduction (1e-4 - 0.999)
    
     """
-    nu0,nu1_0,nu2_0,nu1,nu2,T0,T2,m12,m21,Fi,Pi,p_misid = params
+    nu0,nu1_0,nu2_0,nu1,nu2,T0,T2,m12,m21 = params
     nu1_func = lambda t: nu1_0 * (nu1/nu1_0)**(t/T2)
     nu2_func = lambda t: nu2_0 * (nu2/nu2_0)**(t/T2)
     nu_func = lambda t: [nu1_func(t), nu2_func(t)]
@@ -92,12 +93,12 @@ def s12IMi(params, ns):
     fsis.integrate([Fs*nu1_0, Fs*nu2_0], T1, m = np.array([[0, 0], [0, 0]]))    
     fsis.integrate(nus_func, T2, dt_fac=0.01, m=migs.i)
     """
-    fs2=Ps*fsi+(1-Pi)*fs
-    return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
+#    fs2=Ps*fsi+(1-Pi)*fs
+    return fs
 
 func=s12IMi
-upper_bound = [100,100,100, 100,100, 10,10, 100,100,0.999,0.999,0.25]
-lower_bound = [1e-3,1e-3,1e-3,1e-3, 1e-3,1e-3,1e-3,1e-5,1e-5,1e-4,1e-4,1e-5]
+upper_bound = [100,100,100, 100,100, 10,10, 100,100]
+lower_bound = [1e-3,1e-3,1e-3,1e-3, 1e-3,1e-3,1e-3,1e-5,1e-5]
 
 # if starting parameterss are supplied, don't run GA; if not, run 150 generations of GA
 if len(sys.argv)==9:
@@ -109,7 +110,7 @@ else:
      Xinit=None
      nGA=150
 
-par_labels = ('nu0','nu1_0','nu2_0','nu1','nu2','T0','T2','m12','m21','F_i','F_gi','f_misid')
+par_labels = ('nu0','nu1_0','nu2_0','nu1','nu2','T0','T2','m12','m21')
 
 import timeit
 # allowed fold-excess in evaluation time
@@ -149,15 +150,15 @@ ind=str(random.randint(0,999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
-moments.ModelPlot.plot_model(plot_mod, save_file="s12IMimne_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
+moments.ModelPlot.plot_model(plot_mod, save_file="s12IMmne_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
 
 # printing parameters and their SDs
-print( "RESULT","s12IMimne",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
+print( "RESULT","s12IMmne",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=0.1, resid_range=3,
                                     pop_ids =pop_ids)
-plt.savefig("s12IMimne_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
+plt.savefig("s12IMmne_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 

@@ -72,14 +72,13 @@ def s12IMi(params, ns):
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
 #    fs.integrate([nu1_0, nu2_0], T1, m = np.array([[0, 0], [0, 0]]))    
     fs.integrate(nu_func, T2, dt_fac=0.01, m=migs)
-     
+    """     
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
     fsi.integrate([nu0], T0)
     fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
 #    fsi.integrate([nu1_0, nu2_0], T1, m = np.array([[0, 0], [0, 0]]))    
     fsi.integrate(nu_func, T2, dt_fac=0.01, m=migs.i)
-    """
     stss = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fss = moments.Spectrum(stss)
     fss.integrate([nu0*Fs], T0)
@@ -111,7 +110,7 @@ else:
      Xinit=None
      nGA=150
 
-par_labels = ('nu0','nu1_0','nu2_0','nu1','nu2','T0','T2','m12','m21','Fs','F_gs')
+par_labels = ('nu0','nu1_0','nu2_0','nu1','nu2','T0','T2','m12','m21','F_i','F_gi')
 
 import timeit
 # allowed fold-excess in evaluation time
