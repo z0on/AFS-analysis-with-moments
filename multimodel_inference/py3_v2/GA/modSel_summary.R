@@ -25,6 +25,7 @@ args=[list of arguments]           names of pop1 and pop2, projection for pop1, 
                                    For ANGSD-derived SFS, projections should be 0.8*2N for each population (ronded to integer); 
                                    in the case corresponding to the default setting each population was represented by 10 individuals.
                                    Example: args=\"p1 p2 16 16 0.02 0.005\"
+path2models=\"~/AFS-analysis-with-moments/work/\"      path to scripts and accessory files
 
 ")
 }
@@ -46,6 +47,9 @@ nboots =grep("nboots=",commandArgs())
 if(length(nboots)>0) { nreps=as.numeric(sub("nboots=","", commandArgs()[nboots])) } else { nboots=100 }
 
 if(length(grep("folded=T",commandArgs()))>0) { folded=TRUE } else { folded=FALSE }
+
+path2models =grep("path2models=",commandArgs())
+if(length(path2models)>0) { path2models=sub("path2models=","", commandArgs()[path2models]) } else { path2models="~/AFS-analysis-with-moments/work/" }
 
 
 '
@@ -145,7 +149,7 @@ for (b in 1:nboots) {
 	for (n in 1:nreps) {
 		for (m in mods) {
 			bname=paste(contrast,"_",b,".sfs",sep="")
-			args2=c(args2,paste("sleep ",n," && ",m,"_ga.py ",bname," ",args," ",paste(contrast,".",winner,sep="")," >>",contrast,".winboots",sep=""))
+			args2=c(args2,paste("sleep ",n," && ",path2models,m,"_ga.py ",bname," ",args," ",paste(contrast,".",winner,sep="")," >>",contrast,".winboots",sep=""))
 		}
 	}
 }
