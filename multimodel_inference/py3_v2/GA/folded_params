@@ -1,64 +1,68 @@
-fold_am nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21 = params
-fold_ami nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,P = params
-fold_amS nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fs,P = params
-fold_amSi nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,Pi,Fs,Ps = params
-fold_IMimne nu1_0,nu2_0,nu1,nu2,T,m12,m21,Fi,P = params
-fold_IMmne nu1_0,nu2_0,nu1,nu2,T,m12,m21 = params
-fold_IMSimne nu1_0,nu2_0,nu1,nu2,T,m12,m21,Fs,Ps,Fi,Pi = params
-fold_IMSmne nu1_0,nu2_0,nu1,nu2,T,m12,m21,Fs,P = params
-fold_s103 nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21 = params
-fold_s103i nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21,Fi,P = params
-fold_s103S nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21,Fs,P = params
-fold_s103Si nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_2,m21_2,Fi,Pi,Fs,Ps = params
-fold_s10IMimne nu0,nu1_0,nu2_0,nu1,nu2,T0,T1,T2,m12,m21,Fi,Pi = params
-fold_s10IMmne nu0,nu1_0,nu2_0,nu1,nu2,T0,T1,T2,m12,m21 = params
-fold_s10IMSimne nu0,nu1_0,nu2_0,nu1,nu2,T0,T1,T2,m12,m21,Fs,Ps,Fi,Pi = params
-fold_s10IMSmne nu0,nu1_0,nu2_0,nu1,nu2,T0,T1,T2,m12,m21,Fs,Ps = params
-fold_s123 nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_1,m21_1,m12_2,m21_2 = params
-fold_s123i nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_1,m21_1,m12_2,m21_2,Fi,P = params
-fold_s123imne nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21,Fi,P = params
-fold_s123mne nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21 = params
-fold_s123S nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_1,m21_1,m12_2,m21_2,Fs,P = params
-fold_s123Si nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_1,m21_1,m12_2,m21_2,Fi,Pi,Fs,Ps = params
-fold_s123Simne nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21,Fi,Pi,Fs,Ps = params
-fold_s123Smne nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21,Fs,P = params
-fold_s12 nu1,nu1_2,nu2_2,T1,T2,m12,m21 = params
-fold_s12i nu1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,P = params
-fold_s12IMimne nu0,nu1_0,nu2_0,nu1,nu2,T0,T2,m12,m21,Fi,Pi = params
-fold_s12IMmne nu0,nu1_0,nu2_0,nu1,nu2,T0,T2,m12,m21 = params
-fold_s12IMSimne nu0,nu1_0,nu2_0,nu1,nu2,T0,T2,m12,m21,Fs,Ps,Fi,Pi = params
-fold_s12IMSmne nu0,nu1_0,nu2_0,nu1,nu2,T0,T2,m12,m21,Fs,Ps = params
-fold_s12nm nu1,nu1_2,nu2_2,T1,T2 = params
-fold_s12nmS nu1,nu1_2,nu2_2,T1,T2,Fs,P = params
-fold_s12S nu1,nu1_2,nu2_2,T1,T2,m12,m21,Fs,P = params
-fold_s12Si nu1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,Pi,Fs,Ps = params
-fold_s1 nu1, nu2,T, m12,m21, p_misid
-fold_s1i nu1,nu2,T,m12,m21,Fi,P = params
-fold_s1nm nu1_1,nu2_1,T = params
-fold_s1nmS nu1,nu2,T,Fs,P = params
-fold_s1S nu1,nu2,T,m12,m21,Fs,P = params
-fold_s1Si nu1,nu2,T,m12,m21,Fi,Pi,Fs,Ps = params
-fold_s23imne nu1_1,nu2_1,nu1_2,nu2_2,nu1_3,nu2_3,T1,T2,T3,m12,m21,Fi,P = params
-fold_s23mne nu1_1,nu2_1,nu1_2,nu2_2,nu1_3,nu2_3,T1,T2,T3,m12,m21,Fi,P = params
-fold_s23Simne nu1_1,nu2_1,nu1_2,nu2_2,nu1_3,nu2_3,T1,T2,T3,m12,m21,Fi,Pi,Fs,Ps = params
-fold_s23Smne nu1_1,nu2_1,nu1_2,nu2_2,nu1_3,nu2_3,T1,T2,T3,m12,m21,Fs,P = params
-fold_s2 nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12_1,m21_1,m12_2,m21_2 = params
-fold_s2i nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12_1,m21_1,m12_2,m21_2,Fi,P = params
-fold_s2imne nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,P = params
-fold_s2mne nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21 = params
-fold_s2nm nu1_1,nu2_1,nu1_2,nu2_2,T1,T2 = params
-fold_s2nmS nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,Fs,P = params
-fold_s2ns nu0,nu1,T1,T2 = params
-fold_s2nsS nu0,nu1,T1,T2,Fs,P = params
-fold_s2S nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12_1,m21_1,m12_2,m21_2,Fs,P = params
-fold_s2Si nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12_1,m21_1,m12_2,m21_2,Fi,Pi,Fs,Ps = params
-fold_s2Simne nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,Pi,Fs,Ps = params
-fold_s2Smne nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fs,Ps = params
-fold_sc nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21 = params
-fold_sci nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,P = params
-fold_scIMimne nu1_0,nu2_0,nu1,nu2,T1,T2,m12,m21,Fi,P = params
-fold_scIMmne nu1_0,nu2_0,nu1,nu2,T1,T2,m12,m21 = params
-fold_scIMSimne nu1_0,nu2_0,nu1,nu2,T1, T2,m12,m21,Fs,Ps,Fi,Pi = params
-fold_scIMSmne nu1_0,nu2_0,nu1,nu2,T1,T2,m12,m21,Fs,P = params
-fold_scS nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,P = params
-fold_scSi nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,Pi,Fs,Ps = params
+am nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21
+ami nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,P
+amS nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fs,P
+amSi nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,Pi,Fs,Ps
+IMimne nu1_0,nu2_0,nu1,nu2,T,m12,m21,Fi,P
+IMmne nu1_0,nu2_0,nu1,nu2,T,m12,m21
+IMSimne nu1_0,nu2_0,nu1,nu2,T,m12,m21,Fs,Ps,Fi,Pi
+IMSmne nu1_0,nu2_0,nu1,nu2,T,m12,m21,Fs,P
+s103 nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21
+s103i nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21,Fi,P
+s103S nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21,Fs,P
+s103Si nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_2,m21_2,Fi,Pi,Fs,Ps
+s10IMimne nu0,nu1_0,nu2_0,nu1,nu2,T0,T1,T2,m12,m21,Fi,Pi
+s10IMmne nu0,nu1_0,nu2_0,nu1,nu2,T0,T1,T2,m12,m21
+s10IMSimne nu0,nu1_0,nu2_0,nu1,nu2,T0,T1,T2,m12,m21,Fs,Ps,Fi,Pi
+s10IMSmne nu0,nu1_0,nu2_0,nu1,nu2,T0,T1,T2,m12,m21,Fs,Ps
+s123 nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_1,m21_1,m12_2,m21_2
+s123i nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_1,m21_1,m12_2,m21_2,Fi,P
+s123imne nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21,Fi,P
+s123mne nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21
+s123S nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_1,m21_1,m12_2,m21_2,Fs,P
+s123Si nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_1,m21_1,m12_2,m21_2,Fi,Pi,Fs,Ps
+s123Simne nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21,Fi,Pi,Fs,Ps
+s123Smne nu0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12,m21,Fs,P
+s12 nu1,nu1_2,nu2_2,T1,T2,m12,m21
+s12i nu1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,P
+s12IMimne nu0,nu1_0,nu2_0,nu1,nu2,T0,T2,m12,m21,Fi,Pi
+s12IMmne nu0,nu1_0,nu2_0,nu1,nu2,T0,T2,m12,m21
+s12IMSimne nu0,nu1_0,nu2_0,nu1,nu2,T0,T2,m12,m21,Fs,Ps,Fi,Pi
+s12IMSmne nu0,nu1_0,nu2_0,nu1,nu2,T0,T2,m12,m21,Fs,Ps
+s12nm nu1,nu1_2,nu2_2,T1,T2
+s12nmS nu1,nu1_2,nu2_2,T1,T2,Fs,P
+s12S nu1,nu1_2,nu2_2,T1,T2,m12,m21,Fs,P
+s12Si nu1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,Pi,Fs,Ps
+s1 p_misid
+s1i nu1,nu2,T,m12,m21,Fi,P
+s1nm nu1_1,nu2_1,T
+s1nmS nu1,nu2,T,Fs,P
+s1S nu1,nu2,T,m12,m21,Fs,P
+s1Si nu1,nu2,T,m12,m21,Fi,Pi,Fs,Ps
+s23imne nu1_1,nu2_1,nu1_2,nu2_2,nu1_3,nu2_3,T1,T2,T3,m12,m21,Fi,P
+s23mne nu1_1,nu2_1,nu1_2,nu2_2,nu1_3,nu2_3,T1,T2,T3,m12,m21,Fi,P
+s23Simne nu1_1,nu2_1,nu1_2,nu2_2,nu1_3,nu2_3,T1,T2,T3,m12,m21,Fi,Pi,Fs,Ps
+s23Smne nu1_1,nu2_1,nu1_2,nu2_2,nu1_3,nu2_3,T1,T2,T3,m12,m21,Fs,P
+s2 nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12_1,m21_1,m12_2,m21_2
+s2i nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12_1,m21_1,m12_2,m21_2,Fi,P
+s2imne nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,P
+s2mne nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21
+s2nm nu1_1,nu2_1,nu1_2,nu2_2,T1,T2
+s2nmS nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,Fs,P
+s2ns nu0,nu1,T1,T2
+s2nsS nu0,nu1,T1,T2,Fs,P
+s2S nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12_1,m21_1,m12_2,m21_2,Fs,P
+s2Si nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12_1,m21_1,m12_2,m21_2,Fi,Pi,Fs,Ps
+s2Simne nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,Pi,Fs,Ps
+s2Smne nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fs,Ps
+sc3 nu1_0,nu2_0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_1,m21_1,m12_2,m21_2
+sc3i nu1_0,nu2_0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_1,m21_1,m12_2,m21_2,Fi,Pi
+sc3S nu1_0,nu2_0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_1,m21_1,m12_2,m21_2,Fs,Ps
+sc3Si nu1_0,nu2_0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_1,m21_1,m12_2,m21_2,Fi,Pi,Fs,Ps
+sc nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21
+sci nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,P
+scIMimne nu1_0,nu2_0,nu1,nu2,T1,T2,m12,m21,Fi,P
+scIMmne nu1_0,nu2_0,nu1,nu2,T1,T2,m12,m21
+0,nu2 T2,m12,m21,Fs,Ps,Fi,Pi
+scIMSmne nu1_0,nu2_0,nu1,nu2,T1,T2,m12,m21,Fs,P
+scS nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,P
+scSi nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,Pi,Fs,Ps

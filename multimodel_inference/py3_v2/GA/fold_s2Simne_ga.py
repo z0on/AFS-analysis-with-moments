@@ -75,7 +75,7 @@ def sc3ei(params , ns):
 func=sc3ei
 
 upper_bound = [100, 100, 100,100,100,100,100,100,0.999,0.999,0.999,0.999]
-lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-3,1e-3,1e-1,1e-3]
+lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-3,1e-3,1e-5,1e-3]
 if len(sys.argv)==9:
      params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
 #     params = moments.Misc.perturb_params(params, fold=1.5, upper_bound=upper_bound, lower_bound=lower_bound)
@@ -104,7 +104,7 @@ mean_time = total_time / num_init
 
 result = gadma.Inference.optimize_ga(data=data,
                                      model_func=func,
-#                                     verbose=0,
+                                     verbose=0,
                                      X_init=Xinit,
                                      engine='moments',
                                      args=(),

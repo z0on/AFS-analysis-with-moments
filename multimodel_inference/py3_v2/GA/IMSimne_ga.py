@@ -118,7 +118,7 @@ mean_time = total_time / num_init
 
 result = gadma.Inference.optimize_ga(data=data,
                                      model_func=func,
- #                                    verbose=0,
+                                     verbose=0,
                                      X_init=Xinit,
                                      engine='moments',
                                      args=(),

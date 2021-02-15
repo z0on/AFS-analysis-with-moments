@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
-# split, two epochs in each pop, asymmetric migration.
+# split, two epochs in each pop, asymmetric migration at different rates in different epochs.
 # genomic islands (lower migration)
 # lower Ne in a fractiion of genome (background selection)
-# migration scales with size of source population
-
 
 # uses genetic algorithm from GADMA for optimization
 
@@ -30,6 +28,7 @@ gtime=float(sys.argv[7])
 
 # set Polarized=False below for folded AFS analysis
 fs = moments.Spectrum.from_file(infile)
+fs=fs.fold()
 data=fs.project(projections)
 ns=data.sample_sizes
 np.set_printoptions(precision=3)     
@@ -37,44 +36,50 @@ np.set_printoptions(precision=3)
 #-------------------
 # split into unequal pop sizes with asymmetrical migration
 
-def sc3ei(params , ns):
+def sc3i(params , ns):
 #    p_misid: proportion of misidentified ancestral states
 # Pi: proportion of sites with lower migration
 # Fi: factor of migration reduction (1e-5 - 0.999)
 # Ps: proportion of sites with lower Ne
-# Fs: factor of Ne reduction (0.1 - 0.999)
-    nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,Pi,Fs,Ps,p_misid = params
+# Fs: factor of Ns reduction (1e-5 - 0.999)
+    nu1_0,nu2_0,nu1_1,nu2_1,nu1_2,nu2_2,T0,T1,T2,m12_1,m21_1,m12_2,m21_2,Fi,Pi = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, nu2_1*m12], [nu1_1*m21, 0]]))
-    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, nu2_2*m12], [nu1_2*m21, 0]]))
+    fs.integrate([nu1_0, nu2_0], T0, m = np.array([[0, 0], [0, 0]]))
+    fs.integrate([nu1_1, nu2_1], T1, m = np.array([[0, m12_1], [m21_1, 0]]))
+    fs.integrate([nu1_2, nu2_2], T2, m = np.array([[0, m12_2], [m21_2, 0]]))
 
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
     fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1_1, nu2_1], T1, m = np.array([[0, nu2_1*m12*Fi], [nu1_1*m21*Fi, 0]]))
-    fsi.integrate([nu1_2, nu2_2], T2, m = np.array([[0, nu2_2*m12*Fi], [nu1_2*m21*Fi, 0]]))
- 
+    fsi.integrate([nu1_0, nu2_0], T0, m = np.array([[0, 0], [0, 0]]))
+    fsi.integrate([nu1_1, nu2_1], T1, m = np.array([[0, m12_1*Fi], [m21_1*Fi, 0]]))
+    fsi.integrate([nu1_2, nu2_2], T2, m = np.array([[0, m12_2*Fi], [m21_2*Fi, 0]]))
+    """
     stsis = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsis = moments.Spectrum(stsis)
     fsis = moments.Manips.split_1D_to_2D(fsis, ns[0], ns[1])
-    fsis.integrate([nu1_1*Fs, nu2_1*Fs], T1, m = np.array([[0, nu2_1*m12*Fi*Fs], [nu1_1*m21*Fi*Fs, 0]]))
-    fsis.integrate([nu1_2*Fs, nu2_2*Fs], T2, m = np.array([[0, nu2_2*m12*Fi*Fs], [nu1_2*m21*Fi*Fs, 0]]))
+    fsis.integrate([nu1_0*Fs, nu2_0*Fs], T0, m = np.array([[0, 0], [0, 0]]))
+    fsis.integrate([nu1_1*Fs, nu2_1*Fs], T1, m = np.array([[0, m12_1*Fi], [m21_1*Fi, 0]]))
+    fsis.integrate([nu1_2*Fs, nu2_2*Fs], T2, m = np.array([[0, m12_2*Fi], [m21_2*Fi, 0]]))
 
     stss = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fss = moments.Spectrum(stss)
     fss = moments.Manips.split_1D_to_2D(fss, ns[0], ns[1])
-    fss.integrate([nu1_1*Fs, nu2_1*Fs], T1, m = np.array([[0, nu2_1*m12*Fs], [nu1_1*m21*Fs, 0]]))
-    fss.integrate([nu1_2*Fs, nu2_2*Fs], T2, m = np.array([[0, nu2_2*m12*Fs], [nu1_2*m21*Fs, 0]]))
+    fss.integrate([nu1_0*Fs, nu2_0*Fs], T0, m = np.array([[0, 0], [0, 0]]))
+    fss.integrate([nu1_1*Fs, nu2_1*Fs], T1, m = np.array([[0, m12_1], [m21_1, 0]]))
+    fss.integrate([nu1_2*Fs, nu2_2*Fs], T2, m = np.array([[0, m12_2], [m21_2, 0]]))
 
     fs2=Pi*(1-Ps)*fsi+Ps*(1-Pi)*fss+Pi*Ps*fsis+(1-Pi)*(1-Ps)*fs
-    return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
+    """
+    fs2=P*fsi+(1-P)*fs
+    return fs2
  
-func=sc3ei
+func=sc3i
 
-upper_bound = [100, 100, 100,100,100,100,100,100,0.999,0.999,0.999,0.999,0.25]
-lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-3,1e-3,1e-5,1e-3,1e-5]
+upper_bound = [100, 100,100, 100, 100,100,10,10,10,200,200,200,200,0.999,0.999]
+lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
 if len(sys.argv)==9:
      params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
 #     params = moments.Misc.perturb_params(params, fold=1.5, upper_bound=upper_bound, lower_bound=lower_bound)
@@ -84,7 +89,7 @@ else:
      Xinit=None
      nGA=150
 
-par_labels = ('nu1_1','nu2_1','nu1_2','nu2_2','T1','T2','m12','m21','Fi','F_gi','Fs','F_gs','f_misid')
+par_labels = ('nu1_0','nu2_0','nu1_1','nu2_1','nu1_2','nu2_2','T0','T1','T2','m12_1','m21_1','m12_2','m21_2','Fi','Fgi')
 
 # calculating time limit for GADMA evaluations (the generation will re-spawn if stuck for longer than that)
 
@@ -126,15 +131,15 @@ ind=str(random.randint(0,999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
-moments.ModelPlot.plot_model(plot_mod, save_file="s2Simne_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
+moments.ModelPlot.plot_model(plot_mod, save_file="sc3i_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
 
 # printing parameters and their SDs
-print( "RESULT","s2Simne",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
+print( "RESULT","sc3i",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=0.1, resid_range=3,
                                     pop_ids =pop_ids)
-plt.savefig("s2Simne_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
+plt.savefig("sc3i_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 
