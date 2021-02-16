@@ -70,8 +70,7 @@ So the models differ by:
 - models with ancestral population size change before split (`12` with one epoch post-split, `123` with two epochs post-split, `103` is the secondary contact version of `123` - no migration in the middle epoch)
 - presence of "islands of differentiation" and/or "background selection" (`i` or `S`).
 
-**New in V2**: All models with more than one epoch post-split are of `mne` kind, which means that migration scales with the size of the source population.
->NOTE for version 2: `IM` models are currently not included in the main collection of models since they take substanitally longer to fit (`IMimne` type of model can take 3-4 hours). If you want to include them, copy the extended model lists over the standard ones:
+>NOTE for version 2: `IM` models are currently not included in the main collection of models since they take substanitally longer to fit (some can take 4-5 hours). All IM models are of `mne` kind, which means that migration scales dynamically with the size of the source population. If you want to include them, copy the extended model lists over the standard ones:
 ```bash
 cp ~/AFS-analysis-with-moments/work/allmodels_IMextra_unfolded ~/AFS-analysis-with-moments/work/allmodels_unfolded
 cp ~/AFS-analysis-with-moments/work/allmodels_IMextra_folded ~/AFS-analysis-with-moments/work/allmodels_folded
