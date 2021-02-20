@@ -51,7 +51,7 @@ def sc3ei(params , ns):
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
     fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1_1, nu2_1*Fs], T1, m = np.array([[0, m12], [m21, 0]]))
+    fsi.integrate([nu1_1, nu2_1*Fs], T1, m = np.array([[0, m12*Fs], [m21*Fs, 0]]))
     fsi.integrate([nu1_2, nu2_2*Fs], T2, m = np.array([[0, 0], [0, 0]]))
 
     fs2=P*fsi+(1-P)*fs

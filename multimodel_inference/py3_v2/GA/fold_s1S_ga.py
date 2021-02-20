@@ -47,7 +47,7 @@ def s2mi(params , ns):
     stsi = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsi = moments.Spectrum(stsi)
     fsi = moments.Manips.split_1D_to_2D(fsi, ns[0], ns[1])
-    fsi.integrate([nu1*Fs, nu2*Fs], T, m = np.array([[0, m12], [m21, 0]]))
+    fsi.integrate([nu1*Fs, nu2*Fs], T, m = np.array([[0, m12*Fs], [m21*Fs, 0]]))
 
     fs2=P*fsi+(1-P)*fs
     return fs2

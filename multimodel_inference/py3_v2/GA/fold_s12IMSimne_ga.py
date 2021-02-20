@@ -68,6 +68,8 @@ def s12IMSi(params, ns):
     m12_func = lambda t: m12 * nu1_func(t)
     migs = lambda t: np.array([[0, m12_func(t)], [m21_func(t), 0]])
     migs.i = lambda t: np.array([[0, Fi*m12_func(t)], [Fi*m21_func(t), 0]])
+    migs.s = lambda t: np.array([[0, Fs*m12_func(t)], [Fs*m21_func(t), 0]])
+    migs.si = lambda t: np.array([[0, Fi*Fs*m12_func(t)], [Fi*Fs*m21_func(t), 0]])
  
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
@@ -88,14 +90,14 @@ def s12IMSi(params, ns):
     fss.integrate([nu0*Fs], T0)
     fss = moments.Manips.split_1D_to_2D(fss, ns[0], ns[1])
 #    fss.integrate([Fs*nu1_0, Fs*nu2_0], T1, m = np.array([[0, 0], [0, 0]]))    
-    fss.integrate(nus_func, T2, dt_fac=0.01, m=migs)
+    fss.integrate(nus_func, T2, dt_fac=0.01, m=migs.s)
 
     stsis = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsis = moments.Spectrum(stsis)
     fsis.integrate([nu0*Fs], T0)
     fsis = moments.Manips.split_1D_to_2D(fsis, ns[0], ns[1])
 #    fsis.integrate([Fs*nu1_0, Fs*nu2_0], T1, m = np.array([[0, 0], [0, 0]]))    
-    fsis.integrate(nus_func, T2, dt_fac=0.01, m=migs.i)
+    fsis.integrate(nus_func, T2, dt_fac=0.01, m=migs.si)
 
     fs2=Pi*(1-Ps)*fsi+Ps*(1-Pi)*fss+Pi*Ps*fsis+(1-Pi)*(1-Ps)*fs
     return fs2

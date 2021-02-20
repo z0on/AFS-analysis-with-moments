@@ -63,6 +63,7 @@ def IMi(params, ns):
     m21_func = lambda t: m21 * nu2_func(t)
     m12_func = lambda t: m12 * nu1_func(t)
     migs = lambda t: np.array([[0, m12_func(t)], [m21_func(t), 0]])
+    migs.s = lambda t: np.array([[0, Fs*m12_func(t)], [Fs*m21_func(t), 0]])
  
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
@@ -72,7 +73,7 @@ def IMi(params, ns):
     stss = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fss = moments.Spectrum(stss)
     fss = moments.Manips.split_1D_to_2D(fss, ns[0], ns[1])
-    fss.integrate(nus_func, T, dt_fac=0.01, m=migs)
+    fss.integrate(nus_func, T, dt_fac=0.01, m=migs.s)
 
     fs2=P*fss+(1-P)*fs
     return fs2

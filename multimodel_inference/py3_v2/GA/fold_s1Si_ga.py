@@ -54,12 +54,12 @@ def s2mi(params , ns):
     stsis = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fsis = moments.Spectrum(stsis)
     fsis = moments.Manips.split_1D_to_2D(fsis, ns[0], ns[1])
-    fsis.integrate([nu1*Fs, nu2*Fs], T, m = np.array([[0, m12*Fi], [m21*Fi, 0]]))
+    fsis.integrate([nu1*Fs, nu2*Fs], T, m = np.array([[0, m12*Fi*Fs], [m21*Fi*Fs, 0]]))
 
     stss = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fss = moments.Spectrum(stss)
     fss = moments.Manips.split_1D_to_2D(fss, ns[0], ns[1])
-    fss.integrate([nu1*Fs, nu2*Fs], T, m = np.array([[0, m12], [m21, 0]]))
+    fss.integrate([nu1*Fs, nu2*Fs], T, m = np.array([[0, m12*Fs], [m21*Fs, 0]]))
 
     fs2=Pi*(1-Ps)*fsi+Ps*(1-Pi)*fss+Pi*Ps*fsis+(1-Pi)*(1-Ps)*fs
     return fs2

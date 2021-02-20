@@ -35,7 +35,7 @@ np.set_printoptions(precision=3)
 #-------------------
 # split into unequal pop sizes with asymmetrical migration
 
-def sc3i(params , ns):
+def sc3S(params , ns):
 #    p_misid: proportion of misidentified ancestral states
 # Pi: proportion of sites with lower migration
 # Fi: factor of migration reduction (1e-5 - 0.999)
@@ -67,15 +67,15 @@ def sc3i(params , ns):
     fss = moments.Spectrum(stss)
     fss = moments.Manips.split_1D_to_2D(fss, ns[0], ns[1])
     fss.integrate([nu1_0*Fs, nu2_0*Fs], T0, m = np.array([[0, 0], [0, 0]]))
-    fss.integrate([nu1_1*Fs, nu2_1*Fs], T1, m = np.array([[0, m12_1], [m21_1, 0]]))
-    fss.integrate([nu1_2*Fs, nu2_2*Fs], T2, m = np.array([[0, m12_2], [m21_2, 0]]))
+    fss.integrate([nu1_1*Fs, nu2_1*Fs], T1, m = np.array([[0, m12_1*Fs], [m21_1*Fs, 0]]))
+    fss.integrate([nu1_2*Fs, nu2_2*Fs], T2, m = np.array([[0, m12_2*Fs], [m21_2*Fs, 0]]))
     """
     fs2=Pi*(1-Ps)*fsi+Ps*(1-Pi)*fss+Pi*Ps*fsis+(1-Pi)*(1-Ps)*fs
     """
     fs2=Ps*fss+(1-Ps)*fs
     return (1-p_misid)*fs2 + p_misid*moments.Numerics.reverse_array(fs2)
  
-func=sc3i
+func=sc3S
 
 upper_bound = [100, 100,100, 100, 100,100,10,10,10,200,200,200,200,0.999,0.999,0.25]
 lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]

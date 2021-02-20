@@ -73,7 +73,7 @@ def sc3i(params , ns):
 
     fs2=Pi*(1-Ps)*fsi+Ps*(1-Pi)*fss+Pi*Ps*fsis+(1-Pi)*(1-Ps)*fs
     """
-    fs2=P*fsi+(1-P)*fs
+    fs2=Pi*fsi+(1-Pi)*fs
     return fs2
  
 func=sc3i
