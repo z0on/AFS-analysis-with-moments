@@ -53,8 +53,8 @@ def IM(params, ns):
     
     """
     nu1_0,nu2_0,nu1,nu2,T1,T2,m12,m21,p_misid = params
-    nu1_func = lambda t: nu1_0 * (nu1/nu1_0)**(t/T)
-    nu2_func = lambda t: nu2_0 * (nu2/nu2_0)**(t/T)
+    nu1_func = lambda t: nu1_0 * (nu1/nu1_0)**(t/T2)
+    nu2_func = lambda t: nu2_0 * (nu2/nu2_0)**(t/T2)
     nu_func = lambda t: [nu1_func(t), nu2_func(t)]
 
     m21_func = lambda t: m21 * nu2_func(t)
@@ -123,15 +123,15 @@ ind=str(random.randint(0,999999))
 
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
-moments.ModelPlot.plot_model(plot_mod, save_file="scIM_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
+moments.ModelPlot.plot_model(plot_mod, save_file="scIMmne_"+ind+".png", pop_labels=pop_ids, nref=theta/(4*mu), draw_scale=False, gen_time=gtime, gen_time_units="KY", reverse_timeline=True)
 
 # bootstrapping for SDs of params and theta
 
 # printing parameters and their SDs
-print( "RESULT","scIM",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
+print( "RESULT","scIMmne",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=0.1, resid_range=3,
                                     pop_ids =pop_ids)
-plt.savefig("scIM_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
+plt.savefig("scIMmne_"+ind+"_"+sys.argv[1]+"_"+sys.argv[2]+"_"+sys.argv[3]+"_"+sys.argv[4]+"_"+sys.argv[5]+'.pdf')
 
