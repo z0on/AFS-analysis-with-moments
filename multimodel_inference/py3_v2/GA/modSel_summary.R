@@ -53,11 +53,11 @@ if(length(path2models)>0) { path2models=sub("path2models=","", commandArgs()[pat
 
 
 '
-setwd("/work/01211/cmonstr/newmom1/")
- modselResult="ok.modsel"
- path2models="~/Dropbox/Documents/perl_bin/moments_scripts/multimodel_inference/py3_v2/"
+setwd("/home/cmonstr/Dropbox/Documents/perl_bin/moments_scripts/multimodel_inference/py3_v2/GA")
+ modselResult="ny.modsel"
+ path2models="~/Dropbox/Documents/perl_bin/moments_scripts/multimodel_inference/py3_v2/GA/"
  folded=FALSE
- args="o k 40 40 0.02 0.005"
+ args="n y 25 25 0.02 0.005"
  nreps=3
  nboots=100
 '
@@ -87,6 +87,7 @@ for (b in 1:length(levels(npl$boot))) {
 		nmod=c(nmod,nrow(sub))
 		maxlike=data.frame(rbind(maxlike,sub[sub$ll==max(sub$ll),]))
 	}
+	maxlike$ll=as.numeric(maxlike$ll)
 	npara=maxlike$npara
 	likes=maxlike$ll
 	aic=2*npara-2*likes
