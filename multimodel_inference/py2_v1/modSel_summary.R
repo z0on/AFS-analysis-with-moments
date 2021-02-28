@@ -73,33 +73,34 @@ names(npl)=c("model","id","npara","ll","boot")
 contrast=sub("_.+","", npl$boot[1])
 npl$boot=factor(npl$boot)
 
-head(npl)
+#head(npl)
 #npl=npl[grep(infile,npl$boot),]
 aics=list()
 for (b in 1:length(levels(npl$boot))) {
-	bb=levels(npl$boot)[b]
-	nplb=subset(npl,boot==bb)
-	maxlike=c();nmod=c()
-	for (m in unique(nplb$model)) {
-		sub=subset(nplb,model==m)
-		nmod=c(nmod,nrow(sub))
-		maxlike=data.frame(rbind(maxlike,sub[sub$ll==max(sub$ll),]))
-	}
-	npara=maxlike$npara
-	likes=maxlike$ll
-	aic=2*npara-2*likes
-	aicc=data.frame(cbind(model=as.character(unique(nplb$model))))
-	aicc$aic=aic
-	aicc$nmod=nmod
-	aicc$boot=bb
-	aics[[b]]=aicc
+  bb=levels(npl$boot)[b]
+  nplb=subset(npl,boot==bb)
+  maxlike=c();nmod=c()
+  for (m in unique(nplb$model)) {
+    sub=subset(nplb,model==m)
+    nmod=c(nmod,nrow(sub))
+    maxlike=data.frame(rbind(maxlike,sub[sub$ll==max(sub$ll),]))
+  }
+  maxlike$ll=as.numeric(maxlike$ll)
+  npara=maxlike$npara
+  likes=maxlike$ll
+  aic=2*npara-2*likes
+  aicc=data.frame(cbind(model=as.character(unique(nplb$model))))
+  aicc$aic=aic
+  aicc$nmod=nmod
+  aicc$boot=bb
+  aics[[b]]=aicc
 }
 awt=data.frame(do.call(rbind,aics))
 models=unique(awt$model)
 med=c()
 for (m in models) {
-	ss=subset(awt,model==m)
-	med=c(med,median(ss$aic))
+  ss=subset(awt,model==m)
+  med=c(med,median(ss$aic))
 }
 modmed=data.frame(cbind(mod=as.character(models)))
 modmed$med=med
@@ -107,7 +108,7 @@ modmed=modmed[order(med),]
 modmed$mod=factor(modmed$mod,levels=modmed$mod)
 awt$model=factor(awt$model,levels=modmed$mod)
 
-nmods=5
+nmods=10
 pdf(width=2.2,height=2,file=paste(contrast,"_modsel_top10medians.pdf",sep=""))
 pp=ggplot(modmed[1:nmods,],aes(mod, med))+geom_point()+theme(axis.text.x = element_text(angle = 45,hjust=1))
 #ggplot(modmed,aes(mod, med))+geom_point()+theme(axis.text.x = element_text(angle = 45,hjust=1))
@@ -125,10 +126,10 @@ winner=as.character(modmed[1,1])
 
 npl0=subset(npl,model==winner)
 npl0=npl0[which(npl0$ll==max(npl0$ll)),]
-system(paste("grep \"",npl0$id,",\" ", infile," > ",infile,".winmod",sep=""))
+system(paste("grep \"",npl0$id," \" ", infile," > ",infile,".winmod",sep=""))
 system(paste("rm ",infile,sep=""))
 
-npl0=read.table(paste(infile,".winmod",sep=""),sep=",")
+npl0=read.table(paste(infile,".winmod",sep=""))
 params=as.vector(npl0[1,c(9:(ncol(npl0)-1))])
 write.table(params,file=paste(contrast,".",winner,sep=""),quote=F,col.names=F,row.names=F)
 
@@ -144,12 +145,12 @@ if (folded) {
 
 args2=c()
 for (b in 1:nboots) {
-	for (n in 1:nreps) {
-		for (m in mods) {
-			bname=paste(contrast,"_",b,".sfs",sep="")
-			args2=c(args2,paste("sleep ",n," && ",path2models,m,"_ga.py ",bname," ",args," ",paste(contrast,".",winner,sep="")," >>",contrast,".winboots",sep=""))
-		}
-	}
+  for (n in 1:nreps) {
+    for (m in mods) {
+      bname=paste(contrast,"_",b,".sfs",sep="")
+      args2=c(args2,paste("sleep ",n," && ",path2models,m,"_ga.py ",bname," ",args," ",paste(contrast,".",winner,sep="")," >>",contrast,".winboots",sep=""))
+    }
+  }
 }
 
 writeLines(args2,paste(contrast,".winboots.runs",sep=""))
