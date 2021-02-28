@@ -140,9 +140,9 @@ write.table(params,file=paste(contrast,".",winner,sep=""),quote=F,col.names=F,ro
 # ------ writing commands to bootstrap the winning model
 
 if (folded) { 
-	mods=paste("fold_",winner,sep="")
+	mods=paste(path2models,"fold_",winner,sep="")
 	} else {
-	mods=winner 		
+	mods=paste(path2models,winner,sep="") 		
 	}
 
 args2=c()

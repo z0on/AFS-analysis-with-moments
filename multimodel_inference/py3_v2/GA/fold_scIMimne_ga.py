@@ -50,8 +50,8 @@ def IMi(params, ns):
     
     """
     nu1_0,nu2_0,nu1,nu2,T1,T2,m12,m21,Fi,P = params
-    nu1_func = lambda t: nu1_0 * (nu1/nu1_0)**(t/T)
-    nu2_func = lambda t: nu2_0 * (nu2/nu2_0)**(t/T)
+    nu1_func = lambda t: nu1_0 * (nu1/nu1_0)**(t/T2)
+    nu2_func = lambda t: nu2_0 * (nu2/nu2_0)**(t/T2)
     nu_func = lambda t: [nu1_func(t), nu2_func(t)]
 
     m21_func = lambda t: m21 * nu2_func(t)

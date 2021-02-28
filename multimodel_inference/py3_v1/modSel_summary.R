@@ -25,8 +25,9 @@ args=[list of arguments]           names of pop1 and pop2, projection for pop1, 
                                    For ANGSD-derived SFS, projections should be 0.8*2N for each population (ronded to integer); 
                                    in the case corresponding to the default setting each population was represented by 10 individuals.
                                    Example: args=\"p1 p2 16 16 0.02 0.005\"
+path2models=\"~/AFS-analysis-with-moments/work/\"      path to scripts and accessory files
 
-")
+	     ")
 }
 
 infl=grep("modselResult=",commandArgs())
@@ -47,6 +48,8 @@ if(length(nboots)>0) { nreps=as.numeric(sub("nboots=","", commandArgs()[nboots])
 
 if(length(grep("folded=T",commandArgs()))>0) { folded=TRUE } else { folded=FALSE }
 
+path2models =grep("path2models=",commandArgs())
+if(length(path2models)>0) { path2models=sub("path2models=","", commandArgs()[path2models]) } else { path2models="~/AFS-analysis-with-moments/work/" }
 
 'setwd("~/Dropbox/Documents/perl_bin/moments_scripts/multimodel_inference/py3_v2/")
  modselResult="ok.modsel.ga"
@@ -134,10 +137,10 @@ write.table(params,file=paste(contrast,".",winner,sep=""),quote=F,col.names=F,ro
 # ------ writing commands to bootstrap the winning model
 
 if (folded) { 
-	mods=paste("fold_",winner,sep="")
-	} else {
-	mods=winner 		
-	}
+  mods=paste(path2models,"fold_",winner,sep="")
+} else {
+  mods=paste(path2models,winner,sep="") 		
+}
 
 args2=c()
 for (b in 1:nboots) {

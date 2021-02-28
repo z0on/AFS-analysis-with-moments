@@ -23,7 +23,7 @@ args=[list of arguments]           names of pop1 and pop2, projection for pop1, 
 
 folded=FALSE                       whether the analysis was using folded SFS
 				                
-path2models=\"~/AFS-analysis-with-moments/multimodel_inference/\"      path to the cloned repository
+path2models=\"~/AFS-analysis-with-moments/work/\"      path to scripts and accessory files
 
 ")
 }
@@ -37,7 +37,7 @@ if (length(args)==0) { stop ("specify arguments for SFS model runs\nRun script w
 args =sub("args=","", commandArgs()[args])
 
 path2models =grep("path2models=",commandArgs())
-if(length(path2models)>0) { path2models=sub("path2models=","", commandArgs()[path2models]) } else { path2models="~/AFS-analysis-with-moments/multimodel_inference/" }
+if(length(path2models)>0) { path2models=sub("path2models=","", commandArgs()[path2models]) } else { path2models="~/AFS-analysis-with-moments/work/" }
 
 nr=grep("nreps=",commandArgs())
 if(length(nr)>0) { nreps=as.numeric(sub("nreps=","", commandArgs()[nr])) } else { nreps=6 }

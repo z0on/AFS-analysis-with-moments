@@ -62,7 +62,7 @@ sc nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21
 sci nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,P
 scIMimne nu1_0,nu2_0,nu1,nu2,T1,T2,m12,m21,Fi,P
 scIMmne nu1_0,nu2_0,nu1,nu2,T1,T2,m12,m21
-0,nu2 T2,m12,m21,Fs,Ps,Fi,Pi
+scIMSimne T2,m12,m21,Fs,Ps,Fi,Pi
 scIMSmne nu1_0,nu2_0,nu1,nu2,T1,T2,m12,m21,Fs,P
 scS nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,P
 scSi nu1_1,nu2_1,nu1_2,nu2_2,T1,T2,m12,m21,Fi,Pi,Fs,Ps
