@@ -65,7 +65,7 @@ for (b in 1:nboots) {
 	for (n in 1:nreps) {
 		for (m in mods) {
 			bname=paste(contrast,"_",b,".sfs",sep="")
-			args2=c(args2,paste("sleep ",n," && ",m," ",bname," ",args," >>",contrast,".modsel",sep=""))
+			args2=c(args2,paste("sleep ",n," && ",path2models,m," ",bname," ",args," >>",contrast,".modsel",sep=""))
 		}
 	}
 }
