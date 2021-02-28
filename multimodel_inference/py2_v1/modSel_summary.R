@@ -121,11 +121,11 @@ dev.off()
 # ----- extracting name and parameters of the winning model, writing them to a file
 
 winner=as.character(modmed[1,1])
-winner=as.character(modmed[2,1])
+#winner=as.character(modmed[2,1])
 
 npl0=subset(npl,model==winner)
 npl0=npl0[which(npl0$ll==max(npl0$ll)),]
-system(paste("grep \"",npl0$id,",\" ", infile," > ",infile,".winmod2",sep=""))
+system(paste("grep \"",npl0$id,",\" ", infile," > ",infile,".winmod",sep=""))
 system(paste("rm ",infile,sep=""))
 
 npl0=read.table(paste(infile,".winmod",sep=""),sep=",")

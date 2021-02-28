@@ -51,11 +51,11 @@ if(length(grep("folded=T",commandArgs()))>0) { folded=TRUE } else { folded=FALSE
 path2models =grep("path2models=",commandArgs())
 if(length(path2models)>0) { path2models=sub("path2models=","", commandArgs()[path2models]) } else { path2models="~/AFS-analysis-with-moments/work/" }
 
-'setwd("~/Dropbox/Documents/perl_bin/moments_scripts/multimodel_inference/py3_v2/")
- modselResult="ok.modsel.ga"
- path2models="~/Dropbox/Documents/perl_bin/moments_scripts/multimodel_inference/py3_v2/"
+'setwd("~/Dropbox/ok_newmoments/v1")
+ modselResult="ok.modsel"
+ path2models="~/Dropbox/Documents/perl_bin/moments_scripts/multimodel_inference/py3_v1/"
  folded=FALSE
- args="o k 58 42 0.02 0.005"
+ args="o k 30 30 0.02 0.005"
  nreps=3
  nboots=100
 '
@@ -73,7 +73,7 @@ names(npl)=c("model","id","npara","ll","boot")
 contrast=sub("_.+","", npl$boot[1])
 npl$boot=factor(npl$boot)
 
-head(npl)
+#head(npl)
 #npl=npl[grep(infile,npl$boot),]
 aics=list()
 for (b in 1:length(levels(npl$boot))) {
@@ -107,7 +107,7 @@ modmed=modmed[order(med),]
 modmed$mod=factor(modmed$mod,levels=modmed$mod)
 awt$model=factor(awt$model,levels=modmed$mod)
 
-nmods=5
+nmods=10
 pdf(width=2.2,height=2,file=paste(contrast,"_modsel_top10medians.pdf",sep=""))
 pp=ggplot(modmed[1:nmods,],aes(mod, med))+geom_point()+theme(axis.text.x = element_text(angle = 45,hjust=1))
 #ggplot(modmed,aes(mod, med))+geom_point()+theme(axis.text.x = element_text(angle = 45,hjust=1))
@@ -121,11 +121,11 @@ dev.off()
 # ----- extracting name and parameters of the winning model, writing them to a file
 
 winner=as.character(modmed[1,1])
-winner=as.character(modmed[2,1])
+#winner=as.character(modmed[2,1])
 
 npl0=subset(npl,model==winner)
 npl0=npl0[which(npl0$ll==max(npl0$ll)),]
-system(paste("grep \"",npl0$id,",\" ", infile," > ",infile,".winmod2",sep=""))
+system(paste("grep \"",npl0$id,",\" ", infile," > ",infile,".winmod",sep=""))
 system(paste("rm ",infile,sep=""))
 
 npl0=read.table(paste(infile,".winmod",sep=""),sep=",")
