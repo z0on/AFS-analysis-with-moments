@@ -70,7 +70,7 @@ So the models differ by:
 - number of epochs (1-3) (`s1`,`s2` or `s3`) 
 - migration at some or all of the epochs (there are models with secondary contact, `sc`, or ancestral migration, `am`)
 - models with ancestral population size change before split (`12` with one epoch post-split, `123` with two epochs post-split, `103` is the secondary contact version of `123` - no migration in the middle epoch)
-- presence of "islands of differentiation" 
+- presence of "islands of differentiation" (`i`)
 - **(version 2 only)** presence of islands of "background selection" (`S`).
 
 
