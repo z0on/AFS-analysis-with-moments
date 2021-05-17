@@ -38,9 +38,9 @@ cd
 git clone https://github.com/z0on/AFS-analysis-with-moments.git
 cd AFS-analysis-with-moments
 mkdir work
-# to use version 1 models:
+# to use version 1 models (RECOMMENDED):
 cp multimodel_inference/py3_v1/* work/
-# to use version 2 models - BETA WARNING! If results don't make sense please do tell me
+# to use version 2 models - RISKY! BETA WARNING! If results don't make sense please do tell me
 # cp multimodel_inference/py3_v2/GA/* work/
 # to use version 1 models for python2
 # cp multimodel_inference/py2_v1/* work/
