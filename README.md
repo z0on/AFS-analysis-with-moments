@@ -54,7 +54,7 @@ cp multimodel_inference/py3_v1/* work/
 - The first step is **model selection**, where we run all possible models on 10 bootstrapped SFS. We  run each model on each bootstrap three times (three random restarts), to make sure the model converges to its best likelihood at least once. All these commands are written by the `R` script `modSel_write.R`. Then we use the `R` script `modSel_summary.R` to select the best-fitted instance (out of 3) for each model for each bootstrap, and compare the AIC scores for all models. The best model is the one with the *lowest median AIC score among bootstrap replicates*.  
 - The second step is running the winning model on 100 bootstrapped SFS, to **evaluate parameter uncertainties**. The commands for this stage are actually written by the `modSel_summary.R` script. Once again, we are doing 6 random restarts for each bootstrap replicate. The parameter meanings and uncertainties are deciphered by the third `R` script that we have, `bestBoot_summary.R`. All three `R` scripts are designed for command-line usage.
 
-## Overview of models (version 2) ##
+## Overview of models ##
 The models are designed to test the following basic aspects of population configuration:
 - are these really two demographically distinct populations, or we simply sampled the same population twice? (i.e., does the model fits significantly better if it actually has a split between populations, as opposed to just some population size changes)
 - were there changes in population size(s) through time? (models can include up to three "epochs" where population size could change)
@@ -74,7 +74,8 @@ So the models differ by:
 - **(version 2 only)** presence of islands of "background selection" (`S`).
 
 
->NOTE for version 1: the model names are 
+>NOTE for version 1: the model names are not fully standardized to the above convention, please see `work/moments_multimodels.xlsx` for their structure.
+
 
 >NOTE for version 2: `IM` models are currently not included in the main collection of models since they take substanitally longer to fit (some can take 4-5 hours). All v.2 IM models are of `mne` kind, which means that migration scales dynamically with the size of the source population. If you want to include them, copy the extended model lists over the standard ones:
 ```bash
@@ -82,7 +83,7 @@ cp ~/AFS-analysis-with-moments/work/allmodels_IMextra_unfolded ~/AFS-analysis-wi
 cp ~/AFS-analysis-with-moments/work/allmodels_IMextra_folded ~/AFS-analysis-with-moments/work/allmodels_folded
 ```
 
-See the spreadsheet `work/moments_multimodels.xlsx` (v.1) or `work/multimodels_v2.xlsx` (v.2) for summaries of model structure.
+See the spreadsheet `work/moments_multimodels.xlsx` (v.1) or cfor summaries of model structure.
 
 
 ## Model selection ##
