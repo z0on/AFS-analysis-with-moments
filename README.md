@@ -83,7 +83,7 @@ cp ~/AFS-analysis-with-moments/work/allmodels_IMextra_unfolded ~/AFS-analysis-wi
 cp ~/AFS-analysis-with-moments/work/allmodels_IMextra_folded ~/AFS-analysis-with-moments/work/allmodels_folded
 ```
 
-See the spreadsheet `work/moments_multimodels.xlsx` (v.1) or cfor summaries of model structure.
+See the spreadsheet `work/moments_multimodels.xlsx` (v.1) or `work/multimodels_v2.xlsx` (v.2) for summaries of model structure.
 
 
 ## Model selection ##
