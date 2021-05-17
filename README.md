@@ -19,7 +19,7 @@ cd
 # add moments to $PYTHONPATH (consider adding this line to your .bashrc):
 export PYTHONPATH=$PYTHONPATH:$HOME/moments
 ```
-Then, install GADMA:
+Then, (**if you want to try version 2**) install GADMA:
 ```bash
 # if you are root user:
 sudo python3 -m pip install numpy
@@ -38,9 +38,10 @@ cd
 git clone https://github.com/z0on/AFS-analysis-with-moments.git
 cd AFS-analysis-with-moments
 mkdir work
-cp multimodel_inference/py3_v2/GA/* work/
 # to use version 1 models:
-# cp multimodel_inference/py3_v1/* work/
+cp multimodel_inference/py3_v1/* work/
+# to use version 2 models - BETA WARNING! If results don't make sense please do tell me
+# cp multimodel_inference/py3_v2/GA/* work/
 # to use version 1 models for python2
 # cp multimodel_inference/py2_v1/* work/
 ```
@@ -53,13 +54,14 @@ cp multimodel_inference/py3_v2/GA/* work/
 - The first step is **model selection**, where we run all possible models on 10 bootstrapped SFS. We  run each model on each bootstrap three times (three random restarts), to make sure the model converges to its best likelihood at least once. All these commands are written by the `R` script `modSel_write.R`. Then we use the `R` script `modSel_summary.R` to select the best-fitted instance (out of 3) for each model for each bootstrap, and compare the AIC scores for all models. The best model is the one with the *lowest median AIC score among bootstrap replicates*.  
 - The second step is running the winning model on 100 bootstrapped SFS, to **evaluate parameter uncertainties**. The commands for this stage are actually written by the `modSel_summary.R` script. Once again, we are doing 6 random restarts for each bootstrap replicate. The parameter meanings and uncertainties are deciphered by the third `R` script that we have, `bestBoot_summary.R`. All three `R` scripts are designed for command-line usage.
 
-## Overview of models ##
+## Overview of models (version 2) ##
 The models are designed to test the following basic aspects of population configuration:
 - are these really two demographically distinct populations, or we simply sampled the same population twice? (i.e., does the model fits significantly better if it actually has a split between populations, as opposed to just some population size changes)
 - were there changes in population size(s) through time? (models can include up to three "epochs" where population size could change)
 - if there is a split, is there still migration? (during some or all of the epochs)
+- **(version 1 only)** if there is migration, is it symmetric or asymmetric?
 - do some parts of the genome ("islands of differentiation") introgress at a lower rate than the rest? This is one way to model non-neutral processes such as spatially varying selection.
-- do some parts of the genome show lower population size than the rest? This is to model background selection.
+- **(version 2 only)** do some parts of the genome show lower population size than the rest? This is to model background selection.
 
 
 So the models differ by: 
@@ -68,15 +70,19 @@ So the models differ by:
 - number of epochs (1-3) (`s1`,`s2` or `s3`) 
 - migration at some or all of the epochs (there are models with secondary contact, `sc`, or ancestral migration, `am`)
 - models with ancestral population size change before split (`12` with one epoch post-split, `123` with two epochs post-split, `103` is the secondary contact version of `123` - no migration in the middle epoch)
-- presence of "islands of differentiation" and/or "background selection" (`i` or `S`).
+- presence of "islands of differentiation" 
+- **(version 2 only)** presence of islands of "background selection" (`S`).
 
->NOTE for version 2: `IM` models are currently not included in the main collection of models since they take substanitally longer to fit (some can take 4-5 hours). All IM models are of `mne` kind, which means that migration scales dynamically with the size of the source population. If you want to include them, copy the extended model lists over the standard ones:
+
+>NOTE for version 1: the model names are 
+
+>NOTE for version 2: `IM` models are currently not included in the main collection of models since they take substanitally longer to fit (some can take 4-5 hours). All v.2 IM models are of `mne` kind, which means that migration scales dynamically with the size of the source population. If you want to include them, copy the extended model lists over the standard ones:
 ```bash
 cp ~/AFS-analysis-with-moments/work/allmodels_IMextra_unfolded ~/AFS-analysis-with-moments/work/allmodels_unfolded
 cp ~/AFS-analysis-with-moments/work/allmodels_IMextra_folded ~/AFS-analysis-with-moments/work/allmodels_folded
 ```
 
-See the spreadsheet `work/multimodels_v2.xlsx` for summaries of model structure.
+See the spreadsheet `work/moments_multimodels.xlsx` (v.1) or `work/multimodels_v2.xlsx` (v.2) for summaries of model structure.
 
 
 ## Model selection ##
@@ -102,7 +108,9 @@ Additional arguments to `modSel_write.R` (defaults):
 - `folded` (FALSE) : whether to fold the SFS for analysis
 > Note: if you want to analyze folded SFS, generate unfolded ones and specify `folded=TRUE` here and at the next stage.
 
-Run all commands in `[contrast].modsel.runs` file. This is the most computaitonally intensive thing I have ever done - there are 6 x 108 x 10 model runs, requiring 1 hour each. Best run these on an HPC cluster, in parallel! All the screen output is going to be collected in a file, `p12.modsel` in this case.
+Run all commands in `[contrast].modsel.runs` file. This is the most computaitonally intensive thing I have ever done - in version 1, there are 6 x 108 x 10 model runs, requiring 1 hour each. Best run these on an HPC cluster, in parallel! All the screen output is going to be collected in a file, `p12.modsel` in this case.
+
+
 >Note: some model runs may not finish in 1 hour; just kill them. These are hopeless runs where the parameter search algorithm is stuck, they will have horrible fit even if they eventually finish.
 
 Then, to summarize results and write the list of commands for the next step (bootstrapping the winnign model):
