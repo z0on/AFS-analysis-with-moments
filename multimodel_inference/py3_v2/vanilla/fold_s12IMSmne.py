@@ -19,6 +19,7 @@ import sys
 infile=sys.argv[1]
 pop_ids=[sys.argv[2],sys.argv[3]]
 projections=[int(sys.argv[4]),int(sys.argv[5])]
+'''
 if len(sys.argv)==9:
     params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
 else:
@@ -102,6 +103,7 @@ upper_bound = [100,100,100, 100,100, 10,10, 100,100,0.999,0.999]
 lower_bound = [1e-3,1e-3,1e-3,1e-3, 1e-3,1e-3,1e-3,1e-5,1e-5,1e-4,1e-4]
 
 # if starting parameterss are supplied, don't run GA; if not, run 150 generations of GA
+'''
 if len(sys.argv)==9:
      params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
 #     params = moments.Misc.perturb_params(params, fold=1.5, upper_bound=upper_bound, lower_bound=lower_bound)
@@ -111,7 +113,6 @@ else:
      Xinit=None
      nGA=150
 
-'''
 par_labels = ('nu0','nu1_0','nu2_0','nu1','nu2','T0','T2','m12','m21','Fs','F_gs')
 
 import timeit
@@ -142,6 +143,13 @@ result = gadma.Inference.optimize_ga(data=data,
                                      ls_maxiter=1)
 poptg=result.x
 '''
+if len(sys.argv)==9:
+    params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
+else:
+    params=[[1]*(len(upper_bound)-1),0.01]
+
+params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound, lower_bound=lower_bound)
+
 poptg = moments.Inference.optimize_log(params, data, func,
                                    lower_bound=lower_bound,
                                    upper_bound=upper_bound,

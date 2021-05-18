@@ -58,6 +58,7 @@ def sc12nm(params , ns):
 func=sc12nm
 upper_bound = [100,100,100,100,0.999,0.999]
 lower_bound = [1e-5,1e-5,1e-5,1e-5,1e-1,1e-5]
+'''
 if len(sys.argv)==9:
      params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
 #     params = moments.Misc.perturb_params(params, fold=1.5, upper_bound=upper_bound, lower_bound=lower_bound)
@@ -67,7 +68,6 @@ else:
      Xinit=None
      nGA=150
 
-'''
 par_labels = ('nu1','nu2','T1','T2','F_s','F_gs')
 
 import timeit
@@ -98,6 +98,13 @@ result = gadma.Inference.optimize_ga(data=data,
                                      ls_maxiter=1)
 poptg=result.x
 '''
+if len(sys.argv)==9:
+    params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
+else:
+    params=[[1]*(len(upper_bound)-1),0.01]
+
+params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound, lower_bound=lower_bound)
+
 poptg = moments.Inference.optimize_log(params, data, func,
                                    lower_bound=lower_bound,
                                    upper_bound=upper_bound,

@@ -64,6 +64,7 @@ lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
 
 # if initial parameters are supplied as the last argument, use them for local optimizaiton only (assuming bootstrap)
 # if not, perform 150 generations of GA
+'''
 if len(sys.argv)==9:
      params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
 #     params = moments.Misc.perturb_params(params, fold=1.5, upper_bound=upper_bound, lower_bound=lower_bound)
@@ -73,7 +74,6 @@ else:
      Xinit=None
      nGA=150
 
-'''
 par_labels = ('nu1_1','nu2_1','nu1_2','nu2_2','T1','T2','m12','m21','F_isl','F_gen','f_misid')
 
 # calculating time limit for GADMA evaluations (the generation will re-spawn if stuck for longer than that)
@@ -106,6 +106,13 @@ result = gadma.Inference.optimize_ga(data=data,
                                      ls_maxiter=1)
 poptg=result.x
 '''
+if len(sys.argv)==9:
+    params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
+else:
+    params=[[1]*(len(upper_bound)-1),0.01]
+
+params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound, lower_bound=lower_bound)
+
 poptg = moments.Inference.optimize_log(params, data, func,
                                    lower_bound=lower_bound,
                                    upper_bound=upper_bound,

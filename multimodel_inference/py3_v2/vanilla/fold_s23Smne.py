@@ -62,6 +62,7 @@ func=s23Smne
 upper_bound = [100, 100, 100,100,100,100,100, 100,100,100,100,0.999,0.999]
 lower_bound = [1e-5,1e-5, 1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5,1e-5]
 
+'''
 if len(sys.argv)==9:
      params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
 #     params = moments.Misc.perturb_params(params, fold=1.5, upper_bound=upper_bound, lower_bound=lower_bound)
@@ -71,7 +72,6 @@ else:
      Xinit=None
      nGA=150
 
-'''
 par_labels = ('nu1_1','nu2_1','nu1_2','nu2_2','nu1_3','nu2_3','T1','T2','T3','m12','m21','F_s','F_gs')
 
 # calculating time limit for GADMA evaluations (the generation will re-spawn if stuck for longer than that)
@@ -104,6 +104,13 @@ result = gadma.Inference.optimize_ga(data=data,
                                      ls_maxiter=1)
 poptg=result.x
 '''
+if len(sys.argv)==9:
+    params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
+else:
+    params=[[1]*(len(upper_bound)-1),0.01]
+
+params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound, lower_bound=lower_bound)
+
 poptg = moments.Inference.optimize_log(params, data, func,
                                    lower_bound=lower_bound,
                                    upper_bound=upper_bound,
