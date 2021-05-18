@@ -6,7 +6,7 @@ The problem with *moments* and *dadi* is, they can evaluate the fit of a pre-spe
 
 See [GADMA](https://github.com/ctlab/GADMA) for the alternative solution to this problem. Compared to GADMA, we are far less elegant but somewhat more flexible (we can incorporate essentially any model, including models involving background selection and heterogeneous introgression rates across the genome). Our approach also lets the user evaluate how much better the winning model is compared to certain "null" alternatives (for example, models with no population split or with constant population sizes), which provides statistical evidence for general aspects of the model structure. Our disadvantage (besides the fact that we only do two-pop models and GADMA also does three-pop models) is a huge number of model-fit runs that we have to perform. The good news is, all this can be done in parallel.
 
-Version 2 (***still very beta! use at your own risk***) of this repository (`multimodel_inference/py3_v2`) actually uses GADMA genetic algorithm for find optimal parameters of a pre-specified model, which is supposed to make it much more robust, and has a completely revamped set of models to compare. The new models don't have versions with symmetrical migration (like in version 1), but include models with "background selection" (reduced Ne in a portion of the genome), "islands of divergence" (reduced migration in a portion of the genome) and a combination of the two. The previous version of the model collection is still there, with all corresponding scripts (python and R) in subdirectories `multimodel_inference/py2_v1` and `multimodel_inference/py3_v1`.
+Version 2 (***still very beta! use at your own risk***) of this repository (`multimodel_inference/py3_v2`) actually uses GADMA genetic algorithm for find optimal parameters of a pre-specified model, which is supposed to make it much more robust. It also features a completely revamped set of models - they can be used without GADMA as "v.2 vanilla". The new models don't have versions with symmetrical migration (like in version 1), but include models with "background selection" (reduced Ne in a portion of the genome), "islands of divergence" (reduced migration in a portion of the genome) and a combination of the two. The previous version of the model collection is still there, with all corresponding scripts (python and R) in subdirectories `multimodel_inference/py2_v1` and `multimodel_inference/py3_v1`.
 
 ## Installation ##
 First of all, install *moments*. The example below would clone it into the user's home directory and install it for a specific user.
@@ -19,7 +19,7 @@ cd
 # add moments to $PYTHONPATH (consider adding this line to your .bashrc):
 export PYTHONPATH=$PYTHONPATH:$HOME/moments
 ```
-Then, (**if you want to try version 2**) install GADMA:
+Then, (**if you want to try v.2 with GADMA**) install GADMA:
 ```bash
 # if you are root user:
 sudo python3 -m pip install numpy
@@ -38,10 +38,16 @@ cd
 git clone https://github.com/z0on/AFS-analysis-with-moments.git
 cd AFS-analysis-with-moments
 mkdir work
+
 # to use version 1 models (RECOMMENDED):
 cp multimodel_inference/py3_v1/* work/
-# to use version 2 models - RISKY! BETA WARNING! If results don't make sense please do tell me
+
+# to use v.2 models without GADMA engine (BETA! If results don't make sense please do tell me)
+# cp multimodel_inference/py3_v2/vanilla/* work/
+
+# to use full on v.2 with GADMA (BETA! If results don't make sense please do tell me)
 # cp multimodel_inference/py3_v2/GA/* work/
+
 # to use version 1 models for python2
 # cp multimodel_inference/py2_v1/* work/
 ```
