@@ -103,11 +103,12 @@ where
 Population names can be anything. For ANGSD-derived SFS, projections should be 1.6N for each population (rounded to integer); in the case shown here, each population was represented by 10 individuals.
 
 Additional arguments to `modSel_write.R` (defaults):
-- `nreps` (3)   : number of random restarts for each model for each bootstrap rep.
+- `nreps` (6 for v.1, 3 for v.2)   : number of random restarts for each model for each bootstrap rep.
 - `nboots` (10) : number of bootstrap replicates to use. 10 seems to be optimal at this stage.
-- `path2models` (~/AFS-analysis-with-moments/multimodel_inference/) : path to where model listings live
+- `path2models` (~/AFS-analysis-with-moments/multimodel_inference/) : path to where the package lives
 - `folded` (FALSE) : whether to fold the SFS for analysis
 > Note: if you want to analyze folded SFS, generate unfolded ones and specify `folded=TRUE` here and at the next stage.
+
 
 Run all commands in `[contrast].modsel.runs` file. This is the most computaitonally intensive thing I have ever done - in version 1, there are 6 x 108 x 10 model runs, requiring 1 hour each. Best run these on an HPC cluster, in parallel! All the screen output is going to be collected in a file, `p12.modsel` in this case.
 
