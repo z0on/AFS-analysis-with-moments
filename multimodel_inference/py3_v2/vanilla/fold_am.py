@@ -95,7 +95,8 @@ poptg=result.x
 if len(sys.argv)==9:
     params = np.loadtxt(sys.argv[8], delimiter=" ", unpack=False)
 else:
-    params=[[1]*(len(upper_bound)-1),0.01]
+     params=[1]*(len(upper_bound)-1)
+     params.append(0.01)
 
 params = moments.Misc.perturb_params(params, fold=2, upper_bound=upper_bound, lower_bound=lower_bound)
 
