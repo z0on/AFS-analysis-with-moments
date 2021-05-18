@@ -132,7 +132,7 @@ moments.ModelPlot.plot_model(plot_mod, save_file="ami_"+ind+".png", pop_labels=p
 # bootstrapping for SDs of params and theta
 
 # printing parameters and their SDs
-print( "RESULT","ami",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
+print( "RESULT","ami",ind,len(upper_bound),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
                                     
 # plotting quad-panel figure witt AFS, model, residuals:
 moments.Plotting.plot_2d_comp_multinom(model, data, vmin=0.1, resid_range=3,

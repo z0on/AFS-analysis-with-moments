@@ -134,7 +134,7 @@ theta = moments.Inference.optimal_sfs_scaling(model, data)
 ind=str(random.randint(0,999999))
 
 # printing parameters and their SDs
-print( "RESULT","s1Si",ind,len(par_labels),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
+print( "RESULT","s1Si",ind,len(upper_bound),ll_model,sys.argv[1],sys.argv[2],sys.argv[3],poptg,theta)
                                     
 # plotting demographic model
 plot_mod = moments.ModelPlot.generate_model(func, poptg, ns)
