@@ -130,7 +130,7 @@ where
 - `args`     : same argument as for `modSel_write.R`
 
 Additional arguments to `modSel_summary.R` that will influence the next stage, bootstrapping the winning model (defaults):
-- `nreps` (3)   : number of random restarts for each model for each bootstrap rep.
+- `nreps` (6)   : number of random restarts for each model for each bootstrap rep.
 - `nboots` (100) : number of bootstrap replicates.
 - `folded` (FALSE) : whether analysis is using folded SFS.
 
