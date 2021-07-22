@@ -148,7 +148,7 @@ for (b in 1:nboots) {
   for (n in 1:nreps) {
     for (m in mods) {
       bname=paste(contrast,"_",b,".sfs",sep="")
-      args2=c(args2,paste("sleep ",n," && ",path2models,m,"_ga.py ",bname," ",args," ",paste(contrast,".",winner,sep="")," >>",contrast,".winboots",sep=""))
+      args2=c(args2,paste("sleep ",n," && ",path2models,m,".py ",bname," ",args," ",paste(contrast,".",winner,sep="")," >>",contrast,".winboots",sep=""))
     }
   }
 }
