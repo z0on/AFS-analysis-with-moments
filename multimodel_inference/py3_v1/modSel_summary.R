@@ -18,7 +18,7 @@ The following parameters are about writing commands for bootstrapping the winnin
 (NOT about the completed run for model selection):
 
 nboots=100                       number of boostrap replicates to run for the winning model
-nreps=3                          number of random restarts for each boostrap replicate
+nreps=6                          number of random restarts for each boostrap replicate
 folded=FALSE                     whether the analysis is using folded SFS
 args=[list of arguments]           names of pop1 and pop2, projection for pop1, projection for pop2, mutation rate (per genotyped portion of the 
                                    genome per generation), generation time in thousands of years. Population names can be anything. 
@@ -41,7 +41,7 @@ args =sub("args=","", commandArgs()[args])
 if(length(grep("folded=T",commandArgs()))>0) { folded=TRUE } else { folded=FALSE }
 
 nreps =grep("nreps=",commandArgs())
-if(length(nreps)>0) { nreps=as.numeric(sub("nreps=","", commandArgs()[nreps])) } else { nreps=3 }
+if(length(nreps)>0) { nreps=as.numeric(sub("nreps=","", commandArgs()[nreps])) } else { nreps=6 }
 
 nboots =grep("nboots=",commandArgs())
 if(length(nboots)>0) { nreps=as.numeric(sub("nboots=","", commandArgs()[nboots])) } else { nboots=100 }
