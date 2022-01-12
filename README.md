@@ -139,7 +139,7 @@ Additional arguments to `modSel_summary.R` that will influence the next stage, b
 - `folded` (FALSE) : whether analysis is using folded SFS.
 
 Two plots will be generated. The first one is the boxplot of best AIC scores for each model for all bootstrap replicates:
-![all boxplots](multimodel_inference/all_boxplots.png)
+![all boxplots](all_boxplots.png)
 
 And the second one is the plot of just the AIC medians for the top 10 models:
 
