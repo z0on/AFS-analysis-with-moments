@@ -163,7 +163,7 @@ Additonal options to `bestBoot_summary.R` are:
 
 This will generate the boxplots for parameter estimates:
 
-![params](multimodel_inference/bestboot_params_boxplot.png)
+![params](boot_params.png)
 > Note: names of migration rate parameters are not entirely systematized across models (I should spend some time cleaning those). In general the higher number (i.e. `_3` in `m12_3`) indicates later epoch, but they may not exactly follow the number of epochs actually present in the model.
 
 The script also saves an RData bundle containing the summary dataframe (medians, 25% quantile, 75% quantile for all parameters) and the big dataframe containing all summarized bootstrap data.
