@@ -8,6 +8,10 @@ See [GADMA](https://github.com/ctlab/GADMA) for the alternative solution to this
 
 Version 2 (***still very beta! use at your own risk***) of this repository (`multimodel_inference/py3_v2`) actually uses GADMA genetic algorithm for find optimal parameters of a pre-specified model, which is supposed to make it much more robust. It also features a completely revamped set of models - they can be used without GADMA as "v.2 vanilla". The new models don't have versions with symmetrical migration (like in version 1), but include models with "background selection" (reduced Ne in a portion of the genome). Both version 1 and 2 have models with "islands of divergence" (reduced migration in a portion of the genome).
 
+## Citation ##
+
+Rippe, John P., Groves Dixon, Zachary L. Fuller, Yi Liao, and Mikhail Matz. 2021. “Environmental Specialization and Cryptic Genetic Divergence in Two Massive Coral Species from the Florida Keys Reef Tract.” Molecular Ecology, [https://doi.org/10.1111/mec.15931](https://doi.org/10.1111/mec.15931).
+
 ## Installation ##
 First of all, install *moments*. The example below would clone it into the user's home directory and install it for a specific user.
 ```bash
