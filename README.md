@@ -143,7 +143,7 @@ Two plots will be generated. The first one is the boxplot of best AIC scores for
 
 And the second one is the plot of just the AIC medians for the top 10 models:
 
-![top10](multimodel_inference/top10_medians.png)
+![top10](top10_medians.png)
 
 The script also outputs the text file named `[contrast].[modelname]`, **where `[modelname]` is the name of the winning model**. This file contains the fitted parameter values for the winning model, which will be used at the next stage as "guiding values" for random restarts.
 
