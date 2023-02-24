@@ -150,7 +150,7 @@ The script also outputs the text file named `[contrast].[modelname]`, **where `[
 Lastly, the script outputs a file `[contrast].winboots.runs` that contains all the commands to run the next stage.
 
 ## Bootstrapping the winning model ## 
-Assuming we have 100 boostrapped SFS (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)), we are now going to run just the winning model on all of them. The commands file to do that has been already created by running `modSel_summary.R`, in the current example it is the file `p12.winboots.runs`. Now we need to do is to run all these commands, much preferably in parallel. As before, let them run for one hour, kill all that did not finish.
+Assuming we have 100 boostrapped SFS (See **Appendix** for instructions how to obtain bootstrapped 2dSFS from [ANGSD](http://www.popgen.dk/angsd/index.php/ANGSD)), we are now going to run just the winning model on all of them. The commands file to do that has been already created by running `modSel_summary.R`, in the current example it is the file `p12.winboots.runs`. Now all we need to do is to run all these commands, much preferably in parallel. As before, let them run for one hour, kill all that did not finish.
 
 The text output will be collected in the file `p12.winboots`. To summarize it all we need to do is
 ```bash
