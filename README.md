@@ -197,8 +197,8 @@ FILTERS='-uniqueOnly 1 -skipTriallelic 1 -minMapQ 30 -minQ 30 -doHWE 1 -maxHetFr
 
 export GENOME_REF=mygenome.fasta # reference to which the reads were mapped
 TODO="-doSaf 1 -doMajorMinor 1 -doMaf 1 -doPost 1 -anc $GENOME_REF -ref $GENOME_REF"
-angsd -b p1.bams -GL 1 -P 4 -minIndf $MI1 $FILTERS $TODO -out p1 &
-angsd -b p2.bams -GL 1 -P 4 -minIndf $MI2 $FILTERS $TODO -out p2 &
+angsd -b p1.bams -GL 1 -P 4 -minInd $MI1 $FILTERS $TODO -out p1 &
+angsd -b p2.bams -GL 1 -P 4 -minInd $MI2 $FILTERS $TODO -out p2 &
 
 >Note: don't worry about folding at this point. We will fold the spectra later, when running *moments* models, if needed.
 
