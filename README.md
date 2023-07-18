@@ -179,35 +179,28 @@ Last but not least, the script identifies the model run that is the closest to t
 
 Here we obtain 100 series of 5 block-bootstrap replicates, which we then average. This averaging procedure is called "bagging" and is meant to mitigate the noise that ANGSD-derived SFS often show in the area of high-frequency (implying low count) variants. The resulting 100 "bagged" datasets are going to be our bootstrap replicates.
 
-Let's assume we have two populations, `p1` and `p2`, each with 10 sequenced individuals, and we have two text files, `p1.bams` and `p2.bams`, listing `*.bam` files for each population. First we need to collect sites (variable and invariable!) that pass our filters in both populations:
+Let's assume we have two populations, `p1` and `p2`, each with 10 sequenced individuals, and we have two text files, `p1.bams` and `p2.bams`, listing `*.bam` files for each population. We will make site frequency spectra from them while applying quality and genotyping rate filters, but NOT the filters that rely on commonality of the variant (such as `minMaf` or `snp-pval`). This is because we want to keep all the well-genotyped sites, variable (including singletons) and invariable. 
+
+>Note: One of the filters we need to use is minInd - minimum number of individuals the site should be genotyped at. We want to keep the genotyping rate (the *proprotion* of all individuals in which the site is genotyped) the same in the two populations, so we will have to do a bit of silly bash arithmetics in the beginning of the following code chunk. 
 
 ```bash
 
-GRate=0.8 # genotyping rate filter - a site must be genotyped in this fraction of all samples.
-cat p1.bams p2.bams > p12.bams
+# desired genotyping rate:
+export MinIndPerc=0.75 
+export popsize1=`wc -l p1.bams`
+export popsize2=`wc -l p2.bams`
+export MI1=`echo "($popsize1*$MinIndPerc+0.5)/1" | bc`
+export MI2=`echo "($popsize2*$MinIndPerc+0.5)/1" | bc`
 
-FILTERS='-uniqueOnly 1 -skipTriallelic 1 -minMapQ 30 -minQ 30 -doHWE 1 -maxHetFreq 0.5 -hetbias_pval 1e-5 -minInd $MI'
+FILTERS='-uniqueOnly 1 -skipTriallelic 1 -minMapQ 30 -minQ 30 -doHWE 1 -maxHetFreq 0.5 -hetbias_pval 1e-5'
 # add `-sb_pval 1e-5` (strand bias) to FILTERS if you have 2bRAD, GBS, or WGS data. Other types of RAD only sequence one strand so -sb_pval filter would remove everything.
 
-TODO='-doMajorMinor 1 -doMaf 1 -dosnpstat 1 -doPost 2'
-echo 'export NIND=`cat p12.bams | wc -l`; export MI=`echo "($NIND*$GRate+0.5)/1" | bc`' >calc
-source calc && angsd -b p12.bams -GL 1 -P 4 $FILTERS $TODO -out p12 &
-
-# wait a while...
-
-zcat p12.mafs.gz | cut -f 1,2 | tail -n +2 > goodsites
-angsd sites index goodsites
-
-```
-Next, we use the same `goodsites` to obtain SAF data for both populations:
->Note: don't worry about folding at this point. We will fold the spectra later, when running *moments* models, if needed.
-
-```bash
 export GENOME_REF=mygenome.fasta # reference to which the reads were mapped
 TODO="-doSaf 1 -doMajorMinor 1 -doMaf 1 -doPost 1 -anc $GENOME_REF -ref $GENOME_REF"
-angsd -sites goodsites -b p1.bams -GL 1 -P 4 $TODO -out p1 &
-angsd -sites goodsites -b p2.bams -GL 1 -P 4 $TODO -out p2 &
-```
+angsd -b p1.bams -GL 1 -P 4 -minIndf $MI1 $FILTERS $TODO -out p1 &
+angsd -b p2.bams -GL 1 -P 4 -minIndf $MI2 $FILTERS $TODO -out p2 &
+
+>Note: don't worry about folding at this point. We will fold the spectra later, when running *moments* models, if needed.
 
 Now we generate the bootstrapped data (100 series of 5 bootstraps):
 
