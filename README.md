@@ -185,8 +185,7 @@ Let's assume we have two populations, `p1` and `p2`, each with 10 sequenced indi
 
 ```bash
 
-# desired genotyping rate:
-export GenRate=0.75 
+export GenRate=0.75 # desired genotyping rate
 export N1=`wc -l p1.bams`
 export N2=`wc -l p2.bams`
 export MI1=`echo "($N1*$GenRate+0.5)/1" | bc`
