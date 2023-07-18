@@ -186,11 +186,11 @@ Let's assume we have two populations, `p1` and `p2`, each with 10 sequenced indi
 ```bash
 
 # desired genotyping rate:
-export MinIndPerc=0.75 
-export popsize1=`wc -l p1.bams`
-export popsize2=`wc -l p2.bams`
-export MI1=`echo "($popsize1*$MinIndPerc+0.5)/1" | bc`
-export MI2=`echo "($popsize2*$MinIndPerc+0.5)/1" | bc`
+export GenRate=0.75 
+export N1=`wc -l p1.bams`
+export N2=`wc -l p2.bams`
+export MI1=`echo "($N1*$GenRate+0.5)/1" | bc`
+export MI2=`echo "($N2*$GenRate+0.5)/1" | bc`
 
 FILTERS='-uniqueOnly 1 -skipTriallelic 1 -minMapQ 30 -minQ 30 -doHWE 1 -maxHetFreq 0.5 -hetbias_pval 1e-5'
 # add `-sb_pval 1e-5` (strand bias) to FILTERS if you have 2bRAD, GBS, or WGS data. Other types of RAD only sequence one strand so -sb_pval filter would remove everything.
