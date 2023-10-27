@@ -34,7 +34,7 @@ np.set_printoptions(precision=3)
 
 def s2m(params , ns):
 #    p_misid: proportion of misidentified ancestral states
-    nu1, nu2,T, m12,m21, p_misid = params
+    nu1, nu2,T, m12,m21 = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
     fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
