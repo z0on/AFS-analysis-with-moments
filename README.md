@@ -230,9 +230,14 @@ Execute all commands in `b100` - this will take a while so better do it in paral
 Finally, we do "bagging" (averaging of 5 bootstrap replicates within each of the 100 series):
 
 ```bash
-SFSIZE="21 21" # 2N+1 for each population. In this case we assume that we have sampled 10 diploid individuals from each `p1` and `p2`.
+# computing SFS dimensions
+export N1=`wc -l p1.bams | cut -f 1 -d " "`
+export N2=`wc -l p2.bams | cut -f 1 -d " "`
+export NG1=`echo "($N1*2)+1" | bc`
+export NG2=`echo "($N2*2)+1" | bc`
+
 for B in `seq 1 100`; do
-echo $SFSIZE >p12_${B}.sfs;
+echo"$NG1 $NG2" >p12_${B}.sfs;
 cat p12_${B} | awk '{for (i=1;i<=NF;i++){a[i]+=$i;}} END {for (i=1;i<=NF;i++){printf "%.3f", a[i]/NR; printf "\t"};printf "\n"}' >> p12_${B}.sfs;
 done
 
