@@ -199,11 +199,11 @@ angsd -b O.bams -GL 1 -P 4 -minInd $MI1 $FILTERS $TODO -out p1
 angsd -b K.bams -GL 1 -P 4 -minInd $MI2 $FILTERS $TODO -out p2 
 
 # collecting and indexing filter-passing sites in each population
-zcat p1.mafs.gz | cut -f 1,2 | tail -n +2 | sort -k 1,1 -k 2,2n >p1.sites
-zcat p2.mafs.gz | cut -f 1,2 | tail -n +2 | sort -k 1,1 -k 2,2n >p2.sites
+zcat p1.mafs.gz | cut -f 1,2 | tail -n +2 | sort >p1.sites
+zcat p2.mafs.gz | cut -f 1,2 | tail -n +2 | sort >p2.sites
 
 # collecting and indexing common sites:
-comm -12 p1.sites p2.sites >allSites
+comm -12 p1.sites p2.sites | sort -k 1,1 -k 2,2n >allSites
 angsd sites index allSites
 
 # listing "regions"
