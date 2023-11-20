@@ -186,18 +186,33 @@ Let's assume we have two populations, `p1` and `p2`, each with 10 sequenced indi
 ```bash
 
 export GenRate=0.75 # desired genotyping rate
-export N1=`wc -l p1.bams`
-export N2=`wc -l p2.bams`
+export N1=`wc -l p1.bams | cut -f 1 -d " "`
+export N2=`wc -l p2.bams | cut -f 1 -d " "`
 export MI1=`echo "($N1*$GenRate+0.5)/1" | bc`
 export MI2=`echo "($N2*$GenRate+0.5)/1" | bc`
 
-FILTERS='-uniqueOnly 1 -skipTriallelic 1 -minMapQ 30 -minQ 30 -doHWE 1 -maxHetFreq 0.5 -hetbias_pval 1e-5'
-# add `-sb_pval 1e-5` (strand bias) to FILTERS if you have 2bRAD, GBS, or WGS data. Other types of RAD only sequence one strand so -sb_pval filter would remove everything.
-
+FILTERS='-uniqueOnly 1 -skipTriallelic 1 -minMapQ 30 -minQ 30 -maxHetFreq 0.5 -hetbias_pval 1e-3'
+# add `-sb_pval 1e-3` (strand bias) to FILTERS if you have 2bRAD, GBS, or WGS data. Other types of RAD only sequence one strand so -sb_pval filter would remove everything.
 export GENOME_REF=mygenome.fasta # reference to which the reads were mapped
-TODO="-doSaf 1 -doMajorMinor 1 -doMaf 1 -doPost 1 -dosnpstat 1 -anc $GENOME_REF -ref $GENOME_REF"
-angsd -b p1.bams -GL 1 -P 4 -minInd $MI1 $FILTERS $TODO -out p1 &
-angsd -b p2.bams -GL 1 -P 4 -minInd $MI2 $FILTERS $TODO -out p2 &
+TODO="-doHWE 1 -doSaf 1 -doMajorMinor 1 -doMaf 1 -doPost 2 -dosnpstat 1 -doGeno 11 -doGlf 2 -anc $GENOME_REF -ref $GENOME_REF"
+~/angsd/angsd -b O.bams -GL 1 -P 4 -minInd $MI1 $FILTERS $TODO -out O 
+~/angsd/angsd -b K.bams -GL 1 -p 4 -minInd $MI2 $FILTERS $TODO -out K 
+
+# collecting and indexing filter-passing sites in each population
+zcat p1.mafs.gz | cut -f 1,2 | tail -n +2 | sort >p1.sites
+zcat p2.mafs.gz | cut -f 1,2 | tail -n +2 | sort >p2.sites
+
+# collecting and indexing common sites:
+comm -12 p1.sites p2.sites >allSites
+angsd sites index allSites
+
+# listing "regions"
+cat allSites | cut -f 1 | uniq >regions
+
+# estimating site frequency likelihoods for each population 
+TODO="-doSaf 1 -doMajorMinor 1 -doMaf 1 -doPost 1 -anc $GENOME_REF -ref $GENOME_REF"
+angsd -rf regions -sites allSites -b p1.bams -GL 1 $TODO -out p1
+angsd -rf regions -sites allSites -b p2.bams -GL 1 $TODO -out p2
 ```
 >Note: don't worry about folding at this point. We will fold the spectra later, when running *moments* models, if needed.
 
