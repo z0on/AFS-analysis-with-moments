@@ -236,6 +236,7 @@ export N2=`wc -l p2.bams | cut -f 1 -d " "`
 export NG1=`echo "($N1*2)+1" | bc`
 export NG2=`echo "($N2*2)+1" | bc`
 
+# averaging 5-bootstrap batches
 for B in `seq 1 100`; do
 echo"$NG1 $NG2" >p12_${B}.sfs;
 cat p12_${B} | awk '{for (i=1;i<=NF;i++){a[i]+=$i;}} END {for (i=1;i<=NF;i++){printf "%.3f", a[i]/NR; printf "\t"};printf "\n"}' >> p12_${B}.sfs;
