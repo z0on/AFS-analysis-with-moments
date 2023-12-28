@@ -195,8 +195,8 @@ FILTERS='-uniqueOnly 1 -skipTriallelic 1 -minMapQ 30 -minQ 30 -maxHetFreq 0.5 -h
 # add `-sb_pval 1e-3` (strand bias) to FILTERS if you have 2bRAD, GBS, or WGS data. Other types of RAD only sequence one strand so -sb_pval filter would remove everything.
 export GENOME_REF=mygenome.fasta # reference to which the reads were mapped
 TODO="-doHWE 1 -doSaf 1 -doMajorMinor 1 -doMaf 1 -doPost 1 -dosnpstat 1 -anc $GENOME_REF -ref $GENOME_REF"
-angsd -b O.bams -GL 1 -P 4 -minInd $MI1 $FILTERS $TODO -out p1 
-angsd -b K.bams -GL 1 -P 4 -minInd $MI2 $FILTERS $TODO -out p2 
+angsd -b p1.bams -GL 1 -P 4 -minInd $MI1 $FILTERS $TODO -out p1 
+angsd -b p2.bams -GL 1 -P 4 -minInd $MI2 $FILTERS $TODO -out p2 
 
 # collecting and indexing filter-passing sites in each population
 zcat p1.mafs.gz | cut -f 1,2 | tail -n +2 | sort >p1.sites
