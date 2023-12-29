@@ -193,14 +193,14 @@ export MI2=`echo "($N2*$GenRate+0.5)/1" | bc`
 
 FILTERS='-uniqueOnly 1 -skipTriallelic 1 -minMapQ 30 -minQ 30 -maxHetFreq 0.5 -hetbias_pval 1e-3'
 # add `-sb_pval 1e-3` (strand bias) to FILTERS if you have 2bRAD, GBS, or WGS data. Other types of RAD only sequence one strand so -sb_pval filter would remove everything.
-export GENOME_REF=mygenome.fasta # reference to which the reads were mapped
+GENOME_REF=mygenome.fasta # reference to which the reads were mapped
 TODO="-doHWE 1 -doSaf 1 -doMajorMinor 1 -doMaf 1 -doPost 1 -dosnpstat 1 -anc $GENOME_REF -ref $GENOME_REF"
-angsd -b p1.bams -GL 1 -P 4 -minInd $MI1 $FILTERS $TODO -out p1 
-angsd -b p2.bams -GL 1 -P 4 -minInd $MI2 $FILTERS $TODO -out p2 
+angsd -b p1.bams -GL 1 -P 4 -minInd $MI1 $FILTERS $TODO -out p1.0 
+angsd -b p2.bams -GL 1 -P 4 -minInd $MI2 $FILTERS $TODO -out p2.0 
 
 # collecting and indexing filter-passing sites in each population
-zcat p1.mafs.gz | cut -f 1,2 | tail -n +2 | sort >p1.sites
-zcat p2.mafs.gz | cut -f 1,2 | tail -n +2 | sort >p2.sites
+zcat p1.0.mafs.gz | cut -f 1,2 | tail -n +2 | sort >p1.sites
+zcat p2.0.mafs.gz | cut -f 1,2 | tail -n +2 | sort >p2.sites
 
 # collecting and indexing common sites:
 comm -12 p1.sites p2.sites | sort -V >allSites
@@ -210,9 +210,9 @@ angsd sites index allSites
 cat allSites | cut -f 1 | uniq >regions
 
 # estimating site frequency likelihoods for each population 
-TODO="-doSaf 1 -doMajorMinor 1 -doMaf 1 -doPost 1 -anc $GENOME_REF -ref $GENOME_REF"
-angsd -rf regions -sites allSites -b p1.bams -GL 1 $TODO -out p1
-angsd -rf regions -sites allSites -b p2.bams -GL 1 $TODO -out p2
+GENOME_REF=mygenome.fasta 
+angsd -rf regions -sites allSites -b p1.bams -GL 1 -doSaf 1 -anc $GENOME_REF -out p1
+angsd -rf regions -sites allSites -b p2.bams -GL 1 -doSaf 1 -anc $GENOME_REF -out p2
 ```
 >Note: don't worry about folding at this point. We will fold the spectra later, when running *moments* models, if needed.
 
